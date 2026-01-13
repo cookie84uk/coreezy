@@ -296,13 +296,13 @@ export function SlothProfile({ address }: SlothProfileProps) {
 
 function formatScore(score: string): string {
   const num = BigInt(score);
-  if (num >= 1_000_000_000n) {
-    return (Number(num / 1_000_000n) / 1000).toFixed(2) + 'B';
+  if (num >= BigInt(1_000_000_000)) {
+    return (Number(num / BigInt(1_000_000)) / 1000).toFixed(2) + 'B';
   }
-  if (num >= 1_000_000n) {
-    return (Number(num / 1_000n) / 1000).toFixed(2) + 'M';
+  if (num >= BigInt(1_000_000)) {
+    return (Number(num / BigInt(1_000)) / 1000).toFixed(2) + 'M';
   }
-  if (num >= 1_000n) {
+  if (num >= BigInt(1_000)) {
     return (Number(num) / 1000).toFixed(2) + 'K';
   }
   return score;
