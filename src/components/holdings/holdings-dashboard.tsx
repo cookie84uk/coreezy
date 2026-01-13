@@ -32,6 +32,13 @@ interface HoldingsData {
     corez: number;
     validatorTotalStaked: number;
   };
+  corezToken?: {
+    totalSupply: number;
+    decimals: number;
+    detectedDenom: string;
+    heldByProject: number;
+    circulatingSupply: number;
+  };
   validator: {
     address: string;
     totalStaked: number;
@@ -199,6 +206,42 @@ export function HoldingsDashboard() {
           </div>
         </div>
       </div>
+
+      {/* COREZ Token Info */}
+      {holdings.corezToken && (
+        <div className="card p-6">
+          <h2 className="text-lg font-bold text-coreezy-100 mb-4 flex items-center gap-2">
+            <Coins className="w-5 h-5 text-amber-400" />
+            COREZ Token Supply
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <div className="text-xs text-coreezy-500 mb-1">Total Supply</div>
+              <div className="text-xl font-bold text-amber-400">
+                {holdings.corezToken.totalSupply.toLocaleString()}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-coreezy-500 mb-1">Held by Project</div>
+              <div className="text-xl font-bold text-coreezy-200">
+                {holdings.corezToken.heldByProject.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-coreezy-500 mb-1">Circulating Supply</div>
+              <div className="text-xl font-bold text-canopy-400">
+                {holdings.corezToken.circulatingSupply.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+              </div>
+            </div>
+            <div>
+              <div className="text-xs text-coreezy-500 mb-1">Token Denom</div>
+              <div className="text-sm font-mono text-coreezy-400 truncate">
+                {holdings.corezToken.detectedDenom}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Wallet Details */}
       <div className="grid lg:grid-cols-2 gap-6">

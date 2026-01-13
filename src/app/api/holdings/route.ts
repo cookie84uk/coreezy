@@ -9,8 +9,10 @@ const WALLETS = {
   treasury: 'core1fzrxzy2n6tqxcymj9rgep4kh2v3uyya7759xzm',
 };
 
-// COREZ token denom (you may need to update this with actual denom)
-const COREZ_DENOM = 'ucorez';
+// COREZ token - Smart Token on Coreum
+// Total supply: 10,000,000 COREZ (6 decimals = 10,000,000,000,000 ucorez)
+const COREZ_TOTAL_SUPPLY = 10_000_000;
+const COREZ_DECIMALS = 6;
 
 interface WalletBalance {
   address: string;
@@ -76,28 +78,50 @@ async function getDelegationToValidator(address: string): Promise<number> {
   }
 }
 
-async function getWalletData(address: string): Promise<WalletBalance> {
+interface CorezTokenInfo {
+  denom: string;
+  balance: number;
+}
+
+async function findCorezToken(balances: { denom: string; amount: string }[]): Promise<CorezTokenInfo | null> {
+  // Look for COREZ token - on Coreum, smart tokens have format: {subunit}-{issuer}
+  // Common patterns: ucorez-core1..., corez-core1..., or just containing 'corez'
+  for (const balance of balances) {
+    const denomLower = balance.denom.toLowerCase();
+    if (
+      denomLower.includes('corez') ||
+      denomLower.includes('coreez') ||
+      denomLower.startsWith('ucorez')
+    ) {
+      return {
+        denom: balance.denom,
+        balance: Number(balance.amount),
+      };
+    }
+  }
+  return null;
+}
+
+async function getWalletData(address: string): Promise<WalletBalance & { corezDenom?: string }> {
   const [coreBalance, stakedAmount, allBalances] = await Promise.all([
     getBalance(address, 'ucore'),
     getStakedAmount(address),
     getAllBalances(address),
   ]);
 
-  // Find COREZ balance - look for tokens that might be COREZ
-  let corezBalance = 0;
-  for (const balance of allBalances) {
-    // Check for COREZ denom - it might be a smart token with a different format
-    if (balance.denom.toLowerCase().includes('corez') || balance.denom === COREZ_DENOM) {
-      corezBalance = Number(balance.amount);
-      break;
-    }
-  }
+  // Find COREZ balance
+  const corezInfo = await findCorezToken(allBalances);
+  const corezBalance = corezInfo?.balance || 0;
+
+  // Log all balances for debugging (will show in Railway logs)
+  console.log(`Wallet ${address} balances:`, allBalances.map(b => `${b.denom}: ${b.amount}`));
 
   return {
     address,
     core: coreBalance / 1_000_000, // Convert from ucore to CORE (6 decimals)
     coreStaked: stakedAmount / 1_000_000,
-    corez: corezBalance / 1_000_000, // Convert from ucorez to COREZ (6 decimals)
+    corez: corezBalance / Math.pow(10, COREZ_DECIMALS), // Convert based on decimals
+    corezDenom: corezInfo?.denom,
   };
 }
 
@@ -122,16 +146,25 @@ export async function GET() {
       ? Number(validatorInfo.validator.tokens) / 1_000_000 
       : 0;
 
+    // Detect COREZ denom from wallets
+    const detectedCorezDenom = mainVault.corezDenom || treasury.corezDenom || 'Not detected';
+
     return NextResponse.json({
       lastUpdated: new Date().toISOString(),
       wallets: {
         mainVault: {
           label: 'Coreezy Main Vault',
-          ...mainVault,
+          address: mainVault.address,
+          core: mainVault.core,
+          coreStaked: mainVault.coreStaked,
+          corez: mainVault.corez,
         },
         treasury: {
           label: 'Marketing/Developer/Treasury',
-          ...treasury,
+          address: treasury.address,
+          core: treasury.core,
+          coreStaked: treasury.coreStaked,
+          corez: treasury.corez,
         },
       },
       totals: {
@@ -139,6 +172,13 @@ export async function GET() {
         coreStaked: totalCoreStaked,
         corez: totalCorez,
         validatorTotalStaked: validatorTokens,
+      },
+      corezToken: {
+        totalSupply: COREZ_TOTAL_SUPPLY,
+        decimals: COREZ_DECIMALS,
+        detectedDenom: detectedCorezDenom,
+        heldByProject: totalCorez,
+        circulatingSupply: COREZ_TOTAL_SUPPLY - totalCorez,
       },
       validator: {
         address: COREEZY_VALIDATOR,
