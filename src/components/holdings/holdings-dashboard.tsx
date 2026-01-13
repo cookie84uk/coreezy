@@ -11,6 +11,7 @@ import {
   Copy,
   Check,
 } from 'lucide-react';
+import { NumberDisplay } from '@/components/ui/number-display';
 
 interface WalletData {
   label: string;
@@ -163,7 +164,7 @@ export function HoldingsDashboard() {
             <span className="text-sm text-coreezy-400">Total CORE</span>
           </div>
           <div className="text-2xl font-bold text-canopy-400">
-            {holdings.totals.core.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+            <NumberDisplay value={holdings.totals.core} decimals={2} />
           </div>
         </div>
 
@@ -175,7 +176,7 @@ export function HoldingsDashboard() {
             <span className="text-sm text-coreezy-400">Total Staked</span>
           </div>
           <div className="text-2xl font-bold text-canopy-400">
-            {holdings.totals.coreStaked.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+            <NumberDisplay value={holdings.totals.coreStaked} decimals={2} />
           </div>
         </div>
 
@@ -187,10 +188,7 @@ export function HoldingsDashboard() {
             <span className="text-sm text-coreezy-400">Total COREZ</span>
           </div>
           <div className="text-2xl font-bold text-amber-400">
-            {holdings.totals.corez.toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 6,
-            })}
+            <NumberDisplay value={holdings.totals.corez} decimals={6} />
           </div>
         </div>
 
@@ -202,7 +200,7 @@ export function HoldingsDashboard() {
             <span className="text-sm text-coreezy-400">Validator Total</span>
           </div>
           <div className="text-2xl font-bold text-emerald-400">
-            {holdings.totals.validatorTotalStaked.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+            <NumberDisplay value={holdings.totals.validatorTotalStaked} decimals={0} />
           </div>
         </div>
       </div>
@@ -218,19 +216,19 @@ export function HoldingsDashboard() {
             <div>
               <div className="text-xs text-coreezy-500 mb-1">Total Supply</div>
               <div className="text-xl font-bold text-amber-400">
-                {holdings.corezToken.totalSupply.toLocaleString()}
+                <NumberDisplay value={holdings.corezToken.totalSupply} decimals={0} />
               </div>
             </div>
             <div>
               <div className="text-xs text-coreezy-500 mb-1">Held by Project</div>
               <div className="text-xl font-bold text-coreezy-200">
-                {holdings.corezToken.heldByProject.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                <NumberDisplay value={holdings.corezToken.heldByProject} decimals={2} />
               </div>
             </div>
             <div>
               <div className="text-xs text-coreezy-500 mb-1">Circulating Supply</div>
               <div className="text-xl font-bold text-canopy-400">
-                {holdings.corezToken.circulatingSupply.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                <NumberDisplay value={holdings.corezToken.circulatingSupply} decimals={2} />
               </div>
             </div>
             <div>
@@ -375,22 +373,19 @@ function WalletCard({
         <div>
           <div className="text-xs text-coreezy-500 mb-1">COREZ</div>
           <div className="text-lg font-bold text-amber-400">
-            {wallet.corez.toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 6,
-            })}
+            <NumberDisplay value={wallet.corez} decimals={6} />
           </div>
         </div>
         <div>
           <div className="text-xs text-coreezy-500 mb-1">CORE</div>
           <div className="text-lg font-bold text-coreezy-200">
-            {wallet.core.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+            <NumberDisplay value={wallet.core} decimals={2} />
           </div>
         </div>
         <div>
           <div className="text-xs text-coreezy-500 mb-1">Staked</div>
           <div className="text-lg font-bold text-canopy-400">
-            {wallet.coreStaked.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+            <NumberDisplay value={wallet.coreStaked} decimals={2} />
           </div>
         </div>
       </div>
