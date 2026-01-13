@@ -1,10 +1,9 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'White Paper | Coreezy',
   description:
-    'The Coreezy White Paper - our vision, mission, and roadmap for building a sustainable community on Coreum.',
+    'The Coreezy White Paper - vision, mechanics, and long-term ecosystem behind the Coreezy project.',
 };
 
 export default function WhitePaperPage() {
@@ -16,144 +15,179 @@ export default function WhitePaperPage() {
             <h1 className="text-4xl font-bold text-gradient mb-4">
               Coreezy White Paper
             </h1>
-            <p className="text-coreezy-400">Version 1.0 • January 2026</p>
           </div>
 
           {/* Content */}
           <article className="prose prose-invert prose-coreezy max-w-none">
-            {/* Executive Summary */}
+            {/* 1. Introduction */}
             <section className="card p-8 mb-8">
               <h2 className="text-2xl font-bold text-canopy-400 mb-4">
-                Executive Summary
+                1. Introduction
               </h2>
               <p className="text-coreezy-300 leading-relaxed">
-                Coreezy is a community-driven ecosystem built on Coreum, designed to reward long-term
-                supporters through sustainable validator operations, transparent governance, and innovative
-                gamification. Our mission is simple: <strong className="text-coreezy-100">Stake. Vibe. Grow.</strong>
+                This Coreezy White Paper outlines the vision, mechanics, and long-term ecosystem behind the Coreezy project.
               </p>
               <p className="text-coreezy-300 leading-relaxed mt-4">
-                Unlike projects focused on short-term gains, Coreezy embraces the &quot;sloth mentality&quot; —
-                patient, deliberate growth that compounds over time. We believe the best returns come to those
-                who stake with conviction and contribute to their community.
+                Coreezy is more than a meme coin. It is a community-driven lifestyle brand powered by tokenomics with real impact. Built on Coreum, Coreezy combines the Coreezy Vibes Validator, Reward mechanics, a staking vault, NFTs, and merch to create an ecosystem where culture and finance work together.
+              </p>
+              <p className="text-coreezy-300 leading-relaxed mt-4">
+                Unlike traditional meme tokens, Coreezy is not only about speculation. It is about building a sustainable cycle: a token that rewards, a vault that compounds, NFTs that link directly into rewards, and a brand you can represent in real life.
               </p>
             </section>
 
-            {/* Mission */}
+            {/* 2. Mission */}
             <section className="card p-8 mb-8">
               <h2 className="text-2xl font-bold text-canopy-400 mb-4">
-                Mission & Values
+                2. Mission
               </h2>
-              <div className="space-y-4">
+              <p className="text-coreezy-300 leading-relaxed">
+                To fuse crypto culture with lifestyle branding through a tokenomics model that rewards community growth, and builds long-term value while keeping it simple, transparent, and community-first.
+              </p>
+            </section>
+
+            {/* 3. Core Principles */}
+            <section className="card p-8 mb-8">
+              <h2 className="text-2xl font-bold text-canopy-400 mb-4">
+                3. Core Principles
+              </h2>
+              <ul className="space-y-3 text-coreezy-300">
+                <li className="flex items-start gap-2">
+                  <span className="text-canopy-400 font-bold">Fair Launch</span> — No hidden team allocations, no insider advantage.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-canopy-400 font-bold">Rewards by Design</span> — Vault rewards buy back and Coreezy.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-canopy-400 font-bold">Community-First</span> — NFTs, merch, and ecosystem perks tie directly back to holders.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-canopy-400 font-bold">Lifestyle Identity</span> — Coreezy extends beyond crypto. It is culture you can wear, collect, and share.
+                </li>
+              </ul>
+            </section>
+
+            {/* 4. Tokenomics */}
+            <section className="card p-8 mb-8">
+              <h2 className="text-2xl font-bold text-canopy-400 mb-4">
+                4. Tokenomics
+              </h2>
+              <div className="mb-6">
+                <p className="text-coreezy-300">
+                  <strong className="text-coreezy-100">Ticker:</strong> $COREZ
+                </p>
+                <p className="text-coreezy-300">
+                  <strong className="text-coreezy-100">Total Supply:</strong> Fixed 10,000,000 tokens
+                </p>
+              </div>
+              <h3 className="text-lg font-semibold text-coreezy-100 mb-3">Current Distribution:</h3>
+              <ul className="space-y-2 text-coreezy-300">
+                <li className="flex items-start gap-2">
+                  <span className="text-canopy-400 font-bold">10%</span> — Reserved for Vault Staking (Currently ledger controlled, future smart contract allocation)
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-canopy-400 font-bold">3%</span> — Marketing and Development Wallet
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-canopy-400 font-bold">2.02%</span> — Purchased personally by founder throughout fair launch process
+                </li>
+              </ul>
+            </section>
+
+            {/* 5. Vault Mechanics */}
+            <section className="card p-8 mb-8">
+              <h2 className="text-2xl font-bold text-canopy-400 mb-4">
+                5. Vault Mechanics
+              </h2>
+              <p className="text-coreezy-300 mb-6">
+                The Coreum Vault is the heart of Coreezy&apos;s ecosystem.
+              </p>
+
+              <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-coreezy-100">Mission</h3>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3">5A. Initial Vault Mechanics</h3>
+                  <p className="text-sm text-coreezy-400 mb-2">Vault rewards distributed as follows:</p>
+                  <ul className="space-y-1 text-coreezy-300">
+                    <li><span className="text-canopy-400 font-bold">50%</span> → Reinvestment into Vault (compounding growth)</li>
+                    <li><span className="text-canopy-400 font-bold">10%</span> → Marketing and Development Fund (growth engine)</li>
+                    <li><span className="text-canopy-400 font-bold">40%</span> → OG NFT Reward Pool</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3">5B. Final Vault Mechanics</h3>
+                  <p className="text-sm text-coreezy-400 mb-2">When we have converted our 10% supply to Coreum:</p>
+                  <ul className="space-y-1 text-coreezy-300">
+                    <li><span className="text-canopy-400 font-bold">50%</span> → Buyback and Reward Drip (Promotes Long-Term Holding)</li>
+                    <li><span className="text-canopy-400 font-bold">15%</span> → Reinvestment into Vault (compounding growth)</li>
+                    <li><span className="text-canopy-400 font-bold">10%</span> → Marketing and Development Fund (growth engine)</li>
+                    <li><span className="text-canopy-400 font-bold">20%</span> → OG NFT Reward Pool</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3">5C. Validator Mechanics</h3>
+                  <p className="text-coreezy-300 mb-3">
+                    The Coreezy Vibes Validator now fuels the Vault in two ways.
+                  </p>
+                  <p className="text-coreezy-300 mb-3">
+                    First, <strong className="text-coreezy-100">10 percent of all validator rewards and commissions</strong> are funneled directly into the Coreezy Vault. This strengthens long-term sustainability by providing steady on-chain revenue that supports future distributions for COREZ token holders and NFT collections.
+                  </p>
                   <p className="text-coreezy-300">
-                    To build the most engaged and rewarded validator community on Coreum through
-                    transparency, fair distribution, and genuine utility.
+                    Second, the Vault receives an additional boost from <strong className="text-coreezy-100">10 percent of net profit generated by all businesses operating under Coreezy Vibes LLC</strong>. As the Coreezy brand expands into new projects, partnerships, merch, media, and other ventures, those earnings flow back to the community through the same vault mechanism.
                   </p>
                 </div>
+
                 <div>
-                  <h3 className="text-lg font-semibold text-coreezy-100">Core Values</h3>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3">5D. Ecosystem Growth and Reward Circulation</h3>
+                  <p className="text-coreezy-300 mb-3">
+                    This structure ensures the vault grows over time, rewards stay circulating among engaged holders, and the community benefits at every step.
+                  </p>
+                  <p className="text-coreezy-300 mb-3">
+                    The 2nd NFT series should launch about the same time we hit 1 COREZ equaling 1.5 Coreum. When this happens, Reinvestment to vault goes to 10% and 5% allocated to 2nd Series NFT holders.
+                  </p>
+                  <div className="p-4 rounded-lg bg-amber-900/20 border border-amber-700/30 mt-4">
+                    <p className="text-amber-300 text-sm">
+                      <strong>Minimum Holder Requirement for Drip Rewards:</strong> To qualify for drip rewards, wallets must hold a minimum of <strong>10,000 COREZ</strong>. This ensures that rewards go to active and committed community members, preventing dust-wallet farming and strengthening the ecosystem.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* 6. NFT Ecosystem */}
+            <section className="card p-8 mb-8">
+              <h2 className="text-2xl font-bold text-canopy-400 mb-4">
+                6. NFT Ecosystem
+              </h2>
+              
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3 flex items-center gap-2">
+                    <span className="text-2xl">🦥</span> OG Collection (100 pieces)
+                  </h3>
                   <ul className="space-y-2 text-coreezy-300">
-                    <li className="flex items-start gap-2">
-                      <span className="text-canopy-400 font-bold">Patience</span> — We don&apos;t chase hype. Sustainable growth beats quick flips.
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-canopy-400 font-bold">Transparency</span> — Every decision, metric, and distribution is public.
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-canopy-400 font-bold">Community</span> — Validator rewards flow back to those who support us.
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-canopy-400 font-bold">Security</span> — Enterprise-grade infrastructure protects delegator capital.
-                    </li>
+                    <li>• Proceeds seed the Vault prior to milestone achievement.</li>
+                    <li>• Unlock perpetual access to <strong className="text-coreezy-100">20% of vault rewards</strong> once the project achieves 1 token = 1.5 Coreum valuation.</li>
+                    <li>• Represent cultural status: proof you were here from the very beginning.</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3">Future NFT Collections</h3>
+                  <ul className="space-y-2 text-coreezy-300">
+                    <li>• Each new NFT launch will be tied to the vault.</li>
+                    <li>• <strong className="text-coreezy-100">5% of vault rewards</strong> allocated to holders of future collections.</li>
+                    <li>• A portion of proceeds from each future NFT collection will go directly to the artists who develop them, ensuring creators benefit alongside the community.</li>
+                    <li>• Ensures every NFT adds to the ecosystem, rewards contributors, and stays connected to token growth.</li>
                   </ul>
                 </div>
               </div>
             </section>
 
-            {/* The Sloth Philosophy */}
+            {/* 7. Roadmap */}
             <section className="card p-8 mb-8">
               <h2 className="text-2xl font-bold text-canopy-400 mb-4">
-                The Sloth Philosophy
-              </h2>
-              <div className="flex items-start gap-4 mb-4">
-                <span className="text-4xl">🦥</span>
-                <p className="text-coreezy-300">
-                  Sloths are often misunderstood. They&apos;re not lazy — they&apos;re energy efficient. They move
-                  slowly because they don&apos;t need to rush. They&apos;ve survived for millions of years by
-                  conserving resources and avoiding unnecessary risk.
-                </p>
-              </div>
-              <p className="text-coreezy-300">
-                This is our investment philosophy. We don&apos;t panic sell. We don&apos;t FOMO buy. We stake
-                COREUM, earn rewards, and let compound interest do its work. The Sloth Race gamification
-                system rewards this patience — the longer you stake, the more you earn.
-              </p>
-            </section>
-
-            {/* Ecosystem Components */}
-            <section className="card p-8 mb-8">
-              <h2 className="text-2xl font-bold text-canopy-400 mb-4">
-                Ecosystem Components
-              </h2>
-
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold text-coreezy-100 mb-2">
-                    1. Coreezy Vibes Validator
-                  </h3>
-                  <p className="text-coreezy-300 text-sm">
-                    Our Coreum mainnet validator secures the network while generating rewards for delegators.
-                    Powered by Zeeve infrastructure with 24/7 monitoring and 99.9%+ uptime target.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-coreezy-100 mb-2">
-                    2. COREZ Token
-                  </h3>
-                  <p className="text-coreezy-300 text-sm">
-                    Your community passport. COREZ grants governance rights, vault drip eligibility, and
-                    access to partner perks. Backed by 1.5M COREUM in the community vault.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-coreezy-100 mb-2">
-                    3. Community Vault
-                  </h3>
-                  <p className="text-coreezy-300 text-sm">
-                    A transparent on-chain treasury holding COREUM to back the COREZ token. Distributions
-                    flow to NFT holders, COREZ holders (Final Phase), and reinvestment.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-coreezy-100 mb-2">
-                    4. Canopy Collection NFTs
-                  </h3>
-                  <p className="text-coreezy-300 text-sm">
-                    Limited edition NFTs with real utility — permanent vault reward shares, Sloth Race boosts,
-                    and exclusive community access.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold text-coreezy-100 mb-2">
-                    5. Sloth Race
-                  </h3>
-                  <p className="text-coreezy-300 text-sm">
-                    Gamified staking that rewards consistency over size. Daily snapshots track delegation,
-                    restaking, and engagement to determine class rankings and rewards.
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            {/* Roadmap */}
-            <section className="card p-8 mb-8">
-              <h2 className="text-2xl font-bold text-canopy-400 mb-4">
-                Roadmap
+                7. Roadmap
               </h2>
 
               <div className="space-y-6">
@@ -163,13 +197,10 @@ export default function WhitePaperPage() {
                     <div className="w-0.5 h-full bg-canopy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-canopy-400">Phase 1: Foundation ✓</h3>
-                    <p className="text-sm text-coreezy-400">Q4 2025</p>
+                    <h3 className="font-semibold text-canopy-400">Phase 1 (Now)</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Validator launch on Coreum mainnet</li>
-                      <li>• COREZ token deployment</li>
-                      <li>• OG Canopy NFT mint</li>
-                      <li>• Community vault initialization</li>
+                      <li>• Launch, bonding, vault seeding with OG NFT proceeds</li>
+                      <li>• Launch Validator</li>
                     </ul>
                   </div>
                 </div>
@@ -180,13 +211,26 @@ export default function WhitePaperPage() {
                     <div className="w-0.5 h-full bg-coreezy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-amber-400">Phase 2: Growth (Current)</h3>
-                    <p className="text-sm text-coreezy-400">Q1-Q2 2026</p>
+                    <h3 className="font-semibold text-amber-400">Phase 2 (50K–250K MC)</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Sloth Race v2 launch</li>
-                      <li>• Website rebuild with full integration</li>
-                      <li>• Partner project expansion</li>
-                      <li>• Smart contract automation</li>
+                      <li>• NFT ecosystem expansion</li>
+                      <li>• Merch launch</li>
+                      <li>• Semi or full automation of vault distributions</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex flex-col items-center">
+                    <div className="w-4 h-4 rounded-full bg-coreezy-500" />
+                    <div className="w-0.5 h-full bg-coreezy-800" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-coreezy-300">Phase 3 (1M+ MC)</h3>
+                    <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
+                      <li>• Automated vault contracts</li>
+                      <li>• Public dashboard</li>
+                      <li>• DeFi Tools</li>
                     </ul>
                   </div>
                 </div>
@@ -194,85 +238,126 @@ export default function WhitePaperPage() {
                 <div className="flex gap-4">
                   <div className="flex flex-col items-center">
                     <div className="w-4 h-4 rounded-full bg-coreezy-600" />
-                    <div className="w-0.5 h-full bg-coreezy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-coreezy-400">Phase 3: Expansion</h3>
-                    <p className="text-sm text-coreezy-400">Q3-Q4 2026</p>
+                    <h3 className="font-semibold text-coreezy-400">Phase 4 (5M–10M+ MC)</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Multi-chain validator expansion</li>
-                      <li>• Canopy Cubs NFT collection</li>
-                      <li>• Advanced governance features</li>
-                      <li>• Institutional partnerships</li>
-                    </ul>
-                  </div>
-                </div>
-
-                <div className="flex gap-4">
-                  <div className="flex flex-col items-center">
-                    <div className="w-4 h-4 rounded-full bg-coreezy-700" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-coreezy-500">Phase 4: Maturity</h3>
-                    <p className="text-sm text-coreezy-400">2027+</p>
-                    <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Full vault drip activation</li>
-                      <li>• DAO governance transition</li>
-                      <li>• Ecosystem self-sustainability</li>
+                      <li>• Expansion of lifestyle brand</li>
+                      <li>• Validator operations expansion</li>
+                      <li>• Partnerships</li>
+                      <li>• Exploration of retail-focused financial tools for crypto investment tracking and portfolio management</li>
                     </ul>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* Risk Disclosure */}
+            {/* 8. Governance and Transparency */}
+            <section className="card p-8 mb-8">
+              <h2 className="text-2xl font-bold text-canopy-400 mb-4">
+                8. Governance and Transparency
+              </h2>
+              <ul className="space-y-3 text-coreezy-300">
+                <li>• Transparent monthly reports on vault rewards, burns, reinvestment, and marketing spend, visible via our website.</li>
+                <li>• Community updates and ongoing communication through public dashboards and social channels.</li>
+                <li>• Smart contracts and wallets open-source and verifiable.</li>
+              </ul>
+            </section>
+
+            {/* 9. Legal and Disclaimer */}
             <section className="card p-8 mb-8 border-amber-700/50">
               <h2 className="text-2xl font-bold text-amber-400 mb-4">
-                Risk Disclosure
+                9. Legal and Disclaimer
               </h2>
-              <div className="text-sm text-coreezy-400 space-y-3">
-                <p>
-                  Cryptocurrency investments carry significant risk, including the potential for total loss.
-                  Staking involves locking tokens for a period during which market conditions may change.
-                </p>
-                <p>
-                  Validator operations carry inherent risks including slashing (loss of staked tokens) due to
-                  downtime or double-signing. While we employ enterprise infrastructure to minimize these risks,
-                  they cannot be eliminated entirely.
-                </p>
-                <p>
-                  COREZ token value is not guaranteed. The vault backing ratio provides fundamental value but
-                  does not guarantee market price. Always do your own research before investing.
-                </p>
+              <ul className="space-y-3 text-coreezy-300 text-sm">
+                <li>• Coreezy Vibes LLC is a community-driven project and lifestyle brand.</li>
+                <li>• The token is designed for cultural and ecosystem participation, not as an investment contract.</li>
+                <li>• Vault rewards allocated to NFTs are community milestone rewards, not dividends or profit guarantees.</li>
+                <li>• Coreezy Vibes LLC (U.S.-based entity) manages branding, merch, and community-facing initiatives.</li>
+              </ul>
+            </section>
+
+            {/* 10. Risks and Mitigations */}
+            <section className="card p-8 mb-8">
+              <h2 className="text-2xl font-bold text-canopy-400 mb-4">
+                10. Risks and Mitigations
+              </h2>
+              <p className="text-coreezy-300 mb-6">
+                Coreezy is built with optimism, transparency, and long-term vision, but like any crypto project, it operates within a dynamic and evolving landscape.
+              </p>
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-2">Market Volatility</h3>
+                  <p className="text-sm text-coreezy-400 mb-2">
+                    <strong>Risk:</strong> Crypto markets are inherently volatile. Token price fluctuations may impact vault growth and community sentiment.
+                  </p>
+                  <p className="text-sm text-coreezy-300">
+                    <strong>Mitigation:</strong> Coreezy&apos;s mechanics, compounding vault, and NFT-linked rewards are designed to create value independent of short-term price action. Community rituals and lifestyle branding reinforce cultural value beyond market cycles.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-2">Regulatory Uncertainty</h3>
+                  <p className="text-sm text-coreezy-400 mb-2">
+                    <strong>Risk:</strong> Global regulations around crypto assets, NFTs, and staking mechanisms are evolving.
+                  </p>
+                  <p className="text-sm text-coreezy-300">
+                    <strong>Mitigation:</strong> Coreezy Vibes LLC operates as a U.S.-based lifestyle brand, not a financial institution. Vault rewards are milestone-based community incentives, not dividends or investment returns.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-2">Centralization (Early Phase)</h3>
+                  <p className="text-sm text-coreezy-400 mb-2">
+                    <strong>Risk:</strong> Initial vault operations are manually managed via secure ledger control.
+                  </p>
+                  <p className="text-sm text-coreezy-300">
+                    <strong>Mitigation:</strong> A phased roadmap includes smart contract automation and public dashboards. All wallet addresses and vault flows will remain transparent and verifiable throughout.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-2">NFT Reward Dilution</h3>
+                  <p className="text-sm text-coreezy-400 mb-2">
+                    <strong>Risk:</strong> As new NFT collections launch, reward percentages may be perceived as diluted.
+                  </p>
+                  <p className="text-sm text-coreezy-300">
+                    <strong>Mitigation:</strong> OG NFTs retain perpetual access to the original reward pool. Future collections are milestone-triggered and artist-supported, ensuring each drop adds value to the ecosystem without subtracting from early supporters.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-2">Brand Consistency</h3>
+                  <p className="text-sm text-coreezy-400 mb-2">
+                    <strong>Risk:</strong> As Coreezy Vibes LLC expands into merch, NFTs, and partnerships, brand dilution is a risk.
+                  </p>
+                  <p className="text-sm text-coreezy-300">
+                    <strong>Mitigation:</strong> Coreezy maintains strict visual and thematic guidelines. All merch, media, and community content are curated to reflect the ethos: &quot;We don&apos;t rush. We don&apos;t stress. We stake. We vibe. We grow.&quot;
+                  </p>
+                </div>
               </div>
             </section>
 
-            {/* Contact */}
-            <section className="card p-8 text-center">
-              <h2 className="text-xl font-bold text-coreezy-100 mb-4">
-                Questions?
+            {/* Conclusion */}
+            <section className="card p-8 mb-8 text-center bg-canopy-900/20 border-canopy-700/50">
+              <h2 className="text-2xl font-bold text-canopy-400 mb-4">
+                Conclusion
               </h2>
-              <p className="text-coreezy-300 mb-6">
-                Join our community or reach out directly for more information.
+              <p className="text-coreezy-300 leading-relaxed">
+                Thank you for reading the Coreezy White Paper where meme culture, sustainable tokenomics, NFTs, and lifestyle branding become one ecosystem. Through the Coreum vault engine, NFTs tied to rewards, artist-supported collections, and real-world branding, Coreezy creates something that lasts: a project where culture fuels growth and growth fuels culture.
               </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <a
-                  href="https://t.me/+hh333N0pTRFjNjIx"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary px-6 py-2"
-                >
-                  Telegram
-                </a>
-                <a
-                  href="https://x.com/CoreezyVibes"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-outline px-6 py-2"
-                >
-                  X / Twitter
-                </a>
-              </div>
+            </section>
+
+            {/* Legal Footer */}
+            <section className="text-center text-xs text-coreezy-500">
+              <p className="mb-4">
+                This information is for educational and entertainment purposes only and should not be considered financial advice. Cryptocurrency investments are highly volatile and carry a risk of total loss. Always do your own research before making any investment decisions. Past performance is not indicative of future results. You are solely responsible for any trades or investments you make.
+              </p>
+              <p>
+                © 2025 Coreezy Vibes LLC. All rights reserved.<br />
+                Coreezy™, Coreezy Vibes™, and related marks are owned by Coreezy Vibes LLC.
+              </p>
             </section>
           </article>
         </div>
