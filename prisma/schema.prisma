@@ -1,0 +1,253 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// User & Wallet Management
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  walletAddress String    @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  slothProfile  SlothProfile?
+  snapshots     DailySnapshot[]
+  boostRequests BoostRequest[]
+
+  // Institutional flag
+  isInstitutional Boolean @default(false)
+  companyName     String?
+  contactEmail    String?
+
+  @@index([walletAddress])
+}
+
+// ============================================
+// Sloth Race System
+// ============================================
+
+model SlothProfile {
+  id              String      @id @default(cuid())
+  userId          String      @unique
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name            String?
+  class           SlothClass  @default(BABY)
+  totalScore      BigInt      @default(0)
+  delegationScore BigInt      @default(0)
+  restakeStreak   Int         @default(0)
+  daysAwake       Int         @default(0)
+  isSleeping      Boolean     @default(false)
+  sleepUntil      DateTime?
+  lastSiteVisit   DateTime?
+  joinedAt        DateTime    @default(now())
+
+  // Relations
+  activeBoosts    Boost[]
+
+  @@index([class])
+  @@index([totalScore(sort: Desc)])
+  @@index([isSleeping])
+}
+
+enum SlothClass {
+  BABY
+  TEEN
+  ADULT
+}
+
+model Boost {
+  id            String       @id @default(cuid())
+  profileId     String
+  profile       SlothProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  platform      String       // X, TikTok, Instagram, Reddit
+  multiplier    Int          // Percentage (e.g., 5 = 5%)
+  expiresAt     DateTime
+  proofUrl      String
+  approvedAt    DateTime?
+
+  @@index([profileId, expiresAt])
+  @@index([expiresAt])
+}
+
+model BoostRequest {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  platform    String
+  proofUrl    String
+  status      BoostStatus @default(PENDING)
+  createdAt   DateTime    @default(now())
+  reviewedAt  DateTime?
+  reviewedBy  String?
+  rejectReason String?
+
+  @@index([status])
+  @@index([userId, createdAt])
+}
+
+enum BoostStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model DailySnapshot {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  timestamp        DateTime @db.Date
+  delegationAmount BigInt   // in ucore (micro units)
+  netChange        BigInt   // difference from previous day
+  restakeActive    Boolean
+  undelegated      Boolean
+  siteVisited      Boolean
+  dailyScore       BigInt
+
+  @@unique([userId, timestamp])
+  @@index([timestamp])
+  @@index([userId, timestamp(sort: Desc)])
+}
+
+// ============================================
+// Season Management
+// ============================================
+
+model Season {
+  id          String   @id @default(cuid())
+  name        String
+  startDate   DateTime
+  endDate     DateTime
+  isActive    Boolean  @default(false)
+
+  rewards     SeasonReward[]
+
+  @@index([isActive])
+  @@index([startDate, endDate])
+}
+
+model SeasonReward {
+  id          String      @id @default(cuid())
+  seasonId    String
+  season      Season      @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  class       SlothClass
+  poolPercent Int         // 40, 35, or 25
+  totalPool   BigInt      // in ucore
+  distributed Boolean     @default(false)
+
+  @@unique([seasonId, class])
+}
+
+// ============================================
+// Vault Tracking (Mirror of on-chain state)
+// ============================================
+
+model VaultState {
+  id               String     @id @default(cuid())
+  timestamp        DateTime   @default(now())
+  totalCoreum      BigInt     // in ucore
+  totalCorez       BigInt     // in smallest unit
+  phase            VaultPhase
+  lastDistribution DateTime?
+
+  @@index([timestamp(sort: Desc)])
+}
+
+enum VaultPhase {
+  INITIAL
+  FINAL
+}
+
+model VaultDistribution {
+  id              String   @id @default(cuid())
+  timestamp       DateTime @default(now())
+  totalAmount     BigInt
+  reinvestAmount  BigInt
+  marketingAmount BigInt
+  nftRewardAmount BigInt
+  dripAmount      BigInt
+  txHash          String?
+
+  @@index([timestamp(sort: Desc)])
+}
+
+// ============================================
+// Partners
+// ============================================
+
+model Partner {
+  id          String   @id @default(cuid())
+  name        String
+  website     String
+  logo        String?
+  description String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([isActive, sortOrder])
+}
+
+// ============================================
+// Institutional
+// ============================================
+
+model InstitutionalInquiry {
+  id           String        @id @default(cuid())
+  companyName  String
+  contactName  String
+  email        String
+  phone        String?
+  message      String        @db.Text
+  status       InquiryStatus @default(NEW)
+  createdAt    DateTime      @default(now())
+  respondedAt  DateTime?
+  notes        String?       @db.Text
+
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  NDA_SENT
+  IN_PROGRESS
+  CLOSED
+}
+
+// ============================================
+// Admin & System
+// ============================================
+
+model SystemConfig {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String @db.Text
+
+  @@index([key])
+}
+
+model JobLog {
+  id          String   @id @default(cuid())
+  jobName     String
+  status      String
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  error       String?  @db.Text
+  metadata    Json?
+
+  @@index([jobName, startedAt(sort: Desc)])
+}
