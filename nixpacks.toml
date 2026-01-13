@@ -2,7 +2,7 @@
 nixPkgs = ["nodejs_20", "openssl"]
 
 [phases.install]
-cmds = ["npm install -g pnpm@10.5.0", "pnpm install --frozen-lockfile"]
+cmds = ["npm install -g pnpm@10.5.0 && pnpm install --frozen-lockfile"]
 
 [phases.build]
 cmds = ["pnpm db:generate", "pnpm build"]
