@@ -7,13 +7,21 @@ import { Coins, PieChart, TrendingUp, Clock, Wrench } from 'lucide-react';
 // Note: Total COREZ supply is 10,000,000 (10M)
 // The vault holds 10% (1M COREZ) reserved for staking
 // Target is 1.5M COREUM to achieve 1 COREZ = 1.5 COREUM backing
-const VAULT_DATA = {
+const VAULT_DATA: {
+  totalCoreum: number;
+  targetCoreum: number;
+  totalCorez: number;
+  vaultCorez: number;
+  backingRatio: number;
+  phase: 'INITIAL' | 'FINAL';
+  lastDistribution: string | null;
+} = {
   totalCoreum: 150_000, // Current vault COREUM holdings (placeholder)
   targetCoreum: 1_500_000, // Target: 1.5M COREUM for 1:1.5 backing
   totalCorez: 10_000_000, // Total COREZ supply
   vaultCorez: 1_000_000, // 10% of supply in vault staking
   backingRatio: 0.15, // Current backing ratio (placeholder)
-  phase: 'INITIAL' as const,
+  phase: 'INITIAL',
   lastDistribution: null,
 };
 
