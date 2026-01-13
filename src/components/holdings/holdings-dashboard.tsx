@@ -32,7 +32,6 @@ interface HoldingsData {
   wallets: {
     mainVault: WalletData;
     treasury: WalletData;
-    airdrop: WalletData;
   };
   totals: {
     core: number;
@@ -59,9 +58,8 @@ interface Distribution {
   date: string;
   totalAmount: string;
   perNft: string;
-  reStaked: string;
-  toTreasury: string;
-  txHash: string | null;
+  recipients: number;
+  txHash: string;
 }
 
 export function HoldingsDashboard() {
@@ -249,28 +247,8 @@ export function HoldingsDashboard() {
         </div>
       )}
 
-      {/* LP Tokens */}
-      {holdings.lpTokens && holdings.lpTokens.length > 0 && (
-        <div className="card p-6">
-          <h2 className="text-lg font-bold text-coreezy-100 mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-canopy-400" />
-            COREZ LP Tokens
-          </h2>
-          <div className="space-y-3">
-            {holdings.lpTokens.map((lp, i) => (
-              <div key={i} className="flex justify-between items-center p-3 rounded-lg bg-coreezy-800/50">
-                <code className="text-sm text-coreezy-400 truncate max-w-[60%]">{lp.denom}</code>
-                <span className="font-mono text-canopy-400">
-                  <NumberDisplay value={lp.balance / 1_000_000} decimals={6} />
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Wallet Details */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-2 gap-6">
         {/* Main Vault */}
         <WalletCard
           wallet={holdings.wallets.mainVault}
@@ -278,18 +256,12 @@ export function HoldingsDashboard() {
           copied={copiedAddress === holdings.wallets.mainVault.address}
         />
 
-        {/* Treasury */}
-        <WalletCard
+        {/* Treasury with LP Tokens */}
+        <TreasuryCard
           wallet={holdings.wallets.treasury}
+          lpTokens={holdings.lpTokens}
           onCopy={copyAddress}
           copied={copiedAddress === holdings.wallets.treasury.address}
-        />
-
-        {/* Airdrop */}
-        <WalletCard
-          wallet={holdings.wallets.airdrop}
-          onCopy={copyAddress}
-          copied={copiedAddress === holdings.wallets.airdrop.address}
         />
       </div>
 
@@ -299,6 +271,9 @@ export function HoldingsDashboard() {
           <h2 className="text-lg font-bold text-coreezy-100">
             OG NFT Reward Distributions
           </h2>
+          <p className="text-xs text-coreezy-400 mt-1">
+            On-chain transaction history from the airdrop wallet
+          </p>
         </div>
 
         {distributions.length === 0 ? (
@@ -314,40 +289,36 @@ export function HoldingsDashboard() {
               <thead>
                 <tr className="text-left text-xs text-coreezy-400 border-b border-coreezy-700">
                   <th className="px-4 py-3">Date</th>
+                  <th className="px-4 py-3 text-right">Total</th>
                   <th className="px-4 py-3 text-right">Per NFT</th>
-                  <th className="px-4 py-3 text-right">Re-Staked</th>
-                  <th className="px-4 py-3 text-right">To Treasury</th>
+                  <th className="px-4 py-3 text-right">Recipients</th>
                   <th className="px-4 py-3 text-right">TX</th>
                 </tr>
               </thead>
               <tbody>
                 {distributions.map((d, i) => (
-                  <tr key={i} className="border-b border-coreezy-800">
+                  <tr key={i} className="border-b border-coreezy-800 hover:bg-coreezy-800/30">
                     <td className="px-4 py-3 text-coreezy-300">
                       {new Date(d.date).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-3 text-right font-mono text-coreezy-200">
+                      {d.totalAmount} CORE
                     </td>
                     <td className="px-4 py-3 text-right font-mono text-canopy-400">
                       {d.perNft} CORE
                     </td>
-                    <td className="px-4 py-3 text-right font-mono text-coreezy-300">
-                      {d.reStaked} CORE
-                    </td>
-                    <td className="px-4 py-3 text-right font-mono text-coreezy-300">
-                      {d.toTreasury} CORE
+                    <td className="px-4 py-3 text-right text-coreezy-300">
+                      {d.recipients}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      {d.txHash ? (
-                        <a
-                          href={`https://explorer.coreum.com/coreum/transactions/${d.txHash}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-canopy-400 hover:text-canopy-300"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      ) : (
-                        <span className="text-coreezy-600">—</span>
-                      )}
+                      <a
+                        href={`https://explorer.coreum.com/coreum/transactions/${d.txHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-canopy-400 hover:text-canopy-300"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
                     </td>
                   </tr>
                 ))}
@@ -424,6 +395,96 @@ function WalletCard({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function TreasuryCard({
+  wallet,
+  lpTokens,
+  onCopy,
+  copied,
+}: {
+  wallet: WalletData;
+  lpTokens?: LPToken[];
+  onCopy: (address: string) => void;
+  copied: boolean;
+}) {
+  return (
+    <div className="card p-6">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg bg-coreezy-800">
+          <Wallet className="w-5 h-5 text-coreezy-300" />
+        </div>
+        <h3 className="font-bold text-coreezy-100">{wallet.label}</h3>
+      </div>
+
+      {/* Address */}
+      <div className="flex items-center gap-2 p-2 rounded bg-coreezy-800/50 mb-4">
+        <code className="text-xs text-coreezy-400 flex-1 truncate">
+          {wallet.address}
+        </code>
+        <button
+          onClick={() => onCopy(wallet.address)}
+          className="p-1 hover:bg-coreezy-700 rounded transition-colors"
+        >
+          {copied ? (
+            <Check className="w-4 h-4 text-canopy-400" />
+          ) : (
+            <Copy className="w-4 h-4 text-coreezy-400" />
+          )}
+        </button>
+        <a
+          href={`https://explorer.coreum.com/coreum/accounts/${wallet.address}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="p-1 hover:bg-coreezy-700 rounded transition-colors"
+        >
+          <ExternalLink className="w-4 h-4 text-coreezy-400" />
+        </a>
+      </div>
+
+      {/* Balances */}
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        <div>
+          <div className="text-xs text-coreezy-500 mb-1">COREZ</div>
+          <div className="text-lg font-bold text-amber-400">
+            <NumberDisplay value={wallet.corez} decimals={6} />
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-coreezy-500 mb-1">CORE</div>
+          <div className="text-lg font-bold text-coreezy-200">
+            <NumberDisplay value={wallet.core} decimals={2} />
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-coreezy-500 mb-1">Staked</div>
+          <div className="text-lg font-bold text-canopy-400">
+            <NumberDisplay value={wallet.coreStaked} decimals={2} />
+          </div>
+        </div>
+      </div>
+
+      {/* LP Tokens */}
+      {lpTokens && lpTokens.length > 0 && (
+        <div className="pt-4 border-t border-coreezy-700">
+          <h4 className="text-xs font-semibold text-coreezy-400 mb-3 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            LP Tokens
+          </h4>
+          <div className="space-y-2">
+            {lpTokens.map((lp, i) => (
+              <div key={i} className="flex justify-between items-center p-2 rounded bg-coreezy-800/50">
+                <code className="text-xs text-coreezy-400 truncate max-w-[50%]">{lp.denom}</code>
+                <span className="font-mono text-sm text-canopy-400">
+                  <NumberDisplay value={lp.balance / 1_000_000} decimals={6} />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

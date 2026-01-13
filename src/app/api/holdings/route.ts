@@ -157,20 +157,19 @@ async function getWalletData(address: string): Promise<WalletBalance & { corezDe
 
 export async function GET() {
   try {
-    // Fetch data for all wallets in parallel
-    const [mainVault, treasury, airdrop, validatorInfo] = await Promise.all([
+    // Fetch data for main wallets in parallel
+    const [mainVault, treasury, validatorInfo] = await Promise.all([
       getWalletData(WALLETS.mainVault),
       getWalletData(WALLETS.treasury),
-      getWalletData(WALLETS.airdrop),
       fetch(`${COREUM_REST}/cosmos/staking/v1beta1/validators/${COREEZY_VALIDATOR}`)
         .then(r => r.json())
         .catch(() => null),
     ]);
 
-    // Calculate totals
-    const totalCore = mainVault.core + treasury.core + airdrop.core;
-    const totalCoreStaked = mainVault.coreStaked + treasury.coreStaked + airdrop.coreStaked;
-    const totalCorez = mainVault.corez + treasury.corez + airdrop.corez;
+    // Calculate totals (Main Vault + Treasury only)
+    const totalCore = mainVault.core + treasury.core;
+    const totalCoreStaked = mainVault.coreStaked + treasury.coreStaked;
+    const totalCorez = mainVault.corez + treasury.corez;
 
     // Get validator stats
     const validatorTokens = validatorInfo?.validator?.tokens 
@@ -178,14 +177,10 @@ export async function GET() {
       : 0;
 
     // Detect COREZ denom from wallets
-    const detectedCorezDenom = mainVault.corezDenom || treasury.corezDenom || airdrop.corezDenom || 'Not detected';
+    const detectedCorezDenom = mainVault.corezDenom || treasury.corezDenom || 'Not detected';
     
-    // Collect all LP tokens from all wallets
-    const allLPTokens = [
-      ...(treasury.lpTokens || []),
-      ...(mainVault.lpTokens || []),
-      ...(airdrop.lpTokens || []),
-    ];
+    // Collect LP tokens from treasury
+    const allLPTokens = treasury.lpTokens || [];
 
     return NextResponse.json({
       lastUpdated: new Date().toISOString(),
@@ -203,14 +198,6 @@ export async function GET() {
           core: treasury.core,
           coreStaked: treasury.coreStaked,
           corez: treasury.corez,
-          lpTokens: treasury.lpTokens,
-        },
-        airdrop: {
-          label: 'NFT Holder Airdrops',
-          address: airdrop.address,
-          core: airdrop.core,
-          coreStaked: airdrop.coreStaked,
-          corez: airdrop.corez,
         },
       },
       lpTokens: allLPTokens.length > 0 ? allLPTokens : undefined,
