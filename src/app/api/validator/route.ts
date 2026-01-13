@@ -36,7 +36,7 @@ export async function GET() {
     return NextResponse.json({
       validator: {
         operatorAddress: validator.operator_address,
-        moniker: validator.description?.moniker || 'Coreezy Vibes',
+        moniker: validator.description?.moniker || 'Coreezy',
         website: validator.description?.website || 'https://coreezy.xyz',
         details: validator.description?.details || '',
         status: validator.status,

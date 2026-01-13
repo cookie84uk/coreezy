@@ -18,7 +18,7 @@ import {
 export const metadata: Metadata = {
   title: 'Validator Transparency | Coreezy',
   description:
-    'Coreezy Vibes Validator - Enterprise-grade infrastructure on Coreum with full transparency.',
+    'Coreezy Validator - Enterprise-grade infrastructure on Coreum with full transparency.',
 };
 
 export default function ValidatorPage() {
@@ -28,7 +28,7 @@ export default function ValidatorPage() {
           {/* Hero */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gradient mb-4">
-              Coreezy Vibes Validator
+              Coreezy Validator
             </h1>
             <p className="text-xl text-coreezy-300 max-w-2xl mx-auto">
               Enterprise-grade validation infrastructure with full transparency

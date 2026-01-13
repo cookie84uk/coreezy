@@ -12,6 +12,19 @@ export default function SlothRacePage() {
   return (
     <div className="bg-gradient-jungle py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Coming Soon Banner */}
+          <div className="mb-8 p-4 rounded-xl bg-amber-900/30 border border-amber-700/50 text-center">
+            <span className="inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-sm font-semibold mb-2">
+              Coming Soon
+            </span>
+            <p className="text-amber-200 font-medium">
+              The Sloth Race launches <strong>April 1st, 2026</strong>
+            </p>
+            <p className="text-sm text-amber-300/70 mt-1">
+              3-month racing season matching our partner rewards distribution schedule
+            </p>
+          </div>
+
           {/* Hero */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gradient mb-4">

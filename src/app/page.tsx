@@ -56,55 +56,35 @@ export default function HomePage() {
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-8 items-center">
               <div className="max-w-2xl">
                 <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-                  <span className="text-gradient">Discover Coreezy:</span>
+                  <span className="text-gradient">Enterprise Validation</span>
                   <br />
-                  Web3 Made Eeezy
+                  Built on Coreum
                 </h1>
 
-                <p className="mt-4 text-xl font-medium text-canopy-400 italic">
-                  Stake. Vibe. Grow. Repeat.
+                <p className="mt-4 text-xl font-medium text-canopy-400">
+                  Secure. Transparent. Community-Aligned.
                 </p>
 
                 <p className="mt-6 text-lg text-coreezy-300">
-                  Coreezy isn&apos;t a token you stake. It&apos;s a{' '}
-                  <strong className="text-coreezy-100">vibe you join</strong>.
+                  Coreezy operates enterprise-grade validator infrastructure on the Coreum 
+                  blockchain, combining institutional-level security with community-focused 
+                  reward distribution.
                 </p>
 
-                <p className="mt-4 text-coreezy-300">
-                  Built on Coreum, we believe in staking COREUM — the engine
-                  that powers real yield, real security, and real growth.
-                </p>
-
-                <p className="mt-4 text-coreezy-300">
-                  COREZ? That&apos;s your{' '}
-                  <strong className="text-coreezy-100">community passport</strong>.
-                </p>
-
-                <ul className="mt-6 space-y-2 text-coreezy-300">
+                <ul className="mt-6 space-y-3 text-coreezy-300">
                   <li className="flex items-start">
                     <span className="mr-2 text-canopy-400">•</span>
-                    It lives in your wallet as a sign of belief
+                    99.9% uptime with Zeeve infrastructure
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2 text-canopy-400">•</span>
-                    It connects you to NFT drops, validator rewards, and partner
-                    perks
+                    Wyoming LLC with documented governance
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2 text-canopy-400">•</span>
-                    And one day, it&apos;ll unlock a{' '}
-                    <strong className="text-coreezy-100">
-                      1.5M COREUM community vault
-                    </strong>{' '}
-                    — when the time is right
+                    Transparent on-chain operations
                   </li>
                 </ul>
-
-                <p className="mt-6 text-coreezy-400 italic">
-                  We don&apos;t rush. We don&apos;t stress.
-                  <br />
-                  We stake COREUM. We vibe with COREZ. We grow, together.
-                </p>
 
                 <div className="mt-8 flex flex-wrap gap-4">
                   <Link
@@ -114,10 +94,10 @@ export default function HomePage() {
                     Stake with Coreezy
                   </Link>
                   <Link
-                    href="/community"
-                    className="btn-outline px-6 py-3 text-lg"
+                    href="/institutional"
+                    className="btn-secondary px-6 py-3 text-lg"
                   >
-                    Join the Community
+                    Institutional Inquiry
                   </Link>
                 </div>
               </div>

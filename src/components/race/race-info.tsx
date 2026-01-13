@@ -24,6 +24,28 @@ export function RaceInfo() {
         </div>
       )}
 
+      {/* Racing Schedule */}
+      <div className="card p-4 border-canopy-700/50">
+        <h3 className="text-sm font-semibold text-canopy-400 mb-3">Racing Schedule</h3>
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-coreezy-300">Season Start</span>
+            <span className="text-coreezy-100 font-medium">April 1, 2026</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-coreezy-300">Season End</span>
+            <span className="text-coreezy-100 font-medium">June 30, 2026</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-coreezy-300">Duration</span>
+            <span className="text-canopy-400 font-medium">3 Months</span>
+          </div>
+        </div>
+        <p className="text-xs text-coreezy-400 mt-3">
+          Aligned with partner rewards distribution schedule
+        </p>
+      </div>
+
       {/* How It Works */}
       <div className="card p-4">
         <h3 className="text-sm font-semibold text-coreezy-400 mb-3">How It Works</h3>

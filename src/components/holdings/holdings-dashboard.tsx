@@ -13,12 +13,18 @@ import {
 } from 'lucide-react';
 import { NumberDisplay } from '@/components/ui/number-display';
 
+interface LPToken {
+  denom: string;
+  balance: number;
+}
+
 interface WalletData {
   label: string;
   address: string;
   core: number;
   coreStaked: number;
   corez: number;
+  lpTokens?: LPToken[];
 }
 
 interface HoldingsData {
@@ -26,6 +32,7 @@ interface HoldingsData {
   wallets: {
     mainVault: WalletData;
     treasury: WalletData;
+    airdrop: WalletData;
   };
   totals: {
     core: number;
@@ -33,6 +40,7 @@ interface HoldingsData {
     corez: number;
     validatorTotalStaked: number;
   };
+  lpTokens?: LPToken[];
   corezToken?: {
     totalSupply: number;
     decimals: number;
@@ -241,8 +249,28 @@ export function HoldingsDashboard() {
         </div>
       )}
 
+      {/* LP Tokens */}
+      {holdings.lpTokens && holdings.lpTokens.length > 0 && (
+        <div className="card p-6">
+          <h2 className="text-lg font-bold text-coreezy-100 mb-4 flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-canopy-400" />
+            COREZ LP Tokens
+          </h2>
+          <div className="space-y-3">
+            {holdings.lpTokens.map((lp, i) => (
+              <div key={i} className="flex justify-between items-center p-3 rounded-lg bg-coreezy-800/50">
+                <code className="text-sm text-coreezy-400 truncate max-w-[60%]">{lp.denom}</code>
+                <span className="font-mono text-canopy-400">
+                  <NumberDisplay value={lp.balance / 1_000_000} decimals={6} />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Wallet Details */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-3 gap-6">
         {/* Main Vault */}
         <WalletCard
           wallet={holdings.wallets.mainVault}
@@ -255,6 +283,13 @@ export function HoldingsDashboard() {
           wallet={holdings.wallets.treasury}
           onCopy={copyAddress}
           copied={copiedAddress === holdings.wallets.treasury.address}
+        />
+
+        {/* Airdrop */}
+        <WalletCard
+          wallet={holdings.wallets.airdrop}
+          onCopy={copyAddress}
+          copied={copiedAddress === holdings.wallets.airdrop.address}
         />
       </div>
 

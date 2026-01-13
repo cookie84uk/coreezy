@@ -37,12 +37,6 @@ const PARTNERS = [
     icon: Shield,
     url: 'https://zeeve.io',
   },
-  {
-    name: 'Sologenic',
-    description: 'DEX for trading COREZ and Coreum assets.',
-    icon: ArrowRight,
-    url: 'https://sologenic.com',
-  },
 ];
 
 const SOCIAL_LINKS = [
@@ -51,7 +45,7 @@ const SOCIAL_LINKS = [
     description: 'Main community chat for discussions and support.',
     Icon: MessageCircle,
     url: 'https://t.me/+hh333N0pTRFjNjIx',
-    members: '500+',
+    members: '200+',
   },
   {
     name: 'X / Twitter',
@@ -204,7 +198,7 @@ export default function CommunityPage() {
               <Gift className="w-6 h-6" />
               Ecosystem Partners
             </h2>
-            <div className="grid sm:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 gap-6">
               {PARTNERS.map((partner) => (
                 <a
                   key={partner.name}
