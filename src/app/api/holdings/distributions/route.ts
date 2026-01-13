@@ -82,7 +82,8 @@ async function fetchAirdropTransactions(): Promise<Distribution[]> {
 
     // Convert to distribution format
     const distributions: Distribution[] = [];
-    for (const [, dist] of distributionsByDate) {
+    const entries = Array.from(distributionsByDate.values());
+    for (const dist of entries) {
       // Only include distributions with multiple recipients (likely NFT distributions)
       if (dist.recipients >= 1) {
         const totalCORE = dist.totalAmount / 1_000_000;
