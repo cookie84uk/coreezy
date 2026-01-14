@@ -59,7 +59,7 @@ const FAQ = [
   },
   {
     q: 'What is your commission rate?',
-    a: 'Our standard commission is 2%. Reduced rates may be available for large delegators under partnership agreements.',
+    a: 'Our standard commission is 2%. We provide premium service with enterprise-grade infrastructure and dedicated support.',
   },
   {
     q: 'How do you handle slashing events?',

@@ -10,6 +10,7 @@ import {
   Shield,
   ArrowLeftRight,
   ArrowRight,
+  Users,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -38,14 +39,22 @@ const PARTNERS = [
     perks: '99.9%+ uptime SLA',
   },
   {
-    name: 'Sologenic',
-    category: 'DEX',
+    name: 'Cruise Control',
+    category: 'Ecosystem',
     description:
-      'Decentralized exchange for trading COREZ tokens and other Coreum assets with deep liquidity.',
+      'Building and supporting projects across the Coreum ecosystem with shared community values.',
     Icon: ArrowLeftRight,
-    url: 'https://sologenic.com',
-    perks: 'COREZ trading pairs',
+    url: '#',
+    perks: 'Ecosystem collaboration',
   },
+];
+
+const DELEGATION_PARTICIPANTS = [
+  { name: 'Money Grabbers', url: '#' },
+  { name: 'Xmeme', url: '#' },
+  { name: 'Farmer Union', url: '#' },
+  { name: 'Chain Plate', url: '#' },
+  { name: 'Black Market Dawgs', url: '#' },
 ];
 
 const BECOME_PARTNER = [
@@ -98,7 +107,7 @@ export default function PartnersPage() {
                   href={partner.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="card p-6 hover:border-canopy-500/50 transition-all group"
+                  className={`card p-6 hover:border-canopy-500/50 transition-all group ${partner.url === '#' ? 'pointer-events-none' : ''}`}
                 >
                   <div className="flex items-center gap-4 mb-4">
                     <div className="p-2 rounded-lg bg-coreezy-800 group-hover:bg-canopy-900/50 transition-colors">
@@ -116,6 +125,33 @@ export default function PartnersPage() {
                 </a>
               ))}
             </div>
+          </section>
+
+          {/* Delegation Participants */}
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold text-canopy-400 mb-2 flex items-center gap-3">
+              <Users className="w-6 h-6" />
+              Delegation Participants
+            </h2>
+            <p className="text-coreezy-400 mb-6">
+              Projects that have elected to delegate stake to Coreezy under transparent, non-custodial revenue-sharing arrangements.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+              {DELEGATION_PARTICIPANTS.map((project) => (
+                <div
+                  key={project.name}
+                  className="card p-4 text-center hover:border-canopy-500/30 transition-all"
+                >
+                  <div className="w-12 h-12 rounded-full bg-coreezy-800 mx-auto mb-3 flex items-center justify-center">
+                    <Users className="w-6 h-6 text-coreezy-400" />
+                  </div>
+                  <h3 className="font-medium text-coreezy-100 text-sm">{project.name}</h3>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-coreezy-500 mt-4">
+              Delegation relationships do not grant control over validator operations, governance decisions, or reward distribution mechanics beyond protocol rules.
+            </p>
           </section>
 
           {/* Partner Benefits */}

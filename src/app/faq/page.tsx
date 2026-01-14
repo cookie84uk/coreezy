@@ -101,7 +101,7 @@ const FAQ_SECTIONS = [
       },
       {
         q: 'How do I claim NFT rewards?',
-        a: 'Connect your wallet holding the NFT, visit the Vault Dashboard, and click claim. Rewards accumulate until claimed.',
+        a: 'NFT rewards auto-drip directly to your wallet - no claiming required. Rewards are distributed automatically to all eligible NFT holders.',
       },
       {
         q: 'Do NFTs give Sloth Race boosts?',
