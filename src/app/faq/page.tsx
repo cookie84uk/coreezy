@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import { HelpCircle, MessageCircle, Twitter, ChevronDown } from 'lucide-react';
+import { ReactNode } from 'react';
 
 export const metadata: Metadata = {
   title: 'FAQ | Coreezy',
@@ -7,7 +8,17 @@ export const metadata: Metadata = {
     'Frequently asked questions about Coreezy - staking, COREZ token, Sloth Race, and more.',
 };
 
-const FAQ_SECTIONS = [
+interface FAQItem {
+  q: string;
+  a: ReactNode;
+}
+
+interface FAQSection {
+  title: string;
+  questions: FAQItem[];
+}
+
+const FAQ_SECTIONS: FAQSection[] = [
   {
     title: 'General',
     questions: [
@@ -30,7 +41,7 @@ const FAQ_SECTIONS = [
     questions: [
       {
         q: 'How do I stake with Coreezy?',
-        a: 'Connect your Keplr or Leap wallet, navigate to the Coreum staking page (Mintscan or Coreum Explorer), and delegate to "Coreezy Vibes" validator.',
+        a: 'Go to your wallet (Keplr or Leap), select Stake, and search for "Coreezy". Select our validator and delegate your COREUM.',
       },
       {
         q: 'What is the commission rate?',
@@ -55,7 +66,20 @@ const FAQ_SECTIONS = [
       },
       {
         q: 'How do I get COREZ?',
-        a: 'COREZ is available on Coreum DEXs like Sologenic. Always verify the contract address before trading.',
+        a: (
+          <>
+            Navigate to the DEX on{' '}
+            <a
+              href="https://cruisecontrol.zone/swap?from=ucore&to=corez-coreezyvibes.coreezy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-canopy-400 hover:underline"
+            >
+              Cruise Control
+            </a>
+            . Always verify the contract address before trading.
+          </>
+        ),
       },
       {
         q: 'What backs the COREZ token?',
@@ -122,7 +146,23 @@ const FAQ_SECTIONS = [
       },
       {
         q: 'How can I verify official links?',
-        a: 'Official channels: coreezy.xyz, @CoreezyVibes on X, and our pinned Telegram links. When in doubt, ask in the community.',
+        a: (
+          <>
+            Official channels:{' '}
+            <a href="https://coreezy.xyz" target="_blank" rel="noopener noreferrer" className="text-canopy-400 hover:underline">
+              coreezy.xyz
+            </a>
+            ,{' '}
+            <a href="https://x.com/CoreezyVibes" target="_blank" rel="noopener noreferrer" className="text-canopy-400 hover:underline">
+              @CoreezyVibes on X
+            </a>
+            , and our{' '}
+            <a href="https://t.me/+hh333N0pTRFjNjIx" target="_blank" rel="noopener noreferrer" className="text-canopy-400 hover:underline">
+              pinned Telegram links
+            </a>
+            . When in doubt, ask in the community.
+          </>
+        ),
       },
     ],
   },

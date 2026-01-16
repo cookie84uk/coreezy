@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { useWallet } from '@/components/wallet/wallet-provider';
 import { WalletModal } from '@/components/wallet/wallet-modal';
@@ -29,7 +30,13 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl">🦥</span>
+            <Image
+              src="/logo.png"
+              alt="Coreezy"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
             <span className="text-xl font-bold text-gradient">Coreezy</span>
           </Link>
 

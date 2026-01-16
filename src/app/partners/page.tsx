@@ -11,6 +11,7 @@ import {
   ArrowLeftRight,
   ArrowRight,
   Users,
+  ExternalLink,
 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -50,11 +51,11 @@ const PARTNERS = [
 ];
 
 const DELEGATION_PARTICIPANTS = [
-  { name: 'Money Grabbers', url: '#' },
-  { name: 'Xmeme', url: '#' },
-  { name: 'Farmer Union', url: '#' },
-  { name: 'Chain Plate', url: '#' },
-  { name: 'Black Market Dawgs', url: '#' },
+  { name: 'Money Grabbers', url: 'https://x.com/MonyGrabbersNFT' },
+  { name: 'Xmeme', url: 'https://x.com/xmeme_token' },
+  { name: 'Farmer Union', url: 'https://x.com/FarmerUnionNFT' },
+  { name: 'Chain Plate', url: 'https://x.com/ChainPlate_' },
+  { name: 'Black Market Dawgs', url: 'https://x.com/BMDawgsNFT' },
 ];
 
 const BECOME_PARTNER = [
@@ -138,15 +139,21 @@ export default function PartnersPage() {
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
               {DELEGATION_PARTICIPANTS.map((project) => (
-                <div
+                <a
                   key={project.name}
-                  className="card p-4 text-center hover:border-canopy-500/30 transition-all"
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="card p-4 text-center hover:border-canopy-500/30 transition-all group cursor-pointer"
                 >
-                  <div className="w-12 h-12 rounded-full bg-coreezy-800 mx-auto mb-3 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-coreezy-800 mx-auto mb-3 flex items-center justify-center group-hover:bg-canopy-900/50 transition-colors">
                     <Users className="w-6 h-6 text-coreezy-400" />
                   </div>
-                  <h3 className="font-medium text-coreezy-100 text-sm">{project.name}</h3>
-                </div>
+                  <h3 className="font-medium text-coreezy-100 text-sm flex items-center justify-center gap-1">
+                    {project.name}
+                    <ExternalLink className="w-3 h-3 text-coreezy-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </h3>
+                </a>
               ))}
             </div>
             <p className="text-xs text-coreezy-500 mt-4">
