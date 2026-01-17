@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Baby, Leaf, TreeDeciduous } from 'lucide-react';
 import { Leaderboard } from '@/components/race/leaderboard';
 import { RaceInfo } from '@/components/race/race-info';
+import { PrizePool } from '@/components/race/prize-pool';
 
 export const metadata: Metadata = {
   title: 'Sloth Race',
@@ -39,6 +40,11 @@ export default function SlothRacePage() {
             </p>
           </div>
 
+          {/* Prize Pool */}
+          <div className="mb-12">
+            <PrizePool />
+          </div>
+
           {/* Class Badges */}
           <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto mb-12">
             <div className="card p-4 text-center">
@@ -47,6 +53,7 @@ export default function SlothRacePage() {
               </div>
               <div className="font-bold text-amber-400">Baby Sloth</div>
               <div className="text-xs text-coreezy-400">Bottom 33%</div>
+              <div className="text-xs text-coreezy-500 mt-1">10% of pool</div>
             </div>
             <div className="card p-4 text-center">
               <div className="flex justify-center mb-2">
@@ -54,6 +61,7 @@ export default function SlothRacePage() {
               </div>
               <div className="font-bold text-emerald-400">Teen Sloth</div>
               <div className="text-xs text-coreezy-400">Middle 33%</div>
+              <div className="text-xs text-coreezy-500 mt-1">30% of pool</div>
             </div>
             <div className="card p-4 text-center">
               <div className="flex justify-center mb-2">
@@ -61,6 +69,7 @@ export default function SlothRacePage() {
               </div>
               <div className="font-bold text-canopy-400">Adult Sloth</div>
               <div className="text-xs text-coreezy-400">Top 33%</div>
+              <div className="text-xs text-coreezy-500 mt-1">60% of pool</div>
             </div>
           </div>
 
