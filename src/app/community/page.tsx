@@ -11,11 +11,11 @@ import {
   Zap,
   Shield,
   ArrowRight,
-  Clock,
   CheckCircle,
   XCircle,
   AlertTriangle,
 } from 'lucide-react';
+import { CommunityStats } from '@/components/community/community-stats';
 
 export const metadata: Metadata = {
   title: 'Community | Coreezy',
@@ -156,32 +156,7 @@ export default function CommunityPage() {
 
           {/* Community Stats */}
           <section className="mb-16">
-            <div className="card p-8">
-              <h2 className="text-xl font-bold text-canopy-400 mb-6 text-center">
-                Community by the Numbers
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div>
-                  <div className="text-3xl font-bold text-canopy-400">85</div>
-                  <div className="text-sm text-coreezy-400">Delegators</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-canopy-400">100</div>
-                  <div className="text-sm text-coreezy-400">OG NFT Holders</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-canopy-400">50K</div>
-                  <div className="text-sm text-coreezy-400">COREUM in Vault</div>
-                </div>
-                <div>
-                  <div className="flex items-center justify-center gap-1 text-3xl font-bold text-canopy-400">
-                    <Clock className="w-6 h-6" />
-                    24/7
-                  </div>
-                  <div className="text-sm text-coreezy-400">Community Support</div>
-                </div>
-              </div>
-            </div>
+            <CommunityStats />
           </section>
 
           {/* Partners */}
