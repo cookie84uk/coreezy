@@ -28,15 +28,15 @@ export function Header() {
     <>
       <header className="sticky top-0 z-50 bg-coreezy-950/95 backdrop-blur-sm">
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-24 items-center justify-between gap-6">
+          <div className="flex h-20 sm:h-24 lg:h-28 items-center justify-between gap-6">
             {/* Logo */}
             <Link href="/" className="shrink-0">
               <Image
                 src="/logo.png"
                 alt="Coreezy"
-                width={72}
-                height={72}
-                className="rounded-full hover:scale-105 transition-transform"
+                width={88}
+                height={88}
+                className="w-14 h-14 sm:w-[72px] sm:h-[72px] lg:w-[88px] lg:h-[88px] rounded-full hover:scale-105 transition-transform"
               />
             </Link>
 
