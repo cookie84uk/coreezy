@@ -106,17 +106,15 @@ export default function HomePage() {
               <div className="relative flex items-center justify-center">
                 {/* Coreezy Logo */}
                 <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
-                  <div className="absolute inset-0 bg-gradient-radial from-canopy-500/20 to-transparent rounded-full animate-slow-pulse" />
-                  <div className="absolute inset-4 glass rounded-3xl flex items-center justify-center p-6">
-                    <Image
-                      src="/logo.png"
-                      alt="Coreezy"
-                      width={400}
-                      height={400}
-                      className="w-full h-full object-contain animate-float"
-                      priority
-                    />
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-radial from-canopy-500/30 to-transparent rounded-full animate-slow-pulse" />
+                  <Image
+                    src="/logo.png"
+                    alt="Coreezy"
+                    width={400}
+                    height={400}
+                    className="relative w-full h-full object-contain animate-float drop-shadow-2xl"
+                    priority
+                  />
                 </div>
               </div>
             </div>

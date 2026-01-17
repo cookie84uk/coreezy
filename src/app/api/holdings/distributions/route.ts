@@ -32,10 +32,16 @@ interface Distribution {
 async function fetchAirdropTransactions(): Promise<Distribution[]> {
   try {
     // Fetch transactions where airdrop wallet is the sender (outgoing distributions)
-    const response = await fetch(
-      `${COREUM_REST}/cosmos/tx/v1beta1/txs?events=message.sender%3D%27${AIRDROP_WALLET}%27&pagination.limit=100&order_by=ORDER_BY_DESC`,
-      { next: { revalidate: 300 } } // Cache for 5 minutes
-    );
+    // Use query parameter format with proper URL encoding
+    const query = encodeURIComponent(`message.sender='${AIRDROP_WALLET}'`);
+    const url = `${COREUM_REST}/cosmos/tx/v1beta1/txs?query=${query}&pagination.limit=100&order_by=ORDER_BY_DESC`;
+    
+    console.log('Fetching distributions from:', url);
+    
+    const response = await fetch(url, { 
+      next: { revalidate: 300 }, // Cache for 5 minutes
+      headers: { 'Accept': 'application/json' }
+    });
 
     if (!response.ok) {
       console.error('Failed to fetch transactions:', response.status);
