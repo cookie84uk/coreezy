@@ -118,15 +118,15 @@ export function HoldingsDashboard() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="card p-6 animate-pulse">
-            <div className="h-6 bg-coreezy-700 rounded w-48 mb-4" />
-            <div className="grid grid-cols-3 gap-4">
+          <div key={i} className="card p-4 sm:p-6 animate-pulse">
+            <div className="h-5 sm:h-6 bg-coreezy-700 rounded w-32 sm:w-48 mb-4" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
               {[...Array(3)].map((_, j) => (
                 <div key={j}>
-                  <div className="h-8 bg-coreezy-700 rounded mb-2" />
-                  <div className="h-4 bg-coreezy-700 rounded w-20" />
+                  <div className="h-6 sm:h-8 bg-coreezy-700 rounded mb-2" />
+                  <div className="h-3 sm:h-4 bg-coreezy-700 rounded w-16 sm:w-20" />
                 </div>
               ))}
             </div>
@@ -148,19 +148,19 @@ export function HoldingsDashboard() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Last Updated + Refresh */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-coreezy-400">
-          <Clock className="w-4 h-4" />
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+        <div className="flex items-center gap-2 text-xs sm:text-sm text-coreezy-400">
+          <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
           <span>
-            Last updated: {new Date(holdings.lastUpdated).toLocaleString()}
+            Updated: {new Date(holdings.lastUpdated).toLocaleString()}
           </span>
         </div>
         <button
           onClick={() => fetchData(true)}
           disabled={refreshing}
-          className="btn-ghost px-3 py-1.5 text-sm flex items-center gap-2"
+          className="btn-ghost px-3 py-2 text-sm flex items-center gap-2"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           Refresh
@@ -168,51 +168,51 @@ export function HoldingsDashboard() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 rounded-lg bg-canopy-900/50">
-              <Coins className="w-5 h-5 text-canopy-400" />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="card p-3 sm:p-5">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <div className="p-1.5 sm:p-2 rounded-lg bg-canopy-900/50">
+              <Coins className="w-4 h-4 sm:w-5 sm:h-5 text-canopy-400" />
             </div>
-            <span className="text-sm text-coreezy-400">Total CORE</span>
+            <span className="text-xs sm:text-sm text-coreezy-400">Total CORE</span>
           </div>
-          <div className="text-2xl font-bold text-canopy-400">
-            <NumberDisplay value={holdings.totals.core} decimals={2} />
+          <div className="text-lg sm:text-2xl font-bold text-canopy-400">
+            <NumberDisplay value={holdings.totals.core} decimals={0} />
           </div>
         </div>
 
-        <div className="card p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 rounded-lg bg-canopy-900/50">
-              <TrendingUp className="w-5 h-5 text-canopy-400" />
+        <div className="card p-3 sm:p-5">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <div className="p-1.5 sm:p-2 rounded-lg bg-canopy-900/50">
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-canopy-400" />
             </div>
-            <span className="text-sm text-coreezy-400">Total Staked</span>
+            <span className="text-xs sm:text-sm text-coreezy-400">Staked</span>
           </div>
-          <div className="text-2xl font-bold text-canopy-400">
-            <NumberDisplay value={holdings.totals.coreStaked} decimals={2} />
+          <div className="text-lg sm:text-2xl font-bold text-canopy-400">
+            <NumberDisplay value={holdings.totals.coreStaked} decimals={0} />
           </div>
         </div>
 
-        <div className="card p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 rounded-lg bg-amber-900/50">
-              <Coins className="w-5 h-5 text-amber-400" />
+        <div className="card p-3 sm:p-5">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <div className="p-1.5 sm:p-2 rounded-lg bg-amber-900/50">
+              <Coins className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
             </div>
-            <span className="text-sm text-coreezy-400">Total COREZ</span>
+            <span className="text-xs sm:text-sm text-coreezy-400">COREZ</span>
           </div>
-          <div className="text-2xl font-bold text-amber-400">
-            <NumberDisplay value={holdings.totals.corez} decimals={6} />
+          <div className="text-lg sm:text-2xl font-bold text-amber-400">
+            <NumberDisplay value={holdings.totals.corez} decimals={0} />
           </div>
         </div>
 
-        <div className="card p-5">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 rounded-lg bg-emerald-900/50">
-              <TrendingUp className="w-5 h-5 text-emerald-400" />
+        <div className="card p-3 sm:p-5">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <div className="p-1.5 sm:p-2 rounded-lg bg-emerald-900/50">
+              <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400" />
             </div>
-            <span className="text-sm text-coreezy-400">Validator Total</span>
+            <span className="text-xs sm:text-sm text-coreezy-400">Validator</span>
           </div>
-          <div className="text-2xl font-bold text-emerald-400">
+          <div className="text-lg sm:text-2xl font-bold text-emerald-400">
             <NumberDisplay value={holdings.totals.validatorTotalStaked} decimals={0} />
           </div>
         </div>
@@ -220,33 +220,33 @@ export function HoldingsDashboard() {
 
       {/* COREZ Token Info */}
       {holdings.corezToken && (
-        <div className="card p-6">
-          <h2 className="text-lg font-bold text-coreezy-100 mb-4 flex items-center gap-2">
-            <Coins className="w-5 h-5 text-amber-400" />
+        <div className="card p-4 sm:p-6">
+          <h2 className="text-base sm:text-lg font-bold text-coreezy-100 mb-3 sm:mb-4 flex items-center gap-2">
+            <Coins className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
             COREZ Token Supply
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <div>
               <div className="text-xs text-coreezy-500 mb-1">Total Supply</div>
-              <div className="text-xl font-bold text-amber-400">
+              <div className="text-base sm:text-xl font-bold text-amber-400">
                 <NumberDisplay value={holdings.corezToken.totalSupply} decimals={0} />
               </div>
             </div>
             <div>
               <div className="text-xs text-coreezy-500 mb-1">Held by Project</div>
-              <div className="text-xl font-bold text-coreezy-200">
-                <NumberDisplay value={holdings.corezToken.heldByProject} decimals={2} />
+              <div className="text-base sm:text-xl font-bold text-coreezy-200">
+                <NumberDisplay value={holdings.corezToken.heldByProject} decimals={0} />
               </div>
             </div>
             <div>
-              <div className="text-xs text-coreezy-500 mb-1">Circulating Supply</div>
-              <div className="text-xl font-bold text-canopy-400">
-                <NumberDisplay value={holdings.corezToken.circulatingSupply} decimals={2} />
+              <div className="text-xs text-coreezy-500 mb-1">Circulating</div>
+              <div className="text-base sm:text-xl font-bold text-canopy-400">
+                <NumberDisplay value={holdings.corezToken.circulatingSupply} decimals={0} />
               </div>
             </div>
-            <div>
+            <div className="col-span-2 lg:col-span-1">
               <div className="text-xs text-coreezy-500 mb-1">Token Denom</div>
-              <div className="text-sm font-mono text-coreezy-400 truncate">
+              <div className="text-xs sm:text-sm font-mono text-coreezy-400 truncate">
                 {holdings.corezToken.detectedDenom}
               </div>
             </div>
@@ -255,7 +255,7 @@ export function HoldingsDashboard() {
       )}
 
       {/* Wallet Details */}
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Main Vault */}
         <WalletCard
           wallet={holdings.wallets.mainVault}
@@ -274,21 +274,21 @@ export function HoldingsDashboard() {
 
       {/* Distribution History */}
       <div className="card">
-        <div className="p-4 border-b border-coreezy-700">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="p-3 sm:p-4 border-b border-coreezy-700">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
             <div>
-              <h2 className="text-lg font-bold text-coreezy-100">
-                OG NFT Reward Distributions
+              <h2 className="text-base sm:text-lg font-bold text-coreezy-100">
+                OG NFT Distributions
               </h2>
-              <p className="text-xs text-coreezy-400 mt-1">
-                On-chain transaction history from the airdrop wallet
+              <p className="text-[10px] sm:text-xs text-coreezy-400 mt-0.5 sm:mt-1">
+                On-chain history from airdrop wallet
               </p>
             </div>
             {distributionTotals && distributionTotals.distributionCount > 0 && (
-              <div className="text-right">
-                <div className="text-xs text-coreezy-400">Total Distributed</div>
-                <div className="text-xl font-bold text-canopy-400">{distributionTotals.totalDistributed} CORE</div>
-                <div className="text-xs text-coreezy-500">{distributionTotals.distributionCount} distributions</div>
+              <div className="text-left sm:text-right bg-coreezy-800/50 sm:bg-transparent p-2 sm:p-0 rounded-lg">
+                <div className="text-[10px] sm:text-xs text-coreezy-400">Total Distributed</div>
+                <div className="text-lg sm:text-xl font-bold text-canopy-400">{distributionTotals.totalDistributed} CORE</div>
+                <div className="text-[10px] sm:text-xs text-coreezy-500">{distributionTotals.distributionCount} distributions</div>
               </div>
             )}
           </div>
@@ -395,22 +395,22 @@ function WalletCard({
   copied: boolean;
 }) {
   return (
-    <div className="card p-6">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 rounded-lg bg-coreezy-800">
-          <Wallet className="w-5 h-5 text-coreezy-300" />
+    <div className="card p-4 sm:p-6">
+      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+        <div className="p-1.5 sm:p-2 rounded-lg bg-coreezy-800">
+          <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-coreezy-300" />
         </div>
-        <h3 className="font-bold text-coreezy-100">{wallet.label}</h3>
+        <h3 className="font-bold text-sm sm:text-base text-coreezy-100">{wallet.label}</h3>
       </div>
 
       {/* Address */}
-      <div className="flex items-center gap-2 p-2 rounded bg-coreezy-800/50 mb-4">
-        <code className="text-xs text-coreezy-400 flex-1 truncate">
+      <div className="flex items-center gap-1 sm:gap-2 p-2 rounded bg-coreezy-800/50 mb-3 sm:mb-4">
+        <code className="text-[10px] sm:text-xs text-coreezy-400 flex-1 truncate">
           {wallet.address}
         </code>
         <button
           onClick={() => onCopy(wallet.address)}
-          className="p-1 hover:bg-coreezy-700 rounded transition-colors"
+          className="p-2 -m-1 hover:bg-coreezy-700 rounded transition-colors shrink-0"
         >
           {copied ? (
             <Check className="w-4 h-4 text-canopy-400" />
@@ -422,30 +422,30 @@ function WalletCard({
           href={`https://explorer.coreum.com/coreum/accounts/${wallet.address}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="p-1 hover:bg-coreezy-700 rounded transition-colors"
+          className="p-2 -m-1 hover:bg-coreezy-700 rounded transition-colors shrink-0"
         >
           <ExternalLink className="w-4 h-4 text-coreezy-400" />
         </a>
       </div>
 
       {/* Balances */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4">
         <div>
-          <div className="text-xs text-coreezy-500 mb-1">COREZ</div>
-          <div className="text-lg font-bold text-amber-400">
-            <NumberDisplay value={wallet.corez} decimals={6} />
+          <div className="text-[10px] sm:text-xs text-coreezy-500 mb-1">COREZ</div>
+          <div className="text-sm sm:text-lg font-bold text-amber-400">
+            <NumberDisplay value={wallet.corez} decimals={0} />
           </div>
         </div>
         <div>
-          <div className="text-xs text-coreezy-500 mb-1">CORE</div>
-          <div className="text-lg font-bold text-coreezy-200">
-            <NumberDisplay value={wallet.core} decimals={2} />
+          <div className="text-[10px] sm:text-xs text-coreezy-500 mb-1">CORE</div>
+          <div className="text-sm sm:text-lg font-bold text-coreezy-200">
+            <NumberDisplay value={wallet.core} decimals={0} />
           </div>
         </div>
         <div>
-          <div className="text-xs text-coreezy-500 mb-1">Staked</div>
-          <div className="text-lg font-bold text-canopy-400">
-            <NumberDisplay value={wallet.coreStaked} decimals={2} />
+          <div className="text-[10px] sm:text-xs text-coreezy-500 mb-1">Staked</div>
+          <div className="text-sm sm:text-lg font-bold text-canopy-400">
+            <NumberDisplay value={wallet.coreStaked} decimals={0} />
           </div>
         </div>
       </div>
@@ -465,22 +465,22 @@ function TreasuryCard({
   copied: boolean;
 }) {
   return (
-    <div className="card p-6">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 rounded-lg bg-coreezy-800">
-          <Wallet className="w-5 h-5 text-coreezy-300" />
+    <div className="card p-4 sm:p-6">
+      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+        <div className="p-1.5 sm:p-2 rounded-lg bg-coreezy-800">
+          <Wallet className="w-4 h-4 sm:w-5 sm:h-5 text-coreezy-300" />
         </div>
-        <h3 className="font-bold text-coreezy-100">{wallet.label}</h3>
+        <h3 className="font-bold text-sm sm:text-base text-coreezy-100">{wallet.label}</h3>
       </div>
 
       {/* Address */}
-      <div className="flex items-center gap-2 p-2 rounded bg-coreezy-800/50 mb-4">
-        <code className="text-xs text-coreezy-400 flex-1 truncate">
+      <div className="flex items-center gap-1 sm:gap-2 p-2 rounded bg-coreezy-800/50 mb-3 sm:mb-4">
+        <code className="text-[10px] sm:text-xs text-coreezy-400 flex-1 truncate">
           {wallet.address}
         </code>
         <button
           onClick={() => onCopy(wallet.address)}
-          className="p-1 hover:bg-coreezy-700 rounded transition-colors"
+          className="p-2 -m-1 hover:bg-coreezy-700 rounded transition-colors shrink-0"
         >
           {copied ? (
             <Check className="w-4 h-4 text-canopy-400" />
@@ -492,47 +492,47 @@ function TreasuryCard({
           href={`https://explorer.coreum.com/coreum/accounts/${wallet.address}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="p-1 hover:bg-coreezy-700 rounded transition-colors"
+          className="p-2 -m-1 hover:bg-coreezy-700 rounded transition-colors shrink-0"
         >
           <ExternalLink className="w-4 h-4 text-coreezy-400" />
         </a>
       </div>
 
       {/* Balances */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-3 sm:mb-4">
         <div>
-          <div className="text-xs text-coreezy-500 mb-1">COREZ</div>
-          <div className="text-lg font-bold text-amber-400">
-            <NumberDisplay value={wallet.corez} decimals={6} />
+          <div className="text-[10px] sm:text-xs text-coreezy-500 mb-1">COREZ</div>
+          <div className="text-sm sm:text-lg font-bold text-amber-400">
+            <NumberDisplay value={wallet.corez} decimals={0} />
           </div>
         </div>
         <div>
-          <div className="text-xs text-coreezy-500 mb-1">CORE</div>
-          <div className="text-lg font-bold text-coreezy-200">
-            <NumberDisplay value={wallet.core} decimals={2} />
+          <div className="text-[10px] sm:text-xs text-coreezy-500 mb-1">CORE</div>
+          <div className="text-sm sm:text-lg font-bold text-coreezy-200">
+            <NumberDisplay value={wallet.core} decimals={0} />
           </div>
         </div>
         <div>
-          <div className="text-xs text-coreezy-500 mb-1">Staked</div>
-          <div className="text-lg font-bold text-canopy-400">
-            <NumberDisplay value={wallet.coreStaked} decimals={2} />
+          <div className="text-[10px] sm:text-xs text-coreezy-500 mb-1">Staked</div>
+          <div className="text-sm sm:text-lg font-bold text-canopy-400">
+            <NumberDisplay value={wallet.coreStaked} decimals={0} />
           </div>
         </div>
       </div>
 
       {/* LP Tokens */}
       {lpTokens && lpTokens.length > 0 && (
-        <div className="pt-4 border-t border-coreezy-700">
-          <h4 className="text-xs font-semibold text-coreezy-400 mb-3 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4" />
+        <div className="pt-3 sm:pt-4 border-t border-coreezy-700">
+          <h4 className="text-xs font-semibold text-coreezy-400 mb-2 sm:mb-3 flex items-center gap-2">
+            <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
             LP Tokens
           </h4>
           <div className="space-y-2">
             {lpTokens.map((lp, i) => (
-              <div key={i} className="flex justify-between items-center p-2 rounded bg-coreezy-800/50">
-                <code className="text-xs text-coreezy-400 truncate max-w-[50%]">{lp.denom}</code>
-                <span className="font-mono text-sm text-canopy-400">
-                  <NumberDisplay value={lp.balance / 1_000_000} decimals={6} />
+              <div key={i} className="flex justify-between items-center gap-2 p-2 rounded bg-coreezy-800/50">
+                <code className="text-[10px] sm:text-xs text-coreezy-400 truncate flex-1">{lp.denom}</code>
+                <span className="font-mono text-xs sm:text-sm text-canopy-400 shrink-0">
+                  <NumberDisplay value={lp.balance / 1_000_000} decimals={2} />
                 </span>
               </div>
             ))}

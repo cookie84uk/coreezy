@@ -9,14 +9,14 @@ export const metadata: Metadata = {
 
 export default function HoldingsPage() {
   return (
-    <div className="bg-gradient-jungle py-12">
+    <div className="bg-gradient-jungle py-8 sm:py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Hero */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gradient mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h1 className="text-2xl sm:text-4xl font-bold text-gradient mb-2 sm:mb-4">
             Holdings Dashboard
           </h1>
-          <p className="text-xl text-coreezy-300 max-w-2xl mx-auto">
+          <p className="text-base sm:text-xl text-coreezy-300 max-w-2xl mx-auto">
             Real-time transparency into the Coreezy ecosystem
           </p>
         </div>
