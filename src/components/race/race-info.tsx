@@ -2,6 +2,7 @@
 
 import { useWallet } from '@/components/wallet/wallet-provider';
 import Link from 'next/link';
+import { Rocket } from 'lucide-react';
 
 export function RaceInfo() {
   const { isConnected, address } = useWallet();
@@ -105,7 +106,9 @@ export function RaceInfo() {
 
       {/* Boost CTA */}
       <div className="card p-4 bg-coreezy-800/50">
-        <h3 className="text-sm font-semibold text-amber-400 mb-2">🚀 Get Boosted</h3>
+        <h3 className="text-sm font-semibold text-amber-400 mb-2 flex items-center gap-2">
+          <Rocket className="w-4 h-4" /> Get Boosted
+        </h3>
         <p className="text-sm text-coreezy-300 mb-3">
           Share about Coreezy on social media for temporary score boosts.
         </p>

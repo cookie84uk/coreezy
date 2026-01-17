@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Baby, Leaf, TreeDeciduous, Moon, Rocket, Flame, Trophy, Check, Minus } from 'lucide-react';
 
 interface ProfileData {
   address: string;
@@ -39,21 +40,24 @@ interface SlothProfileProps {
 
 const CLASS_CONFIG = {
   BABY: {
-    icon: '🍼',
+    icon: <Baby className="w-10 h-10" />,
+    iconSmall: <Baby className="w-4 h-4" />,
     name: 'Baby Sloth',
     color: 'text-amber-400',
     bgColor: 'bg-amber-900/30',
     borderColor: 'border-amber-700/50',
   },
   TEEN: {
-    icon: '🌿',
+    icon: <Leaf className="w-10 h-10" />,
+    iconSmall: <Leaf className="w-4 h-4" />,
     name: 'Teen Sloth',
     color: 'text-emerald-400',
     bgColor: 'bg-emerald-900/30',
     borderColor: 'border-emerald-700/50',
   },
   ADULT: {
-    icon: '🌳',
+    icon: <TreeDeciduous className="w-10 h-10" />,
+    iconSmall: <TreeDeciduous className="w-4 h-4" />,
     name: 'Adult Sloth',
     color: 'text-canopy-400',
     bgColor: 'bg-canopy-900/30',
@@ -137,15 +141,15 @@ export function SlothProfile({ address }: SlothProfileProps) {
           {/* Avatar */}
           <div className="relative">
             <div
-              className={`w-24 h-24 rounded-full ${classConfig.bgColor} border-4 ${classConfig.borderColor} flex items-center justify-center text-4xl ${
+              className={`w-24 h-24 rounded-full ${classConfig.bgColor} border-4 ${classConfig.borderColor} flex items-center justify-center ${classConfig.color} ${
                 profile.isSleeping ? 'sloth-sleeping' : ''
               }`}
             >
-              {profile.isSleeping ? '😴' : classConfig.icon}
+              {profile.isSleeping ? <Moon className="w-10 h-10 text-purple-400" /> : classConfig.icon}
             </div>
             {profile.activeBoosts.length > 0 && (
               <span className="absolute -top-1 -right-1 bg-amber-500 text-black text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center">
-                🚀
+                <Rocket className="w-3 h-3" />
               </span>
             )}
           </div>
@@ -157,8 +161,8 @@ export function SlothProfile({ address }: SlothProfileProps) {
             </h1>
             <p className="font-mono text-sm text-coreezy-400 mt-1">{address}</p>
             <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-3">
-              <span className={`badge ${classConfig.bgColor} ${classConfig.color} border ${classConfig.borderColor}`}>
-                {classConfig.icon} {classConfig.name}
+              <span className={`badge ${classConfig.bgColor} ${classConfig.color} border ${classConfig.borderColor} flex items-center gap-1`}>
+                {classConfig.iconSmall} {classConfig.name}
               </span>
               <span className="badge bg-coreezy-800 text-coreezy-200">
                 Rank #{profile.rank}
@@ -172,7 +176,7 @@ export function SlothProfile({ address }: SlothProfileProps) {
           {/* Share Button */}
           <button
             onClick={() => {
-              const text = `Check out my Sloth Race profile on @CoreezyVibes!\n\n${classConfig.icon} ${classConfig.name}\n🏆 Rank #${profile.rank}\n\nhttps://coreezy.xyz/sloth-race/${address}`;
+              const text = `Check out my Sloth Race profile on @CoreezyVibes!\n\n${classConfig.name}\nRank #${profile.rank}\n\nhttps://coreezy.xyz/sloth-race/${address}`;
               window.open(
                 `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`,
                 '_blank'
@@ -186,9 +190,10 @@ export function SlothProfile({ address }: SlothProfileProps) {
 
         {/* Sleep Warning */}
         {profile.isSleeping && profile.sleepUntil && (
-          <div className="mt-4 p-3 rounded-lg bg-amber-900/30 border border-amber-700/50 text-center">
+          <div className="mt-4 p-3 rounded-lg bg-amber-900/30 border border-amber-700/50 text-center flex items-center justify-center gap-2">
+            <Moon className="w-4 h-4 text-purple-400" />
             <p className="text-amber-300 text-sm">
-              😴 This sloth is sleeping until{' '}
+              This sloth is sleeping until{' '}
               {new Date(profile.sleepUntil).toLocaleDateString()}
             </p>
           </div>
@@ -204,8 +209,14 @@ export function SlothProfile({ address }: SlothProfileProps) {
           <div className="text-xs text-coreezy-400">Total Score</div>
         </div>
         <div className="card p-4 text-center">
-          <div className="text-2xl font-bold text-canopy-400">
-            {profile.restakeStreak > 0 ? `🔥 ${profile.restakeStreak}` : '—'}
+          <div className="text-2xl font-bold text-canopy-400 flex items-center justify-center gap-1">
+            {profile.restakeStreak > 0 ? (
+              <>
+                <Flame className="w-5 h-5 text-amber-400" /> {profile.restakeStreak}
+              </>
+            ) : (
+              '—'
+            )}
           </div>
           <div className="text-xs text-coreezy-400">Restake Streak</div>
         </div>
@@ -224,8 +235,8 @@ export function SlothProfile({ address }: SlothProfileProps) {
       {/* Active Boosts */}
       {profile.activeBoosts.length > 0 && (
         <div className="card p-4">
-          <h3 className="text-sm font-semibold text-coreezy-400 mb-3">
-            🚀 Active Boosts
+          <h3 className="text-sm font-semibold text-coreezy-400 mb-3 flex items-center gap-2">
+            <Rocket className="w-4 h-4 text-amber-400" /> Active Boosts
           </h3>
           <div className="space-y-2">
             {profile.activeBoosts.map((boost, i) => (
@@ -276,10 +287,18 @@ export function SlothProfile({ address }: SlothProfileProps) {
                       {formatScore(entry.dailyScore)}
                     </td>
                     <td className="py-2 text-center">
-                      {entry.restakeActive ? '✓' : '—'}
+                      {entry.restakeActive ? (
+                        <Check className="w-4 h-4 text-canopy-400 inline" />
+                      ) : (
+                        <Minus className="w-4 h-4 text-coreezy-600 inline" />
+                      )}
                     </td>
                     <td className="py-2 text-center">
-                      {entry.siteVisited ? '✓' : '—'}
+                      {entry.siteVisited ? (
+                        <Check className="w-4 h-4 text-canopy-400 inline" />
+                      ) : (
+                        <Minus className="w-4 h-4 text-coreezy-600 inline" />
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -297,18 +316,18 @@ export function SlothProfile({ address }: SlothProfileProps) {
   );
 }
 
+// Score is in ucore, convert to CORE and format
 function formatScore(score: string): string {
-  const num = BigInt(score);
-  if (num >= BigInt(1_000_000_000)) {
-    return (Number(num / BigInt(1_000_000)) / 1000).toFixed(2) + 'B';
+  const ucore = BigInt(score);
+  const core = Number(ucore) / 1_000_000;
+  
+  if (core >= 1_000_000) {
+    return (core / 1_000_000).toFixed(2) + 'M';
   }
-  if (num >= BigInt(1_000_000)) {
-    return (Number(num / BigInt(1_000)) / 1000).toFixed(2) + 'M';
+  if (core >= 1_000) {
+    return (core / 1_000).toFixed(1) + 'K';
   }
-  if (num >= BigInt(1_000)) {
-    return (Number(num) / 1000).toFixed(2) + 'K';
-  }
-  return score;
+  return core.toFixed(0);
 }
 
 function formatCore(amount: string): string {

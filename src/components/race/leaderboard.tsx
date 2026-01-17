@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Baby, Leaf, TreeDeciduous, Moon, Rocket, Flame } from 'lucide-react';
 
 interface LeaderboardEntry {
   rank: number;
@@ -37,18 +38,21 @@ interface LeaderboardData {
 const CLASS_STYLES = {
   BABY: {
     badge: 'badge-baby',
-    icon: '🍼',
+    icon: <Baby className="w-4 h-4" />,
     label: 'Baby',
+    color: 'text-amber-400',
   },
   TEEN: {
     badge: 'badge-teen',
-    icon: '🌿',
+    icon: <Leaf className="w-4 h-4" />,
     label: 'Teen',
+    color: 'text-emerald-400',
   },
   ADULT: {
     badge: 'badge-adult',
-    icon: '🌳',
+    icon: <TreeDeciduous className="w-4 h-4" />,
     label: 'Adult',
+    color: 'text-canopy-400',
   },
 };
 
@@ -106,10 +110,10 @@ export function Leaderboard() {
             <button
               key={c}
               onClick={() => setClassFilter(c)}
-              className={`px-3 py-1 rounded text-sm transition-colors ${
+              className={`px-3 py-1 rounded text-sm transition-colors flex items-center gap-1 ${
                 classFilter === c
                   ? 'bg-canopy-600 text-white'
-                  : 'bg-coreezy-700 text-coreezy-300 hover:bg-coreezy-600'
+                  : `bg-coreezy-700 ${CLASS_STYLES[c].color} hover:bg-coreezy-600`
               }`}
             >
               {CLASS_STYLES[c].icon}
@@ -122,9 +126,15 @@ export function Leaderboard() {
       {data?.classDistribution && data.classDistribution.total > 0 && (
         <div className="px-4 py-2 bg-coreezy-800/50 border-b border-coreezy-700 flex flex-wrap gap-4 text-xs text-coreezy-400">
           <span>Total: {data.classDistribution.total}</span>
-          <span>🌳 {data.classDistribution.adult}</span>
-          <span>🌿 {data.classDistribution.teen}</span>
-          <span>🍼 {data.classDistribution.baby}</span>
+          <span className="flex items-center gap-1 text-canopy-400">
+            <TreeDeciduous className="w-3 h-3" /> {data.classDistribution.adult}
+          </span>
+          <span className="flex items-center gap-1 text-emerald-400">
+            <Leaf className="w-3 h-3" /> {data.classDistribution.teen}
+          </span>
+          <span className="flex items-center gap-1 text-amber-400">
+            <Baby className="w-3 h-3" /> {data.classDistribution.baby}
+          </span>
         </div>
       )}
 
@@ -181,15 +191,15 @@ export function Leaderboard() {
                         {entry.name || entry.shortAddress}
                       </span>
                       {entry.isSleeping && (
-                        <span title="Sleeping (undelegated recently)">😴</span>
+                        <Moon className="w-4 h-4 text-purple-400" title="Sleeping (undelegated recently)" />
                       )}
                       {entry.hasBoosts && (
-                        <span title={`${entry.boostCount} active boost(s)`}>🚀</span>
+                        <Rocket className="w-4 h-4 text-cyan-400" title={`${entry.boostCount} active boost(s)`} />
                       )}
                     </Link>
                   </td>
                   <td className="px-4 py-3">
-                    <span className={CLASS_STYLES[entry.class].badge}>
+                    <span className={`flex items-center gap-1 ${CLASS_STYLES[entry.class].color}`}>
                       {CLASS_STYLES[entry.class].icon} {CLASS_STYLES[entry.class].label}
                     </span>
                   </td>
@@ -198,8 +208,8 @@ export function Leaderboard() {
                   </td>
                   <td className="px-4 py-3 text-right hidden sm:table-cell">
                     {entry.restakeStreak > 0 && (
-                      <span className="text-amber-400" title="Restake streak">
-                        🔥 {entry.restakeStreak}
+                      <span className="flex items-center justify-end gap-1 text-amber-400" title="Restake streak">
+                        <Flame className="w-4 h-4" /> {entry.restakeStreak}
                       </span>
                     )}
                   </td>
@@ -236,19 +246,16 @@ export function Leaderboard() {
   );
 }
 
+// Score is in ucore (micro units), convert to CORE and format nicely
 function formatScore(score: string): string {
-  const num = BigInt(score);
-  if (num >= BigInt(1_000_000_000_000)) {
-    return (Number(num / BigInt(1_000_000_000)) / 1000).toFixed(2) + 'T';
+  const ucore = BigInt(score);
+  const core = Number(ucore) / 1_000_000; // Convert to CORE
+  
+  if (core >= 1_000_000) {
+    return (core / 1_000_000).toFixed(2) + 'M';
   }
-  if (num >= BigInt(1_000_000_000)) {
-    return (Number(num / BigInt(1_000_000)) / 1000).toFixed(2) + 'B';
+  if (core >= 1_000) {
+    return (core / 1_000).toFixed(1) + 'K';
   }
-  if (num >= BigInt(1_000_000)) {
-    return (Number(num / BigInt(1_000)) / 1000).toFixed(2) + 'M';
-  }
-  if (num >= BigInt(1_000)) {
-    return (Number(num) / 1000).toFixed(2) + 'K';
-  }
-  return score;
+  return core.toFixed(0);
 }
