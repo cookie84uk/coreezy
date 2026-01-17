@@ -103,11 +103,15 @@ export default function HomePage() {
               </div>
 
               <div className="relative lg:ml-auto">
-                {/* Sloth mascot */}
+                {/* Coreezy Logo */}
                 <div className="relative w-full aspect-square max-w-lg mx-auto">
                   <div className="absolute inset-0 bg-gradient-radial from-canopy-500/20 to-transparent rounded-full animate-slow-pulse" />
-                  <div className="absolute inset-8 glass rounded-3xl flex items-center justify-center">
-                    <span className="text-8xl animate-float">🦥</span>
+                  <div className="absolute inset-4 glass rounded-3xl flex items-center justify-center p-8">
+                    <img
+                      src="/logo.png"
+                      alt="Coreezy"
+                      className="w-full h-full object-contain animate-float"
+                    />
                   </div>
                 </div>
               </div>

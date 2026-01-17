@@ -115,7 +115,7 @@ export default function VaultPage() {
                   </div>
                   <div className="flex justify-between items-center p-2 rounded bg-amber-900/20 border border-amber-700/30">
                     <span className="text-coreezy-300">
-                      2nd Series NFT Holders
+                      Cubs NFT Reward Pool
                       <span className="text-xs text-coreezy-500 ml-1">(New)</span>
                     </span>
                     <span className="text-amber-400 font-bold">5%</span>
@@ -125,10 +125,10 @@ export default function VaultPage() {
             </div>
           </section>
 
-          {/* Validator Mechanics */}
+          {/* Additional Vault Funding Streams */}
           <section className="mt-12">
             <h2 className="text-2xl font-bold text-canopy-400 mb-6">
-              5C. Validator Mechanics
+              5C. Additional Vault Funding Streams
             </h2>
             <div className="card p-6">
               <p className="text-coreezy-300 mb-6">
@@ -186,17 +186,16 @@ export default function VaultPage() {
               </p>
               <div className="p-4 rounded-lg bg-amber-900/20 border border-amber-700/50">
                 <h3 className="font-semibold text-amber-300 mb-2">
-                  2nd NFT Series Launch Trigger
+                  Cub Collection Launch Trigger
                 </h3>
                 <p className="text-sm text-coreezy-300">
-                  The 2nd NFT series should launch about the same time we hit{' '}
-                  <strong className="text-amber-400">1 COREZ = 1.5 Coreum</strong>. When
-                  this happens, reinvestment to vault goes to 10% and 5% is allocated
-                  to 2nd Series NFT holders.
+                  The Cub Collection should launch about the same time we hit{' '}
+                  <strong className="text-amber-400">1.5 million Coreum</strong> in the vault.
+                  At this point, 5% of vault rewards are allocated to Cub Collection holders.
                 </p>
                 <p className="text-sm text-coreezy-400 mt-2">
-                  A portion of the funds will be directed to the artist behind the 2nd
-                  Series NFT Project. Exact % TBD. Project currently under development.
+                  A portion of the funds will be directed to the artist behind the
+                  Cub Collection. Exact % TBD. Project currently under development.
                 </p>
               </div>
             </div>

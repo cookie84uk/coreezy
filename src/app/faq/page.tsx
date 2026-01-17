@@ -62,7 +62,7 @@ const FAQ_SECTIONS: FAQSection[] = [
     questions: [
       {
         q: 'What is COREZ?',
-        a: 'COREZ is your community passport token. It grants governance rights, vault drip eligibility, Sloth Race boosts, and access to partner perks.',
+        a: 'COREZ is your community passport token. It grants vault drip eligibility, Sloth Race boosts, and access to partner perks.',
       },
       {
         q: 'How do I get COREZ?',
@@ -80,10 +80,6 @@ const FAQ_SECTIONS: FAQSection[] = [
             . Always verify the contract address before trading.
           </>
         ),
-      },
-      {
-        q: 'What backs the COREZ token?',
-        a: 'The Community Vault holds 1.5 Million COREUM backing the COREZ supply, creating a 1.5:1 backing ratio.',
       },
       {
         q: 'When do COREZ holders get vault drip?',
@@ -104,7 +100,7 @@ const FAQ_SECTIONS: FAQSection[] = [
       },
       {
         q: 'What are the sloth classes?',
-        a: 'Baby Sloth (bottom 33%), Teen Sloth (middle 33%), Adult Sloth (top 33%). Classes are recalculated daily based on total scores.',
+        a: 'Baby Sloth (bottom 33%), Teen Sloth (middle 33%), Adult Sloth (top 33%). Classes are determined at the start of each race season and remain fixed for the duration of that season.',
       },
       {
         q: 'What happens if I undelegate?',
@@ -121,7 +117,7 @@ const FAQ_SECTIONS: FAQSection[] = [
     questions: [
       {
         q: 'What NFT collections does Coreezy have?',
-        a: 'OG Canopy Collection (100 NFTs, sold out) and Canopy Cubs (coming soon). OG holders receive 40% of vault distributions in Initial Phase.',
+        a: 'OG Canopy Collection (100 NFTs, sold out) and Cub Collection (coming soon). OG holders receive 40% of vault distributions in Initial Phase.',
       },
       {
         q: 'How do I claim NFT rewards?',
@@ -129,7 +125,7 @@ const FAQ_SECTIONS: FAQSection[] = [
       },
       {
         q: 'Do NFTs give Sloth Race boosts?',
-        a: 'Yes! OG Canopy holders get +15% permanent score boost, Canopy Cubs get +5%.',
+        a: 'Yes! OG Canopy holders get +15% permanent score boost, Cub Collection holders get +5%.',
       },
     ],
   },

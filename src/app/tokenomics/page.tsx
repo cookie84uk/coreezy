@@ -8,10 +8,8 @@ import {
   Shield,
   Users,
   TrendingUp,
-  ArrowRight,
   CheckCircle,
   AlertCircle,
-  Wallet,
   Server,
 } from 'lucide-react';
 
@@ -38,7 +36,7 @@ const DISTRIBUTION = [
     label: 'Marketing & Development',
     percent: 3,
     color: 'bg-emerald-500',
-    description: 'Marketing and development wallet for growth initiatives',
+    description: 'Marketing and development will continue to purchase additional COREZ to increase the strength of the LP pool',
   },
   {
     label: 'Founder Purchase',
@@ -53,7 +51,7 @@ const UTILITY = [
     Icon: Droplets,
     title: 'Vault Drip Rewards',
     description:
-      'Earn COREUM rewards when the vault reaches Final Phase (1 COREZ = 1.5 COREUM backing).',
+      'Earn COREUM rewards when the vault reaches Final Phase (1.5 million COREUM milestone).',
   },
   {
     Icon: Gift,
@@ -67,8 +65,8 @@ const UTILITY = [
   },
   {
     Icon: Shield,
-    title: 'Vault-Backed Value',
-    description: 'Backed by real COREUM in the community vault, not speculation.',
+    title: 'Utility Unlocks',
+    description: 'More perks unlock as Coreezy expands the ecosystem.',
   },
 ];
 
@@ -204,73 +202,6 @@ export default function TokenomicsPage() {
             </div>
           </section>
 
-          {/* Vault Backing */}
-          <section className="mb-16">
-            <h2 className="text-2xl font-bold text-canopy-400 mb-6 flex items-center gap-3">
-              <Wallet className="w-6 h-6" />
-              COREUM Vault Backing
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="card p-6">
-                <h3 className="text-lg font-semibold text-coreezy-100 mb-3">
-                  What is Vault Backing?
-                </h3>
-                <p className="text-sm text-coreezy-300 mb-4">
-                  The Coreezy Community Vault holds COREUM that backs the COREZ token.
-                  The target is{' '}
-                  <strong className="text-canopy-400">
-                    1 COREZ = 1.5 Coreum
-                  </strong>{' '}
-                  backing. When this milestone is achieved, drip rewards begin for
-                  token holders.
-                </p>
-                <div className="p-4 rounded-lg bg-coreezy-800/50">
-                  <div className="text-xs text-coreezy-500 mb-1">Target Milestone</div>
-                  <div className="text-2xl font-bold text-canopy-400">
-                    1.5 COREUM / COREZ
-                  </div>
-                  <div className="text-xs text-coreezy-500 mt-1">
-                    ~1.5M COREUM for 10% supply (1M COREZ) in vault
-                  </div>
-                </div>
-              </div>
-              <div className="card p-6">
-                <h3 className="text-lg font-semibold text-coreezy-100 mb-3">
-                  How Does Backing Grow?
-                </h3>
-                <ul className="space-y-2 text-sm text-coreezy-300">
-                  <li className="flex items-start gap-2">
-                    <TrendingUp className="w-4 h-4 text-canopy-400 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong className="text-coreezy-100">10%</strong> of validator
-                      rewards and commissions
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <TrendingUp className="w-4 h-4 text-canopy-400 mt-0.5 flex-shrink-0" />
-                    <span>
-                      <strong className="text-coreezy-100">10%</strong> of net profit
-                      from all Coreezy Vibes LLC businesses
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <TrendingUp className="w-4 h-4 text-canopy-400 mt-0.5 flex-shrink-0" />
-                    <span>OG NFT sale proceeds seeding the vault</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <TrendingUp className="w-4 h-4 text-canopy-400 mt-0.5 flex-shrink-0" />
-                    <span>Reinvestment from vault distributions (compounding)</span>
-                  </li>
-                </ul>
-                <Link
-                  href="/vault"
-                  className="btn-ghost mt-4 text-sm flex items-center gap-1"
-                >
-                  View Vault Dashboard <ArrowRight className="w-3 h-3" />
-                </Link>
-              </div>
-            </div>
-          </section>
 
           {/* Utility */}
           <section className="mb-16">
@@ -360,12 +291,12 @@ export default function TokenomicsPage() {
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <a
-                  href="https://sologenic.com"
+                  href="https://cruisecontrol.zone/swap?from=ucore&to=corez-coreezyvibes.coreezy"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary px-6 py-2"
                 >
-                  Trade on Sologenic
+                  Trade on Cruise Control
                 </a>
                 <Link href="/vault" className="btn-outline px-6 py-2">
                   View Vault

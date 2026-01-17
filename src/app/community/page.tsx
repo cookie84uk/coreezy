@@ -6,7 +6,6 @@ import {
   Gamepad2,
   Trophy,
   Palette,
-  Vote,
   Gift,
   Users,
   Zap,
@@ -45,7 +44,7 @@ const SOCIAL_LINKS = [
     description: 'Main community chat for discussions and support.',
     Icon: MessageCircle,
     url: 'https://t.me/+hh333N0pTRFjNjIx',
-    members: '200+',
+    members: '100+',
   },
   {
     name: 'X / Twitter',
@@ -79,18 +78,11 @@ const ACTIVITIES = [
     linkText: 'View Collections',
   },
   {
-    Icon: Vote,
-    title: 'Governance',
-    description: 'Vote on proposals with your COREZ tokens.',
-    link: '/tokenomics',
-    linkText: 'Learn More',
-  },
-  {
     Icon: Gift,
-    title: 'Partner Perks',
-    description: 'Exclusive deals from ecosystem partners.',
-    link: '/partners',
-    linkText: 'See Partners',
+    title: 'Merch Coming Soon',
+    description: 'With Exclusive Rewards',
+    link: '/community',
+    linkText: 'Stay Tuned',
   },
 ];
 
@@ -170,7 +162,7 @@ export default function CommunityPage() {
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div>
-                  <div className="text-3xl font-bold text-canopy-400">500+</div>
+                  <div className="text-3xl font-bold text-canopy-400">85</div>
                   <div className="text-sm text-coreezy-400">Delegators</div>
                 </div>
                 <div>
@@ -178,7 +170,7 @@ export default function CommunityPage() {
                   <div className="text-sm text-coreezy-400">OG NFT Holders</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-canopy-400">1.5M</div>
+                  <div className="text-3xl font-bold text-canopy-400">50K</div>
                   <div className="text-sm text-coreezy-400">COREUM in Vault</div>
                 </div>
                 <div>

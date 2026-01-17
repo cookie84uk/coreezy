@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Sparkles, Crown, Gift, Image, Star, Users, Palette, Globe, Link2 } from 'lucide-react';
+import { Sparkles, Crown, Gift, Image, Star, Users, Palette, Globe, Link2, ExternalLink } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'NFT Collections | Canopy Collection',
@@ -32,16 +32,16 @@ const OG_COLLECTION = {
 
 const FUTURE_COLLECTION = {
   id: 'future-series',
-  name: 'Club Collection (Coming Soon)',
+  name: 'Cub Collection (Coming Soon)',
   description:
-    'The Club Collection launches when COREZ reaches 1.5 COREUM backing. A portion of proceeds goes directly to the artists who develop them.',
+    'The Cub Collection launches when COREZ reaches 1.5 million COREUM backing. A portion of proceeds goes directly to the artists who develop them.',
   supply: 'TBD',
   minted: 0,
   status: 'COMING_SOON' as const,
   rewards: '5% of vault rewards (Final Phase)',
   image: '🎨',
   perks: [
-    'Tied to the Coreum Vault alongside OG Collection',
+    'Tied to the Coreezy Vault alongside OG Collection',
     '5% of vault rewards allocated to holders',
     'A portion of proceeds goes to the artists',
     'Ensures every NFT adds to the ecosystem',
@@ -152,7 +152,7 @@ export default function NFTsPage() {
               {/* Action */}
               <div className="p-4 bg-coreezy-800/30 border-t border-coreezy-700/50">
                 <a
-                  href="https://xplorer.coreum.com/coreum/marketplace"
+                  href="https://bidds.com/collection/coreezy-vibes-og-nfts/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-outline w-full py-2 justify-center flex items-center gap-2"
@@ -188,12 +188,12 @@ export default function NFTsPage() {
                 <div className="p-4 rounded-lg bg-coreezy-800/50 mb-6">
                   <div className="text-xs text-coreezy-500 mb-2">Launch Trigger</div>
                   <div className="text-sm text-coreezy-300">
-                    The Club Collection launches when{' '}
+                    The Cub Collection launches after reaching the{' '}
                     <strong className="text-canopy-400">
-                      1 COREZ = 1.5 Coreum
+                      1.5 million Coreum
                     </strong>{' '}
-                    backing is achieved. At this point, reinvestment to vault reduces
-                    to 15% and 5% is allocated to Club Collection holders.
+                    milestone. At this point, reinvestment to vault reduces
+                    to 15% and 5% is allocated to Cub Collection holders.
                   </div>
                 </div>
 
@@ -254,7 +254,7 @@ export default function NFTsPage() {
                     OG holders receive a proportional share of vault distributions.
                     During the Initial Phase, this is{' '}
                     <strong className="text-canopy-400">40% of rewards</strong>. After
-                    reaching the 1.5 COREUM milestone, OG holders receive{' '}
+                    reaching the 1.5 million Coreum milestone, OG holders receive{' '}
                     <strong className="text-canopy-400">20% perpetually</strong>.
                   </p>
                   <div className="p-3 rounded bg-coreezy-800/50">
@@ -271,17 +271,17 @@ export default function NFTsPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-coreezy-100 mb-3">
-                    Club Collection Holders
+                    Cub Collection Holders
                   </h3>
                   <p className="text-sm text-coreezy-300 mb-4">
-                    The OG Collection and Club Collection are the only NFTs tied to the
-                    Coreum Vault. Club Collection holders receive{' '}
+                    The OG Collection and Cub Collection are the only NFTs tied to the
+                    Coreezy Vault. Cub Collection holders receive{' '}
                     <strong className="text-amber-400">5% of vault rewards</strong>.
                   </p>
                   <div className="p-3 rounded bg-coreezy-800/50">
                     <div className="text-xs text-coreezy-500 mb-1">Artist Support</div>
                     <div className="text-sm text-coreezy-300">
-                      A portion of proceeds from the Club Collection will go
+                      A portion of proceeds from the Cub Collection will go
                       directly to the artists who develop them, ensuring creators
                       benefit alongside the community.
                     </div>
@@ -301,8 +301,8 @@ export default function NFTsPage() {
                     Vault-Tied Collections
                   </h3>
                   <p className="text-sm text-coreezy-300">
-                    The OG Collection and Club Collection will be the only NFTs tied to
-                    the Coreum Vault. Any vaults, rewards, or benefits tied to these
+                    The OG Collection and Cub Collection will be the only NFTs tied to
+                    the Coreezy Vault. Any vaults, rewards, or benefits tied to these
                     collections are self-contained and explicitly defined, not implied
                     through ownership of other Coreezy assets.
                   </p>
@@ -319,9 +319,9 @@ export default function NFTsPage() {
             </h2>
             <div className="card p-6">
               <p className="text-coreezy-300 mb-6">
-                Coreezy is a multi-chain brand by design. While the Coreum Vault and OG
+                Coreezy is a multi-chain brand by design. While the Coreezy Vault and OG
                 NFT collections form the foundation of the Coreezy ecosystem, not all
-                Coreezy NFTs will be tied to the original Coreum Vault.
+                Coreezy NFTs will be tied to the original Coreezy Vault.
               </p>
               <p className="text-coreezy-300 mb-6">
                 As the brand expands, Coreezy will launch cross-chain NFT collections on
@@ -332,15 +332,25 @@ export default function NFTsPage() {
 
               {/* XRPL Example */}
               <div className="p-5 rounded-lg bg-coreezy-800/50 border border-coreezy-700/50">
-                <div className="flex items-center gap-3 mb-4">
-                  <Link2 className="w-5 h-5 text-canopy-400" />
-                  <h3 className="font-semibold text-coreezy-100">
-                    Example: Coreezy Canopy Collection (XRPL)
-                  </h3>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <Link2 className="w-5 h-5 text-canopy-400" />
+                    <h3 className="font-semibold text-coreezy-100">
+                      Example: Coreezy Canopy Collection (XRPL)
+                    </h3>
+                  </div>
+                  <a
+                    href="https://xrp.cafe/collection/canopy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-canopy-400 hover:text-canopy-300 flex items-center gap-1"
+                  >
+                    View on XRP Cafe <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
                 <p className="text-sm text-coreezy-300 mb-4">
                   The Coreezy Canopy Collection, launched on the XRPL, is an example of
-                  this model in action. It operates outside the Coreum Vault.
+                  this model in action. It operates outside the Coreezy Vault.
                 </p>
                 <div className="mb-4">
                   <div className="text-xs text-coreezy-500 mb-2">Designed to:</div>

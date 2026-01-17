@@ -3,24 +3,28 @@
 import { useEffect, useState } from 'react';
 import { Coins, PieChart, TrendingUp, Clock, Wrench } from 'lucide-react';
 
-// Placeholder data until smart contracts are deployed
+// Vault Configuration
+// Vault address: core1lg2mh0x0wgkgq5rcwd7d2gn7sr3x56mh6kc5yx
 // Note: Total COREZ supply is 10,000,000 (10M)
 // The vault holds 10% (1M COREZ) reserved for staking
 // Target is 1.5M COREUM to achieve 1 COREZ = 1.5 COREUM backing
+const VAULT_ADDRESS = 'core1lg2mh0x0wgkgq5rcwd7d2gn7sr3x56mh6kc5yx';
+const CURRENT_PRICE_PER_COREZ = 0.0283; // Current price in COREUM per COREZ
+
 const VAULT_DATA: {
   totalCoreum: number;
   targetCoreum: number;
   totalCorez: number;
   vaultCorez: number;
-  backingRatio: number;
+  currentPrice: number;
   phase: 'INITIAL' | 'FINAL';
   lastDistribution: string | null;
 } = {
-  totalCoreum: 150_000, // Current vault COREUM holdings (placeholder)
+  totalCoreum: 50_000, // Current vault COREUM holdings
   targetCoreum: 1_500_000, // Target: 1.5M COREUM for 1:1.5 backing
   totalCorez: 10_000_000, // Total COREZ supply
   vaultCorez: 1_000_000, // 10% of supply in vault staking
-  backingRatio: 0.15, // Current backing ratio (placeholder)
+  currentPrice: CURRENT_PRICE_PER_COREZ, // Current price in COREUM per COREZ
   phase: 'INITIAL',
   lastDistribution: null,
 };
@@ -81,9 +85,9 @@ export function VaultDashboard() {
               <TrendingUp className="w-6 h-6 text-canopy-400" />
             </div>
             <div className="text-3xl font-bold text-canopy-400">
-              {VAULT_DATA.backingRatio.toFixed(2)}:1
+              {VAULT_DATA.currentPrice}
             </div>
-            <div className="text-sm text-coreezy-400">Current Backing</div>
+            <div className="text-sm text-coreezy-400">Current Price (CORE)</div>
           </div>
           <div>
             <div className="flex justify-center mb-2">
@@ -118,18 +122,17 @@ export function VaultDashboard() {
       {/* Value Indicator */}
       <div className="card p-6">
         <h3 className="text-sm font-semibold text-coreezy-400 mb-4">
-          Current Backing per COREZ (Vault Portion)
+          Current Price in Coreum
         </h3>
         <div className="flex items-baseline gap-2">
           <span className="text-4xl font-bold text-canopy-400">
-            {(VAULT_DATA.totalCoreum / VAULT_DATA.vaultCorez).toFixed(6)}
+            {VAULT_DATA.currentPrice}
           </span>
           <span className="text-coreezy-400">COREUM / COREZ</span>
         </div>
         <p className="mt-2 text-xs text-coreezy-500">
-          Based on vault COREUM holdings ({formatNumber(VAULT_DATA.totalCoreum)}) 
-          divided by vault COREZ allocation ({formatNumber(VAULT_DATA.vaultCorez)}).
-          Target: 1.5 COREUM / COREZ.
+          Current market price per COREZ token.
+          Target milestone: 1.5 COREUM / COREZ.
         </p>
       </div>
 

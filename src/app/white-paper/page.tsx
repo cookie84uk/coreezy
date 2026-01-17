@@ -121,11 +121,12 @@ export default function WhitePaperPage() {
                     <li><span className="text-canopy-400 font-bold">15%</span> → Reinvestment into Vault (compounding growth)</li>
                     <li><span className="text-canopy-400 font-bold">10%</span> → Marketing and Development Fund (growth engine)</li>
                     <li><span className="text-canopy-400 font-bold">20%</span> → OG NFT Reward Pool</li>
+                    <li><span className="text-amber-400 font-bold">5%</span> → Cubs NFT Reward Pool</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3">5C. Validator Mechanics</h3>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3">5C. Additional Vault Funding Streams</h3>
                   <p className="text-coreezy-300 mb-3">
                     The Coreezy Vibes Validator now fuels the Vault in two ways.
                   </p>
@@ -143,7 +144,7 @@ export default function WhitePaperPage() {
                     This structure ensures the vault grows over time, rewards stay circulating among engaged holders, and the community benefits at every step.
                   </p>
                   <p className="text-coreezy-300 mb-3">
-                    The 2nd NFT series should launch about the same time we hit 1 COREZ equaling 1.5 Coreum. When this happens, Reinvestment to vault goes to 10% and 5% allocated to 2nd Series NFT holders.
+                    The Cub Collection should launch about the same time we hit the 1.5 million Coreum milestone. At this point, 5% is allocated to Cub Collection holders.
                   </p>
                   <div className="p-4 rounded-lg bg-amber-900/20 border border-amber-700/30 mt-4">
                     <p className="text-amber-300 text-sm">
@@ -167,19 +168,43 @@ export default function WhitePaperPage() {
                   </h3>
                   <ul className="space-y-2 text-coreezy-300">
                     <li>• Proceeds seed the Vault prior to milestone achievement.</li>
-                    <li>• Unlock perpetual access to <strong className="text-coreezy-100">20% of vault rewards</strong> once the project achieves 1 token = 1.5 Coreum valuation.</li>
+                    <li>• Unlock perpetual access to <strong className="text-coreezy-100">20% of vault rewards</strong> once the project achieves the 1.5 million Coreum milestone.</li>
                     <li>• Represent cultural status: proof you were here from the very beginning.</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3">Future NFT Collections</h3>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3">Cub Collection</h3>
                   <ul className="space-y-2 text-coreezy-300">
-                    <li>• Each new NFT launch will be tied to the vault.</li>
-                    <li>• <strong className="text-coreezy-100">5% of vault rewards</strong> allocated to holders of future collections.</li>
-                    <li>• A portion of proceeds from each future NFT collection will go directly to the artists who develop them, ensuring creators benefit alongside the community.</li>
+                    <li>• Tied to the Coreezy Vault alongside OG Collection.</li>
+                    <li>• <strong className="text-coreezy-100">5% of vault rewards</strong> allocated to Cub Collection holders.</li>
+                    <li>• A portion of proceeds will go directly to the artists who develop them, ensuring creators benefit alongside the community.</li>
                     <li>• Ensures every NFT adds to the ecosystem, rewards contributors, and stays connected to token growth.</li>
                   </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-coreezy-100 mb-3">Cross-Chain NFT Strategy</h3>
+                  <p className="text-coreezy-300 mb-3">
+                    Coreezy is a multi-chain brand by design. While the Coreezy Vault and OG NFT collections form the foundation of the Coreezy ecosystem, not all Coreezy NFTs will be tied to the original Coreezy Vault.
+                  </p>
+                  <p className="text-coreezy-300 mb-3">
+                    As the brand expands, Coreezy will launch cross-chain NFT collections on other networks where it makes strategic sense. These collections may operate with independent vaults, reward structures, and distribution mechanics, tailored to the strengths and native users of each chain.
+                  </p>
+                  <div className="p-4 rounded-lg bg-coreezy-800/50 border border-coreezy-700/50 mt-4">
+                    <h4 className="font-semibold text-coreezy-100 mb-2">Example: Coreezy Canopy Collection (XRPL)</h4>
+                    <p className="text-sm text-coreezy-300 mb-2">
+                      The Coreezy Canopy Collection, launched on the XRPL, is an example of this model in action. It operates outside the Coreezy Vault and is designed to:
+                    </p>
+                    <ul className="space-y-1 text-sm text-coreezy-300">
+                      <li>• Expand the Coreezy brand to new ecosystems</li>
+                      <li>• Experiment with alternative reward mechanics</li>
+                      <li>• Onboard users who may not yet be active on Coreum</li>
+                    </ul>
+                    <p className="text-xs text-coreezy-400 mt-3">
+                      <strong>Important:</strong> Any vaults, rewards, or benefits tied to cross-chain collections are self-contained and explicitly defined, not implied through ownership of other Coreezy assets.
+                    </p>
+                  </div>
                 </div>
               </div>
             </section>
@@ -197,10 +222,12 @@ export default function WhitePaperPage() {
                     <div className="w-0.5 h-full bg-canopy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-canopy-400">Phase 1 (Now)</h3>
+                    <h3 className="font-semibold text-canopy-400">Phase 1: Foundation ✓</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Launch, bonding, vault seeding with OG NFT proceeds</li>
-                      <li>• Launch Validator</li>
+                      <li>• Token launch and initial distribution</li>
+                      <li>• OG NFT Collection mint (sold out)</li>
+                      <li>• Validator launch on Coreum</li>
+                      <li>• Website and community infrastructure</li>
                     </ul>
                   </div>
                 </div>
@@ -211,11 +238,12 @@ export default function WhitePaperPage() {
                     <div className="w-0.5 h-full bg-coreezy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-amber-400">Phase 2 (50K–250K MC)</h3>
+                    <h3 className="font-semibold text-amber-400">Phase 2: Growth (Current)</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• NFT ecosystem expansion</li>
-                      <li>• Merch launch</li>
-                      <li>• Semi or full automation of vault distributions</li>
+                      <li>• Sloth Race gamified staking system</li>
+                      <li>• Holdings dashboard with live data</li>
+                      <li>• Community expansion and engagement</li>
+                      <li>• Vault growth toward 1.5M milestone</li>
                     </ul>
                   </div>
                 </div>
@@ -226,11 +254,12 @@ export default function WhitePaperPage() {
                     <div className="w-0.5 h-full bg-coreezy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-coreezy-300">Phase 3 (1M+ MC)</h3>
+                    <h3 className="font-semibold text-coreezy-300">Phase 3: Expansion</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Automated vault contracts</li>
-                      <li>• Public dashboard</li>
-                      <li>• DeFi Tools</li>
+                      <li>• Cub Collection NFT launch</li>
+                      <li>• Merch store with exclusive rewards</li>
+                      <li>• Cross-chain NFT collections</li>
+                      <li>• Partnership integrations</li>
                     </ul>
                   </div>
                 </div>
@@ -240,12 +269,12 @@ export default function WhitePaperPage() {
                     <div className="w-4 h-4 rounded-full bg-coreezy-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-coreezy-400">Phase 4 (5M–10M+ MC)</h3>
+                    <h3 className="font-semibold text-coreezy-400">Phase 4: Maturity</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Expansion of lifestyle brand</li>
-                      <li>• Validator operations expansion</li>
-                      <li>• Partnerships</li>
-                      <li>• Exploration of retail-focused financial tools for crypto investment tracking and portfolio management</li>
+                      <li>• Final Phase vault mechanics activated</li>
+                      <li>• Token holder drip rewards begin</li>
+                      <li>• Automated vault distributions</li>
+                      <li>• Ecosystem partnerships and integrations</li>
                     </ul>
                   </div>
                 </div>
