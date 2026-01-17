@@ -216,66 +216,108 @@ export default function WhitePaperPage() {
               </h2>
 
               <div className="space-y-6">
+                {/* Phase 1 - Completed */}
                 <div className="flex gap-4">
                   <div className="flex flex-col items-center">
                     <div className="w-4 h-4 rounded-full bg-canopy-500" />
                     <div className="w-0.5 h-full bg-canopy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-canopy-400">Phase 1: Foundation ✓</h3>
+                    <h3 className="font-semibold text-canopy-400">✅ Phase 1 – Foundation & Institutional Readiness</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Token launch and initial distribution</li>
-                      <li>• OG NFT Collection mint (sold out)</li>
-                      <li>• Validator launch on Coreum</li>
-                      <li>• Website and community infrastructure</li>
+                      <li>• Enterprise-grade Coreum validator launched and operational</li>
+                      <li>• Institutional-ready governance, risk, and operational frameworks</li>
+                      <li>• Wyoming LLC structure with jurisdiction-aware operations</li>
+                      <li>• Transparent on-chain validator operations and reporting</li>
+                      <li>• $COREZ token launched as the Coreezy ecosystem token</li>
+                      <li>• Coreezy NFT collections launched on Coreum and XRPL</li>
+                      <li>• Initial vaults, bonding, and reward distribution mechanisms</li>
                     </ul>
+                    <p className="text-xs text-canopy-500 mt-2 italic">
+                      Outcome: Coreezy operates as an institutionally-ready validator and ecosystem.
+                    </p>
                   </div>
                 </div>
 
+                {/* Phase 2 - Current */}
                 <div className="flex gap-4">
                   <div className="flex flex-col items-center">
-                    <div className="w-4 h-4 rounded-full bg-amber-500" />
+                    <div className="w-4 h-4 rounded-full bg-amber-500 animate-pulse" />
                     <div className="w-0.5 h-full bg-coreezy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-amber-400">Phase 2: Growth (Current)</h3>
+                    <h3 className="font-semibold text-amber-400">🔄 Phase 2 – Ecosystem Expansion & Engagement (Current)</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Sloth Race gamified staking system</li>
-                      <li>• Holdings dashboard with live data</li>
-                      <li>• Community expansion and engagement</li>
-                      <li>• Vault growth toward 1.5M milestone</li>
+                      <li>• Website refresh with live on-chain data</li>
+                      <li>• Expansion of the Coreezy NFT ecosystem</li>
+                      <li>• Sloth Race launched as validator engagement and community layer</li>
+                      <li>• Free, mutable Sloth NFTs as evolving identity NFTs</li>
+                      <li>• Partner, Community, and Institutional dashboards</li>
+                      <li>• Coreezy merchandise launch with reward NFT integration</li>
+                      <li>• Ongoing validator growth and partnership outreach</li>
                     </ul>
+                    <p className="text-xs text-amber-500/70 mt-2 italic">
+                      Focus: Engagement, identity, and ecosystem participation.
+                    </p>
                   </div>
                 </div>
 
+                {/* Phase 3 */}
                 <div className="flex gap-4">
                   <div className="flex flex-col items-center">
                     <div className="w-4 h-4 rounded-full bg-coreezy-500" />
                     <div className="w-0.5 h-full bg-coreezy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-coreezy-300">Phase 3: Expansion</h3>
+                    <h3 className="font-semibold text-coreezy-300">Phase 3 – Platform & Creator Tools</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Cub Collection NFT launch</li>
-                      <li>• Merch store with exclusive rewards</li>
-                      <li>• Cross-chain NFT collections</li>
-                      <li>• Partnership integrations</li>
+                      <li>• Expansion of Coreezy&apos;s NFT tooling for creators and partners</li>
+                      <li>• Support for flexible NFT configurations across networks</li>
+                      <li>• Partner and brand use cases prioritized</li>
+                      <li>• Enhanced ecosystem visibility and transparency tools</li>
                     </ul>
+                    <p className="text-xs text-coreezy-500 mt-2 italic">
+                      Focus: Practical NFT infrastructure for communities and brands.
+                    </p>
                   </div>
                 </div>
 
+                {/* Phase 4 */}
                 <div className="flex gap-4">
                   <div className="flex flex-col items-center">
                     <div className="w-4 h-4 rounded-full bg-coreezy-600" />
+                    <div className="w-0.5 h-full bg-coreezy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-coreezy-400">Phase 4: Maturity</h3>
+                    <h3 className="font-semibold text-coreezy-400">Phase 4 – Ecosystem & Validator Scale</h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
-                      <li>• Final Phase vault mechanics activated</li>
-                      <li>• Token holder drip rewards begin</li>
-                      <li>• Automated vault distributions</li>
-                      <li>• Ecosystem partnerships and integrations</li>
+                      <li>• Expansion of Coreezy validator operations and infrastructure</li>
+                      <li>• Strategic partnerships with projects, creators, and institutions</li>
+                      <li>• Advanced NFT-based access control, rewards, and identity</li>
+                      <li>• Continued ecosystem tooling and platform hardening</li>
                     </ul>
+                    <p className="text-xs text-coreezy-500 mt-2 italic">
+                      Focus: Scaling responsibly while maintaining operational discipline.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Phase 5 */}
+                <div className="flex gap-4">
+                  <div className="flex flex-col items-center">
+                    <div className="w-4 h-4 rounded-full bg-coreezy-700" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-coreezy-500">Phase 5 – Advanced Infrastructure (Exploration)</h3>
+                    <ul className="text-sm text-coreezy-400 mt-2 space-y-1">
+                      <li>• Research into advanced validator-aligned staking models</li>
+                      <li>• Exploration of tokenization and settlement infrastructure</li>
+                      <li>• Evaluation of self-custody user experience</li>
+                      <li>• Continued refinement of institutional documentation and standards</li>
+                    </ul>
+                    <p className="text-xs text-coreezy-600 mt-2 italic">
+                      Focus: Long-term infrastructure explored deliberately and cautiously.
+                    </p>
                   </div>
                 </div>
               </div>
