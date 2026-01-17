@@ -28,21 +28,20 @@ export function Header() {
     <>
       <header className="sticky top-0 z-50 glass">
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-20 items-center justify-between gap-8">
+          <div className="flex h-16 items-center justify-between gap-6">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 shrink-0">
+            <Link href="/" className="shrink-0">
               <Image
                 src="/logo.png"
                 alt="Coreezy"
-                width={56}
-                height={56}
-                className="rounded-full"
+                width={48}
+                height={48}
+                className="rounded-full hover:scale-105 transition-transform"
               />
-              <span className="hidden sm:block text-xl font-bold text-gradient">Coreezy</span>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex md:items-center md:gap-6 flex-1 justify-center">
+            <div className="hidden md:flex md:items-center md:gap-6">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
@@ -55,7 +54,7 @@ export function Header() {
             </div>
 
             {/* Wallet Button */}
-            <div className="flex items-center gap-4 shrink-0">
+            <div className="flex items-center gap-4">
               {isConnected ? (
                 <div className="flex items-center gap-2">
                   <span className="hidden sm:inline text-sm text-coreezy-400">
