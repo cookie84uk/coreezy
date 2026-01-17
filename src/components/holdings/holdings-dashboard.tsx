@@ -64,7 +64,6 @@ interface Distribution {
 
 interface DistributionTotals {
   totalDistributed: string;
-  totalPerNft: string;
   distributionCount: number;
 }
 
@@ -286,15 +285,10 @@ export function HoldingsDashboard() {
               </p>
             </div>
             {distributionTotals && distributionTotals.distributionCount > 0 && (
-              <div className="flex gap-6 text-right">
-                <div>
-                  <div className="text-xs text-coreezy-400">Total Distributed</div>
-                  <div className="text-lg font-bold text-canopy-400">{distributionTotals.totalDistributed} CORE</div>
-                </div>
-                <div>
-                  <div className="text-xs text-coreezy-400">Total Per NFT</div>
-                  <div className="text-lg font-bold text-canopy-400">{distributionTotals.totalPerNft} CORE</div>
-                </div>
+              <div className="text-right">
+                <div className="text-xs text-coreezy-400">Total Distributed</div>
+                <div className="text-xl font-bold text-canopy-400">{distributionTotals.totalDistributed} CORE</div>
+                <div className="text-xs text-coreezy-500">{distributionTotals.distributionCount} distributions</div>
               </div>
             )}
           </div>

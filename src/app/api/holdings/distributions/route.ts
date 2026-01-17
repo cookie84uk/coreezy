@@ -153,14 +153,12 @@ export async function GET() {
     
     // Calculate total distributed over all time
     const totalDistributed = distributions.reduce((sum, d) => sum + parseFloat(d.totalAmount), 0);
-    const totalPerNft = distributions.reduce((sum, d) => sum + parseFloat(d.perNft), 0);
 
     return NextResponse.json({
       wallet: AIRDROP_WALLET,
       distributions,
       totals: {
         totalDistributed: totalDistributed.toFixed(2),
-        totalPerNft: totalPerNft.toFixed(4),
         distributionCount: distributions.length,
       }
     });
@@ -171,7 +169,6 @@ export async function GET() {
       distributions: [],
       totals: {
         totalDistributed: '0',
-        totalPerNft: '0',
         distributionCount: 0,
       }
     });
