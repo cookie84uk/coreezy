@@ -54,8 +54,8 @@ export default function HomePage() {
       {/* Hero Section */}
         <section className="relative overflow-hidden py-20 sm:py-32">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-8 items-center">
-              <div className="max-w-2xl">
+            <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+              <div className="max-w-xl lg:max-w-none">
                 <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
                   <span className="text-gradient">Enterprise Validation</span>
                   <br />
@@ -103,11 +103,11 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="relative lg:ml-auto">
+              <div className="relative flex items-center justify-center">
                 {/* Coreezy Logo */}
-                <div className="relative w-full aspect-square max-w-lg mx-auto">
+                <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
                   <div className="absolute inset-0 bg-gradient-radial from-canopy-500/20 to-transparent rounded-full animate-slow-pulse" />
-                  <div className="absolute inset-4 glass rounded-3xl flex items-center justify-center p-8">
+                  <div className="absolute inset-4 glass rounded-3xl flex items-center justify-center p-6">
                     <Image
                       src="/logo.png"
                       alt="Coreezy"
