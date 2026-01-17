@@ -11,7 +11,7 @@ export async function GET() {
         next: { revalidate: 300 }, // Cache for 5 minutes
       }),
       fetch(
-        `${COREUM_REST}/cosmos/staking/v1beta1/validators/${COREEZY_VALIDATOR}/delegations?pagination.limit=1`,
+        `${COREUM_REST}/cosmos/staking/v1beta1/validators/${COREEZY_VALIDATOR}/delegations?pagination.limit=1&pagination.count_total=true`,
         { next: { revalidate: 300 } }
       ),
     ]);
