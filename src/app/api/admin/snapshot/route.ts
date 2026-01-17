@@ -18,6 +18,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  // Check if this is a season start (class recalculation) request
+  const url = new URL(request.url);
+  const recalculateClasses = url.searchParams.get('recalculate_classes') === 'true';
+
   try {
     console.log('[Snapshot] Starting daily snapshot...');
 
@@ -43,6 +47,8 @@ export async function POST(request: NextRequest) {
           snapshots: { orderBy: { timestamp: 'desc' }, take: 1 },
         },
       });
+
+      const isNewUser = !user;
 
       if (!user) {
         user = await prisma.user.create({
@@ -153,11 +159,19 @@ export async function POST(request: NextRequest) {
         },
       });
 
+      // Assign class to NEW users only (mid-season joiners)
+      if (isNewUser) {
+        await assignClassToNewUser(user!.slothProfile!.id, newTotalScore);
+      }
+
       processed++;
     }
 
-    // Update sloth classes based on distribution
-    await updateSlothClasses();
+    // Only recalculate ALL classes at season start (when explicitly requested)
+    if (recalculateClasses) {
+      console.log('[Snapshot] Recalculating all classes (season start)...');
+      await updateSlothClasses();
+    }
 
     // Handle sleeping sloths (undelegated)
     await handleSleepingSloths(delegations.map(d => d.address), snapshotDay);
@@ -168,6 +182,7 @@ export async function POST(request: NextRequest) {
       success: true,
       processed,
       newUsers,
+      classesRecalculated: recalculateClasses,
       timestamp: snapshotDate.toISOString(),
     });
   } catch (error) {
@@ -205,6 +220,40 @@ async function fetchAllDelegations(): Promise<Array<{ address: string; amount: s
   return delegations;
 }
 
+// Assign class to a new user joining mid-season based on their score vs existing participants
+async function assignClassToNewUser(profileId: string, totalScore: bigint) {
+  // Count how many profiles have higher scores
+  const higherCount = await prisma.slothProfile.count({
+    where: { totalScore: { gt: totalScore } },
+  });
+  
+  const totalCount = await prisma.slothProfile.count();
+  
+  if (totalCount === 0) {
+    // First user - default to BABY (they'll get Adult at season start recalc)
+    return;
+  }
+  
+  // Calculate percentile position
+  const percentile = (higherCount / totalCount) * 100;
+  
+  // Assign class based on where they fall
+  let newClass: 'BABY' | 'TEEN' | 'ADULT';
+  if (percentile < 33.33) {
+    newClass = 'ADULT'; // Top 33%
+  } else if (percentile < 66.66) {
+    newClass = 'TEEN'; // Middle 33%
+  } else {
+    newClass = 'BABY'; // Bottom 33%
+  }
+  
+  await prisma.slothProfile.update({
+    where: { id: profileId },
+    data: { class: newClass },
+  });
+}
+
+// Recalculate ALL classes - only run at season start
 async function updateSlothClasses() {
   // Get all profiles sorted by total score
   const profiles = await prisma.slothProfile.findMany({

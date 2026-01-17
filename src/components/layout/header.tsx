@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { useWallet } from '@/components/wallet/wallet-provider';
 import { WalletModal } from '@/components/wallet/wallet-modal';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Baby, Leaf, TreeDeciduous, Trophy } from 'lucide-react';
 
 const navigation = [
   { name: 'Community', href: '/community' },
@@ -16,8 +16,14 @@ const navigation = [
   { name: 'Docs', href: '/white-paper' },
 ];
 
+const CLASS_ICONS = {
+  BABY: <Baby className="w-4 h-4 text-amber-400" />,
+  TEEN: <Leaf className="w-4 h-4 text-emerald-400" />,
+  ADULT: <TreeDeciduous className="w-4 h-4 text-canopy-400" />,
+};
+
 export function Header() {
-  const { address, isConnected, disconnect } = useWallet();
+  const { address, isConnected, disconnect, raceProfile } = useWallet();
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -56,8 +62,21 @@ export function Header() {
             {/* Wallet Button */}
             <div className="flex items-center gap-4">
               {isConnected ? (
-                <div className="flex items-center gap-2">
-                  <span className="hidden sm:inline text-sm text-coreezy-400">
+                <div className="flex items-center gap-3">
+                  {/* Race Profile Badge */}
+                  {raceProfile && (
+                    <Link
+                      href={`/sloth-race/${address}`}
+                      className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-coreezy-800/50 hover:bg-coreezy-800 transition-colors"
+                      title="View your Sloth Race profile"
+                    >
+                      {CLASS_ICONS[raceProfile.class]}
+                      <span className="text-xs font-medium text-coreezy-300">
+                        #{raceProfile.rank}
+                      </span>
+                    </Link>
+                  )}
+                  <span className="hidden lg:inline text-sm text-coreezy-400">
                     {truncateAddress(address!)}
                   </span>
                   <button
@@ -95,6 +114,26 @@ export function Header() {
           {isMobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-coreezy-700 safe-bottom">
               <div className="flex flex-col gap-1">
+                {/* Mobile Race Profile Card */}
+                {isConnected && raceProfile && (
+                  <Link
+                    href={`/sloth-race/${address}`}
+                    className="flex items-center gap-3 px-4 py-3 mb-2 rounded-lg bg-coreezy-800/50"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {CLASS_ICONS[raceProfile.class]}
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-coreezy-200">
+                        Your Sloth Profile
+                      </div>
+                      <div className="text-xs text-coreezy-400">
+                        Rank #{raceProfile.rank} • {raceProfile.class.toLowerCase()}
+                      </div>
+                    </div>
+                    <Trophy className="w-4 h-4 text-canopy-400" />
+                  </Link>
+                )}
+                
                 {navigation.map((item) => (
                   <Link
                     key={item.name}

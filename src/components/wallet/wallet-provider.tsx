@@ -20,15 +20,28 @@ export interface DelegationInfo {
   };
 }
 
+export interface RaceProfile {
+  address: string;
+  name: string | null;
+  class: 'BABY' | 'TEEN' | 'ADULT';
+  rank: number;
+  percentile: string;
+  score: string;
+  isSleeping: boolean;
+  daysAwake: number;
+}
+
 interface WalletContextType {
   address: string | null;
   isConnected: boolean;
   isConnecting: boolean;
   walletType: WalletType | null;
   delegation: DelegationInfo | null;
+  raceProfile: RaceProfile | null;
   connect: (walletType: WalletType) => Promise<void>;
   disconnect: () => void;
   refreshDelegation: () => Promise<void>;
+  refreshRaceProfile: () => Promise<void>;
 }
 
 const WalletContext = createContext<WalletContextType | null>(null);
@@ -78,6 +91,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [walletType, setWalletType] = useState<WalletType | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [delegation, setDelegation] = useState<DelegationInfo | null>(null);
+  const [raceProfile, setRaceProfile] = useState<RaceProfile | null>(null);
 
   // Check for existing connection on mount
   useEffect(() => {
@@ -104,6 +118,18 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         setAddress(savedAddress);
         setWalletType(type);
         await fetchDelegation(savedAddress);
+        await fetchRaceProfile(savedAddress);
+        
+        // Record site visit on reconnect too
+        try {
+          await fetch('/api/race/site-visit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ address: savedAddress }),
+          });
+        } catch (error) {
+          console.error('Failed to record site visit:', error);
+        }
       } else {
         localStorage.removeItem('coreezy_wallet_address');
         localStorage.removeItem('coreezy_wallet_type');
@@ -117,7 +143,6 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
   const fetchDelegation = async (walletAddress: string) => {
     try {
-      // Fetch delegation via API route (server-side)
       const response = await fetch(`/api/delegation?address=${walletAddress}`);
       if (response.ok) {
         const data = await response.json();
@@ -128,6 +153,21 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error('Failed to fetch delegation:', error);
       setDelegation(null);
+    }
+  };
+
+  const fetchRaceProfile = async (walletAddress: string) => {
+    try {
+      const response = await fetch(`/api/race/profile/${walletAddress}`);
+      if (response.ok) {
+        const data = await response.json();
+        setRaceProfile(data.profile);
+      } else {
+        setRaceProfile(null);
+      }
+    } catch (error) {
+      console.error('Failed to fetch race profile:', error);
+      setRaceProfile(null);
     }
   };
 
@@ -161,7 +201,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('coreezy_wallet_address', walletAddress);
       localStorage.setItem('coreezy_wallet_type', type);
 
-      // Record site visit
+      // Record site visit (also creates user/profile if new)
       try {
         await fetch('/api/race/site-visit', {
           method: 'POST',
@@ -172,7 +212,11 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         console.error('Failed to record site visit:', error);
       }
 
-      await fetchDelegation(walletAddress);
+      // Fetch delegation and race profile
+      await Promise.all([
+        fetchDelegation(walletAddress),
+        fetchRaceProfile(walletAddress),
+      ]);
     } catch (error) {
       console.error('Failed to connect wallet:', error);
       throw error;
@@ -185,6 +229,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     setAddress(null);
     setWalletType(null);
     setDelegation(null);
+    setRaceProfile(null);
     localStorage.removeItem('coreezy_wallet_address');
     localStorage.removeItem('coreezy_wallet_type');
   }, []);
@@ -192,6 +237,11 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const refreshDelegation = useCallback(async () => {
     if (!address) return;
     await fetchDelegation(address);
+  }, [address]);
+
+  const refreshRaceProfile = useCallback(async () => {
+    if (!address) return;
+    await fetchRaceProfile(address);
   }, [address]);
 
   return (
@@ -202,9 +252,11 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         isConnecting,
         walletType,
         delegation,
+        raceProfile,
         connect,
         disconnect,
         refreshDelegation,
+        refreshRaceProfile,
       }}
     >
       {children}
