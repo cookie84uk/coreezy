@@ -191,10 +191,14 @@ export function Leaderboard() {
                         {entry.name || entry.shortAddress}
                       </span>
                       {entry.isSleeping && (
-                        <Moon className="w-4 h-4 text-purple-400" title="Sleeping (undelegated recently)" />
+                        <span title="Sleeping (undelegated recently)">
+                          <Moon className="w-4 h-4 text-purple-400" />
+                        </span>
                       )}
                       {entry.hasBoosts && (
-                        <Rocket className="w-4 h-4 text-cyan-400" title={`${entry.boostCount} active boost(s)`} />
+                        <span title={`${entry.boostCount} active boost(s)`}>
+                          <Rocket className="w-4 h-4 text-cyan-400" />
+                        </span>
                       )}
                     </Link>
                   </td>
