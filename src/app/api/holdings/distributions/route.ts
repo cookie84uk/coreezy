@@ -140,7 +140,7 @@ async function fetchAirdropTransactions(): Promise<Distribution[]> {
     // Sort by date descending
     distributions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    return distributions.slice(0, 20); // Limit to 20 most recent
+    return distributions; // Return all distributions
   } catch (error) {
     console.error('Error fetching airdrop transactions:', error);
     return [];
@@ -150,16 +150,30 @@ async function fetchAirdropTransactions(): Promise<Distribution[]> {
 export async function GET() {
   try {
     const distributions = await fetchAirdropTransactions();
+    
+    // Calculate total distributed over all time
+    const totalDistributed = distributions.reduce((sum, d) => sum + parseFloat(d.totalAmount), 0);
+    const totalPerNft = distributions.reduce((sum, d) => sum + parseFloat(d.perNft), 0);
 
     return NextResponse.json({
       wallet: AIRDROP_WALLET,
       distributions,
+      totals: {
+        totalDistributed: totalDistributed.toFixed(2),
+        totalPerNft: totalPerNft.toFixed(4),
+        distributionCount: distributions.length,
+      }
     });
   } catch (error) {
     console.error('Failed to fetch distributions:', error);
     return NextResponse.json({ 
       wallet: AIRDROP_WALLET,
-      distributions: [] 
+      distributions: [],
+      totals: {
+        totalDistributed: '0',
+        totalPerNft: '0',
+        distributionCount: 0,
+      }
     });
   }
 }

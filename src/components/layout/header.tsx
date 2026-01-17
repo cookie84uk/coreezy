@@ -26,16 +26,16 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 glass">
+      <header className="sticky top-0 z-50 bg-coreezy-950/95 backdrop-blur-sm">
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between gap-6">
+          <div className="flex h-24 items-center justify-between gap-6">
             {/* Logo */}
             <Link href="/" className="shrink-0">
               <Image
                 src="/logo.png"
                 alt="Coreezy"
-                width={48}
-                height={48}
+                width={72}
+                height={72}
                 className="rounded-full hover:scale-105 transition-transform"
               />
             </Link>

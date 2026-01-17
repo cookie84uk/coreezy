@@ -62,9 +62,16 @@ interface Distribution {
   txHash: string;
 }
 
+interface DistributionTotals {
+  totalDistributed: string;
+  totalPerNft: string;
+  distributionCount: number;
+}
+
 export function HoldingsDashboard() {
   const [holdings, setHoldings] = useState<HoldingsData | null>(null);
   const [distributions, setDistributions] = useState<Distribution[]>([]);
+  const [distributionTotals, setDistributionTotals] = useState<DistributionTotals | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
@@ -87,6 +94,7 @@ export function HoldingsDashboard() {
       if (distributionsRes.ok) {
         const data = await distributionsRes.json();
         setDistributions(data.distributions || []);
+        setDistributionTotals(data.totals || null);
       }
     } catch (error) {
       console.error('Failed to fetch holdings:', error);
@@ -268,12 +276,28 @@ export function HoldingsDashboard() {
       {/* Distribution History */}
       <div className="card">
         <div className="p-4 border-b border-coreezy-700">
-          <h2 className="text-lg font-bold text-coreezy-100">
-            OG NFT Reward Distributions
-          </h2>
-          <p className="text-xs text-coreezy-400 mt-1">
-            On-chain transaction history from the airdrop wallet
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-bold text-coreezy-100">
+                OG NFT Reward Distributions
+              </h2>
+              <p className="text-xs text-coreezy-400 mt-1">
+                On-chain transaction history from the airdrop wallet
+              </p>
+            </div>
+            {distributionTotals && distributionTotals.distributionCount > 0 && (
+              <div className="flex gap-6 text-right">
+                <div>
+                  <div className="text-xs text-coreezy-400">Total Distributed</div>
+                  <div className="text-lg font-bold text-canopy-400">{distributionTotals.totalDistributed} CORE</div>
+                </div>
+                <div>
+                  <div className="text-xs text-coreezy-400">Total Per NFT</div>
+                  <div className="text-lg font-bold text-canopy-400">{distributionTotals.totalPerNft} CORE</div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {distributions.length === 0 ? (
