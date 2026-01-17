@@ -1,4 +1,6 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
+import { CheckCircle2, RefreshCw } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'White Paper | Coreezy',
@@ -164,7 +166,7 @@ export default function WhitePaperPage() {
               <div className="space-y-6">
                 <div>
                   <h3 className="text-lg font-semibold text-coreezy-100 mb-3 flex items-center gap-2">
-                    <span className="text-2xl">🦥</span> OG Collection (100 pieces)
+                    <Image src="/logo.png" alt="OG Collection" width={28} height={28} className="rounded-full" /> OG Collection (100 pieces)
                   </h3>
                   <ul className="space-y-2 text-coreezy-300">
                     <li>• Proceeds seed the Vault prior to milestone achievement.</li>
@@ -223,7 +225,9 @@ export default function WhitePaperPage() {
                     <div className="w-0.5 h-full bg-canopy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-canopy-400">✅ Phase 1 – Foundation & Institutional Readiness</h3>
+                    <h3 className="font-semibold text-canopy-400 flex items-center gap-2">
+                      <CheckCircle2 className="w-5 h-5" /> Phase 1 – Foundation & Institutional Readiness
+                    </h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
                       <li>• Enterprise-grade Coreum validator launched and operational</li>
                       <li>• Institutional-ready governance, risk, and operational frameworks</li>
@@ -246,7 +250,9 @@ export default function WhitePaperPage() {
                     <div className="w-0.5 h-full bg-coreezy-800" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-amber-400">🔄 Phase 2 – Ecosystem Expansion & Engagement (Current)</h3>
+                    <h3 className="font-semibold text-amber-400 flex items-center gap-2">
+                      <RefreshCw className="w-5 h-5" /> Phase 2 – Ecosystem Expansion & Engagement (Current)
+                    </h3>
                     <ul className="text-sm text-coreezy-300 mt-2 space-y-1">
                       <li>• Website refresh with live on-chain data</li>
                       <li>• Expansion of the Coreezy NFT ecosystem</li>

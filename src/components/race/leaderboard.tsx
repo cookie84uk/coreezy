@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface LeaderboardEntry {
   rank: number;
@@ -135,7 +136,9 @@ export function Leaderboard() {
           </div>
         ) : !hasData ? (
           <div className="p-8 text-center">
-            <div className="text-4xl mb-4">🦥</div>
+            <div className="mb-4 flex justify-center">
+              <Image src="/logo.png" alt="Coreezy" width={64} height={64} className="rounded-full opacity-50" />
+            </div>
             <p className="text-coreezy-400">No participants yet.</p>
             <p className="text-sm text-coreezy-500 mt-2">
               Connect your wallet and delegate to join the race!

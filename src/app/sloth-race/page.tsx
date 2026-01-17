@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { Leaderboard } from '@/components/race/leaderboard';
 import { RaceInfo } from '@/components/race/race-info';
 
@@ -27,8 +28,9 @@ export default function SlothRacePage() {
 
           {/* Hero */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gradient mb-4">
-              🦥 The Sloth Race
+            <h1 className="text-4xl font-bold text-gradient mb-4 flex items-center justify-center gap-3">
+              <Image src="/logo.png" alt="Coreezy" width={48} height={48} className="rounded-full" />
+              The Sloth Race
             </h1>
             <p className="text-xl text-coreezy-300 max-w-2xl mx-auto">
               Slow and steady wins the race. Compete by delegating, restaking, and

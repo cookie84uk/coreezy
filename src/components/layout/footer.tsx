@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Twitter, Send } from 'lucide-react';
 
 const footerLinks = {
@@ -36,7 +37,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2">
-              <span className="text-2xl">🦥</span>
+              <Image src="/logo.png" alt="Coreezy" width={32} height={32} className="rounded-full" />
               <span className="text-xl font-bold text-gradient">Coreezy</span>
             </Link>
             <p className="mt-4 text-sm text-coreezy-400">

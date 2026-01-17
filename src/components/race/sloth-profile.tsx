@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface ProfileData {
   address: string;
@@ -107,7 +108,9 @@ export function SlothProfile({ address }: SlothProfileProps) {
   if (error || !profile) {
     return (
       <div className="card p-8 text-center">
-        <div className="text-4xl mb-4">🦥</div>
+        <div className="mb-4 flex justify-center">
+          <Image src="/logo.png" alt="Coreezy" width={64} height={64} className="rounded-full opacity-50" />
+        </div>
         <p className="text-coreezy-300 mb-4">{error}</p>
         <Link href="/sloth-race" className="btn-primary px-4 py-2">
           ← Back to Leaderboard

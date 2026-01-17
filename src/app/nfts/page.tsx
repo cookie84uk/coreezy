@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import NextImage from 'next/image';
 import { Sparkles, Crown, Gift, Image, Star, Users, Palette, Globe, Link2, ExternalLink } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -20,7 +21,6 @@ const OG_COLLECTION = {
     initial: '40% of vault rewards',
     final: '20% of vault rewards (perpetual)',
   },
-  image: '🦥',
   perks: [
     'Proceeds seed the Vault prior to milestone achievement',
     'Unlock perpetual access to vault rewards (20% in Final Phase)',
@@ -39,7 +39,6 @@ const FUTURE_COLLECTION = {
   minted: 0,
   status: 'COMING_SOON' as const,
   rewards: '5% of vault rewards (Final Phase)',
-  image: '🎨',
   perks: [
     'Tied to the Coreezy Vault alongside OG Collection',
     '5% of vault rewards allocated to holders',
@@ -69,7 +68,7 @@ export default function NFTsPage() {
               {/* Header */}
               <div className="p-6 bg-coreezy-800/50">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="text-7xl">{OG_COLLECTION.image}</div>
+                  <NextImage src="/logo.png" alt="OG Collection" width={80} height={80} className="rounded-xl" />
                   <div className="flex flex-col items-end gap-2">
                     <span className="px-3 py-1 rounded-full text-xs font-medium bg-canopy-900/50 text-canopy-300 border border-canopy-700">
                       Sold Out
@@ -170,7 +169,9 @@ export default function NFTsPage() {
               {/* Header */}
               <div className="p-6 bg-coreezy-800/50">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="text-6xl">{FUTURE_COLLECTION.image}</div>
+                  <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-amber-500/20 to-canopy-500/20 flex items-center justify-center">
+                    <Palette className="w-10 h-10 text-amber-400" />
+                  </div>
                   <span className="px-3 py-1 rounded-full text-xs font-medium bg-amber-900/50 text-amber-300 border border-amber-700">
                     Coming Soon
                   </span>

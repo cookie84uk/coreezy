@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { Coins, Percent, Users, Activity, ExternalLink } from 'lucide-react';
 
 interface ValidatorData {
@@ -69,7 +70,7 @@ export function ValidatorStats() {
   return (
     <div className="card p-8">
       <div className="flex items-center justify-center gap-3 mb-6">
-        <span className="text-3xl">🦥</span>
+        <Image src="/logo.png" alt="Coreezy" width={40} height={40} className="rounded-full" />
         <h2 className="text-2xl font-bold text-coreezy-100">{validator.moniker}</h2>
         <span
           className={`px-2 py-1 rounded text-xs font-medium flex items-center gap-1 ${
