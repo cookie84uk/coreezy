@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Baby, Leaf, TreeDeciduous, Trophy, Clock, Users } from 'lucide-react';
+import { Baby, Leaf, TreeDeciduous, Trophy, Clock, Users, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface PrizePoolData {
   season: {
@@ -27,6 +27,7 @@ interface PrizePoolData {
 export function PrizePool() {
   const [data, setData] = useState<PrizePoolData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     async function fetchPrizePool() {
@@ -48,13 +49,10 @@ export function PrizePool() {
 
   if (loading) {
     return (
-      <div className="card p-6 animate-pulse">
-        <div className="h-6 bg-coreezy-700 rounded w-32 mb-4" />
-        <div className="h-16 bg-coreezy-700 rounded mb-4" />
-        <div className="grid grid-cols-3 gap-4">
-          <div className="h-24 bg-coreezy-700 rounded" />
-          <div className="h-24 bg-coreezy-700 rounded" />
-          <div className="h-24 bg-coreezy-700 rounded" />
+      <div className="card animate-pulse">
+        <div className="p-4 flex items-center justify-between">
+          <div className="h-6 bg-coreezy-700 rounded w-48" />
+          <div className="h-6 bg-coreezy-700 rounded w-24" />
         </div>
       </div>
     );
@@ -73,117 +71,112 @@ export function PrizePool() {
 
   return (
     <div className="card overflow-hidden">
-      {/* Header */}
-      <div className="p-4 bg-gradient-to-r from-canopy-900/50 to-coreezy-900/50 border-b border-coreezy-700">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Trophy className="w-5 h-5 text-amber-400" />
-            <h2 className="font-bold text-coreezy-100">{data.season.name} Prize Pool</h2>
-          </div>
-          <div className="flex items-center gap-4 text-xs text-coreezy-400">
+      {/* Accordion Header - Always Visible */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full p-4 flex items-center justify-between hover:bg-coreezy-800/30 transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <Trophy className="w-5 h-5 text-amber-400" />
+          <span className="font-bold text-coreezy-100">{data.season.name} Prize Pool</span>
+          <span className="text-xl font-bold text-canopy-400 ml-2">
+            {formatCore(data.pool.total)} CORE
+          </span>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-4 text-xs text-coreezy-400">
             <span className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
-              {data.daysRemaining} days left
+              {data.daysRemaining} days
             </span>
             <span className="flex items-center gap-1">
               <Users className="w-3 h-3" />
-              {data.totalParticipants} racers
+              {data.totalParticipants}
             </span>
           </div>
+          {isOpen ? (
+            <ChevronUp className="w-5 h-5 text-coreezy-400" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-coreezy-400" />
+          )}
         </div>
-      </div>
+      </button>
 
-      {/* Total Pool */}
-      <div className="p-6 text-center border-b border-coreezy-800">
-        <div className="text-xs text-coreezy-500 mb-1">
-          {data.pool.commissionPercent}% of Validator Commission
-        </div>
-        <div className="text-4xl font-bold text-canopy-400">
-          {formatCore(data.pool.total)} <span className="text-xl text-coreezy-400">CORE</span>
-        </div>
-        <div className="text-xs text-coreezy-500 mt-1">
-          Growing throughout the quarter
-        </div>
-      </div>
+      {/* Accordion Content */}
+      {isOpen && (
+        <>
+          {/* Total Pool Info */}
+          <div className="px-4 pb-4 border-b border-coreezy-800">
+            <div className="text-xs text-coreezy-500">
+              {data.pool.commissionPercent}% of Validator Commission • Growing throughout the quarter
+            </div>
+          </div>
 
-      {/* Class Distribution */}
-      <div className="grid grid-cols-3 divide-x divide-coreezy-800">
-        {/* Adult */}
-        <div className="p-4 text-center">
-          <div className="flex justify-center mb-2">
-            <div className="p-2 rounded-full bg-canopy-900/30">
-              <TreeDeciduous className="w-6 h-6 text-canopy-400" />
+          {/* Class Distribution */}
+          <div className="grid grid-cols-3 divide-x divide-coreezy-800">
+            {/* Adult */}
+            <div className="p-4 text-center">
+              <div className="flex justify-center mb-2">
+                <div className="p-2 rounded-full bg-canopy-900/30">
+                  <TreeDeciduous className="w-5 h-5 text-canopy-400" />
+                </div>
+              </div>
+              <div className="text-lg font-bold text-canopy-400">
+                {formatCore(data.classes.adult.pool)}
+              </div>
+              <div className="text-xs text-coreezy-500">
+                {data.classes.adult.percent}% • {data.classes.adult.participants} racers
+              </div>
+              <div className="text-xs text-coreezy-400 mt-1">
+                ~{formatCore(data.classes.adult.perParticipant)} each
+              </div>
             </div>
-          </div>
-          <div className="text-lg font-bold text-canopy-400">
-            {formatCore(data.classes.adult.pool)}
-          </div>
-          <div className="text-xs text-coreezy-500">
-            {data.classes.adult.percent}% of pool
-          </div>
-          <div className="mt-2 pt-2 border-t border-coreezy-800">
-            <div className="text-xs text-coreezy-400">
-              {data.classes.adult.participants} Adults
-            </div>
-            <div className="text-sm font-medium text-coreezy-300">
-              ~{formatCore(data.classes.adult.perParticipant)} each
-            </div>
-          </div>
-        </div>
 
-        {/* Teen */}
-        <div className="p-4 text-center">
-          <div className="flex justify-center mb-2">
-            <div className="p-2 rounded-full bg-emerald-900/30">
-              <Leaf className="w-6 h-6 text-emerald-400" />
+            {/* Teen */}
+            <div className="p-4 text-center">
+              <div className="flex justify-center mb-2">
+                <div className="p-2 rounded-full bg-emerald-900/30">
+                  <Leaf className="w-5 h-5 text-emerald-400" />
+                </div>
+              </div>
+              <div className="text-lg font-bold text-emerald-400">
+                {formatCore(data.classes.teen.pool)}
+              </div>
+              <div className="text-xs text-coreezy-500">
+                {data.classes.teen.percent}% • {data.classes.teen.participants} racers
+              </div>
+              <div className="text-xs text-coreezy-400 mt-1">
+                ~{formatCore(data.classes.teen.perParticipant)} each
+              </div>
             </div>
-          </div>
-          <div className="text-lg font-bold text-emerald-400">
-            {formatCore(data.classes.teen.pool)}
-          </div>
-          <div className="text-xs text-coreezy-500">
-            {data.classes.teen.percent}% of pool
-          </div>
-          <div className="mt-2 pt-2 border-t border-coreezy-800">
-            <div className="text-xs text-coreezy-400">
-              {data.classes.teen.participants} Teens
-            </div>
-            <div className="text-sm font-medium text-coreezy-300">
-              ~{formatCore(data.classes.teen.perParticipant)} each
-            </div>
-          </div>
-        </div>
 
-        {/* Baby */}
-        <div className="p-4 text-center">
-          <div className="flex justify-center mb-2">
-            <div className="p-2 rounded-full bg-amber-900/30">
-              <Baby className="w-6 h-6 text-amber-400" />
+            {/* Baby */}
+            <div className="p-4 text-center">
+              <div className="flex justify-center mb-2">
+                <div className="p-2 rounded-full bg-amber-900/30">
+                  <Baby className="w-5 h-5 text-amber-400" />
+                </div>
+              </div>
+              <div className="text-lg font-bold text-amber-400">
+                {formatCore(data.classes.baby.pool)}
+              </div>
+              <div className="text-xs text-coreezy-500">
+                {data.classes.baby.percent}% • {data.classes.baby.participants} racers
+              </div>
+              <div className="text-xs text-coreezy-400 mt-1">
+                ~{formatCore(data.classes.baby.perParticipant)} each
+              </div>
             </div>
           </div>
-          <div className="text-lg font-bold text-amber-400">
-            {formatCore(data.classes.baby.pool)}
-          </div>
-          <div className="text-xs text-coreezy-500">
-            {data.classes.baby.percent}% of pool
-          </div>
-          <div className="mt-2 pt-2 border-t border-coreezy-800">
-            <div className="text-xs text-coreezy-400">
-              {data.classes.baby.participants} Babies
-            </div>
-            <div className="text-sm font-medium text-coreezy-300">
-              ~{formatCore(data.classes.baby.perParticipant)} each
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Footer */}
-      <div className="p-3 bg-coreezy-800/30 text-center">
-        <p className="text-xs text-coreezy-500">
-          Pool distributed at season end based on final rankings within each class
-        </p>
-      </div>
+          {/* Footer */}
+          <div className="p-3 bg-coreezy-800/30 text-center">
+            <p className="text-xs text-coreezy-500">
+              Pool distributed at season end based on final rankings within each class
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 }

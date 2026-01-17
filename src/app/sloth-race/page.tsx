@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import { Baby, Leaf, TreeDeciduous } from 'lucide-react';
+import Link from 'next/link';
+import { Baby, Leaf, TreeDeciduous, History } from 'lucide-react';
 import { Leaderboard } from '@/components/race/leaderboard';
 import { RaceInfo } from '@/components/race/race-info';
 import { PrizePool } from '@/components/race/prize-pool';
@@ -31,18 +32,13 @@ export default function SlothRacePage() {
           {/* Hero */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gradient mb-4 flex items-center justify-center gap-3">
-              <Image src="/logo.png" alt="Coreezy" width={48} height={48} className="rounded-full" />
+              <Image src="/logo.png" alt="Coreezy" width={64} height={64} className="w-12 h-12 sm:w-16 sm:h-16 rounded-full" />
               The Sloth Race
             </h1>
             <p className="text-xl text-coreezy-300 max-w-2xl mx-auto">
               Slow and steady wins the race. Compete by delegating, restaking, and
               staying active.
             </p>
-          </div>
-
-          {/* Prize Pool */}
-          <div className="mb-12">
-            <PrizePool />
           </div>
 
           {/* Class Badges */}
@@ -75,9 +71,21 @@ export default function SlothRacePage() {
 
           {/* Main Content */}
           <div className="grid lg:grid-cols-3 gap-8">
-            {/* Leaderboard */}
-            <div className="lg:col-span-2">
+            {/* Leaderboard + Prize Pool */}
+            <div className="lg:col-span-2 space-y-6">
               <Leaderboard />
+              
+              {/* Prize Pool Accordion */}
+              <PrizePool />
+              
+              {/* Historical Seasons Link */}
+              <Link
+                href="/sloth-race/history"
+                className="flex items-center justify-center gap-2 p-3 rounded-lg bg-coreezy-800/30 hover:bg-coreezy-800/50 transition-colors text-sm text-coreezy-400 hover:text-coreezy-200"
+              >
+                <History className="w-4 h-4" />
+                View Historical Seasons
+              </Link>
             </div>
 
             {/* Info Panel */}
