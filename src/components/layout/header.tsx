@@ -29,15 +29,14 @@ export function Header() {
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center">
             <Image
               src="/logo.png"
               alt="Coreezy"
-              width={40}
-              height={40}
+              width={48}
+              height={48}
               className="rounded-full"
             />
-            <span className="text-xl font-bold text-gradient">Coreezy</span>
           </Link>
 
           {/* Desktop Navigation */}
