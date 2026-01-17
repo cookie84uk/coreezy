@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Server,
   Shield,
@@ -107,10 +108,13 @@ export default function HomePage() {
                 <div className="relative w-full aspect-square max-w-lg mx-auto">
                   <div className="absolute inset-0 bg-gradient-radial from-canopy-500/20 to-transparent rounded-full animate-slow-pulse" />
                   <div className="absolute inset-4 glass rounded-3xl flex items-center justify-center p-8">
-                    <img
+                    <Image
                       src="/logo.png"
                       alt="Coreezy"
+                      width={400}
+                      height={400}
                       className="w-full h-full object-contain animate-float"
+                      priority
                     />
                   </div>
                 </div>
