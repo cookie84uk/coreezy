@@ -45,7 +45,7 @@ const PARTNERS = [
     description:
       'Building and supporting projects across the Coreum ecosystem with shared community values.',
     Icon: ArrowLeftRight,
-    url: '#',
+    url: 'https://app.cruise-control.xyz/trade/core1ppuayqt2t0chjkt9jemtyr4v2tl2krqcpjc6ed2yzl9kx75gvwzqquenfg',
     perks: 'Ecosystem collaboration',
   },
 ];

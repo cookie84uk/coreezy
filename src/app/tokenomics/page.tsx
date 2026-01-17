@@ -12,6 +12,7 @@ import {
   AlertCircle,
   Server,
 } from 'lucide-react';
+import { LivePrices } from '@/components/tokenomics/live-prices';
 
 export const metadata: Metadata = {
   title: 'Tokenomics | COREZ Token',
@@ -117,6 +118,9 @@ export default function TokenomicsPage() {
               </div>
             </div>
           </div>
+
+          {/* Live Prices */}
+          <LivePrices />
 
           {/* Core Principles */}
           <section className="mb-16">
@@ -291,7 +295,7 @@ export default function TokenomicsPage() {
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <a
-                  href="https://cruisecontrol.zone/swap?from=ucore&to=corez-coreezyvibes.coreezy"
+                  href="https://app.cruise-control.xyz/trade/core1ppuayqt2t0chjkt9jemtyr4v2tl2krqcpjc6ed2yzl9kx75gvwzqquenfg"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary px-6 py-2"

@@ -70,7 +70,7 @@ const FAQ_SECTIONS: FAQSection[] = [
           <>
             Navigate to the DEX on{' '}
             <a
-              href="https://cruisecontrol.zone/swap?from=ucore&to=corez-coreezyvibes.coreezy"
+              href="https://app.cruise-control.xyz/trade/core1ppuayqt2t0chjkt9jemtyr4v2tl2krqcpjc6ed2yzl9kx75gvwzqquenfg"
               target="_blank"
               rel="noopener noreferrer"
               className="text-canopy-400 hover:underline"
