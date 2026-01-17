@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 const COREUM_REST = 'https://full-node.mainnet-1.coreum.dev:1317';
 const AIRDROP_WALLET = 'core1qxaaycuv8jj669fn0ppqn96ylxfdcw58clwc6d';
+const TOTAL_OG_NFTS = 100; // Total OG NFT supply for per-NFT calculation
 
 interface Transaction {
   txhash: string;
@@ -13,6 +14,8 @@ interface Transaction {
         from_address?: string;
         to_address?: string;
         amount?: Array<{ denom: string; amount: string }>;
+        inputs?: Array<{ address: string; coins: Array<{ denom: string; amount: string }> }>;
+        outputs?: Array<{ address: string; coins: Array<{ denom: string; amount: string }> }>;
       }>;
     };
   };
@@ -30,7 +33,7 @@ async function fetchAirdropTransactions(): Promise<Distribution[]> {
   try {
     // Fetch transactions where airdrop wallet is the sender (outgoing distributions)
     const response = await fetch(
-      `${COREUM_REST}/cosmos/tx/v1beta1/txs?events=message.sender%3D%27${AIRDROP_WALLET}%27&pagination.limit=50&order_by=ORDER_BY_DESC`,
+      `${COREUM_REST}/cosmos/tx/v1beta1/txs?events=message.sender%3D%27${AIRDROP_WALLET}%27&pagination.limit=100&order_by=ORDER_BY_DESC`,
       { next: { revalidate: 300 } } // Cache for 5 minutes
     );
 
@@ -45,37 +48,63 @@ async function fetchAirdropTransactions(): Promise<Distribution[]> {
     // Group transactions by date to identify distribution batches
     const distributionsByDate = new Map<string, {
       date: string;
-      txHashes: string[];
+      txHashes: Set<string>;
       totalAmount: number;
-      recipients: number;
+      recipientAddresses: Set<string>;
     }>();
 
     for (const tx of txs) {
       const date = tx.timestamp.split('T')[0]; // YYYY-MM-DD
       
-      // Look for bank send messages
       for (const msg of tx.tx.body.messages) {
+        // Handle regular MsgSend (single recipient)
         if (
           msg['@type'] === '/cosmos.bank.v1beta1.MsgSend' &&
           msg.from_address === AIRDROP_WALLET &&
+          msg.to_address &&
           msg.amount
         ) {
-          // Find CORE amount
           const coreAmount = msg.amount.find(a => a.denom === 'ucore');
           if (coreAmount) {
             const existing = distributionsByDate.get(date) || {
               date,
-              txHashes: [],
+              txHashes: new Set<string>(),
               totalAmount: 0,
-              recipients: 0,
+              recipientAddresses: new Set<string>(),
             };
 
-            existing.txHashes.push(tx.txhash);
+            existing.txHashes.add(tx.txhash);
             existing.totalAmount += Number(coreAmount.amount);
-            existing.recipients += 1;
+            existing.recipientAddresses.add(msg.to_address);
 
             distributionsByDate.set(date, existing);
           }
+        }
+        
+        // Handle MsgMultiSend (batch sends)
+        if (
+          msg['@type'] === '/cosmos.bank.v1beta1.MsgMultiSend' &&
+          msg.inputs?.some(input => input.address === AIRDROP_WALLET) &&
+          msg.outputs
+        ) {
+          const existing = distributionsByDate.get(date) || {
+            date,
+            txHashes: new Set<string>(),
+            totalAmount: 0,
+            recipientAddresses: new Set<string>(),
+          };
+
+          existing.txHashes.add(tx.txhash);
+          
+          for (const output of msg.outputs) {
+            const coreAmount = output.coins.find(c => c.denom === 'ucore');
+            if (coreAmount) {
+              existing.totalAmount += Number(coreAmount.amount);
+              existing.recipientAddresses.add(output.address);
+            }
+          }
+
+          distributionsByDate.set(date, existing);
         }
       }
     }
@@ -83,16 +112,19 @@ async function fetchAirdropTransactions(): Promise<Distribution[]> {
     // Convert to distribution format
     const distributions: Distribution[] = [];
     const entries = Array.from(distributionsByDate.values());
+    
     for (const dist of entries) {
-      // Only include distributions with multiple recipients (likely NFT distributions)
-      if (dist.recipients >= 1) {
+      const recipients = dist.recipientAddresses.size;
+      // Only include if there are actual recipients (outgoing transactions)
+      if (recipients >= 1 && dist.totalAmount > 0) {
         const totalCORE = dist.totalAmount / 1_000_000;
-        const perNft = totalCORE / Math.max(dist.recipients, 1);
+        // Calculate per NFT based on total OG NFTs (100), not number of recipients
+        const perNft = totalCORE / TOTAL_OG_NFTS;
 
         distributions.push({
           date: dist.date,
-          txHash: dist.txHashes[0], // Link to first transaction of the batch
-          recipients: dist.recipients,
+          txHash: Array.from(dist.txHashes)[0], // Link to first transaction of the batch
+          recipients: recipients,
           totalAmount: totalCORE.toFixed(2),
           perNft: perNft.toFixed(4),
         });
