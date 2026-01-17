@@ -52,27 +52,42 @@ export default function HomePage() {
   return (
     <div className="bg-gradient-jungle">
       {/* Hero Section */}
-        <section className="relative overflow-hidden py-20 sm:py-32">
+        <section className="relative overflow-hidden py-12 sm:py-20 lg:py-32">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
-              <div className="max-w-xl lg:max-w-none">
-                <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+              {/* Logo - show first on mobile */}
+              <div className="relative flex items-center justify-center lg:order-2">
+                <div className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 xl:w-96 xl:h-96">
+                  <div className="absolute inset-0 bg-gradient-radial from-canopy-500/30 to-transparent rounded-full animate-slow-pulse" />
+                  <Image
+                    src="/logo.png"
+                    alt="Coreezy"
+                    width={400}
+                    height={400}
+                    className="relative w-full h-full object-contain animate-float drop-shadow-2xl"
+                    priority
+                  />
+                </div>
+              </div>
+
+              <div className="max-w-xl lg:max-w-none text-center lg:text-left lg:order-1">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight">
                   <span className="text-gradient">Enterprise Validation</span>
                   <br />
                   Built on Coreum
                 </h1>
 
-                <p className="mt-4 text-xl font-medium text-canopy-400">
+                <p className="mt-4 text-lg sm:text-xl font-medium text-canopy-400">
                   Secure. Transparent. Community-Aligned.
                 </p>
 
-                <p className="mt-6 text-lg text-coreezy-300">
+                <p className="mt-4 sm:mt-6 text-base sm:text-lg text-coreezy-300">
                   Coreezy operates enterprise-grade validator infrastructure on the Coreum 
                   blockchain, combining institutional-level security with community-focused 
                   reward distribution.
                 </p>
 
-                <ul className="mt-6 space-y-3 text-coreezy-300">
+                <ul className="mt-4 sm:mt-6 space-y-2 sm:space-y-3 text-coreezy-300 text-left">
                   <li className="flex items-start">
                     <span className="mr-2 text-canopy-400">•</span>
                     99.9% uptime with Zeeve infrastructure
@@ -87,34 +102,19 @@ export default function HomePage() {
                   </li>
                 </ul>
 
-                <div className="mt-8 flex flex-wrap gap-4">
+                <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
                   <Link
                     href="/validator"
-                    className="btn-primary px-6 py-3 text-lg"
+                    className="btn-primary px-6 py-3 text-base sm:text-lg w-full sm:w-auto"
                   >
                     Stake with Coreezy
                   </Link>
                   <Link
                     href="/institutional"
-                    className="btn-secondary px-6 py-3 text-lg"
+                    className="btn-secondary px-6 py-3 text-base sm:text-lg w-full sm:w-auto"
                   >
                     Institutional Inquiry
                   </Link>
-                </div>
-              </div>
-
-              <div className="relative flex items-center justify-center">
-                {/* Coreezy Logo */}
-                <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
-                  <div className="absolute inset-0 bg-gradient-radial from-canopy-500/30 to-transparent rounded-full animate-slow-pulse" />
-                  <Image
-                    src="/logo.png"
-                    alt="Coreezy"
-                    width={400}
-                    height={400}
-                    className="relative w-full h-full object-contain animate-float drop-shadow-2xl"
-                    priority
-                  />
                 </div>
               </div>
             </div>
@@ -123,29 +123,27 @@ export default function HomePage() {
 
         {/* Trust Signals Strip */}
         <section className="border-y border-coreezy-800 bg-coreezy-900/50">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-4 sm:gap-8 text-center">
               <div>
-                <div className="text-3xl font-bold text-canopy-400">99.9%</div>
-                <div className="text-sm text-coreezy-400">Uptime</div>
+                <div className="text-xl sm:text-3xl font-bold text-canopy-400">99.9%</div>
+                <div className="text-xs sm:text-sm text-coreezy-400">Uptime</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-canopy-400">2%</div>
-                <div className="text-sm text-coreezy-400">Commission</div>
+                <div className="text-xl sm:text-3xl font-bold text-canopy-400">2%</div>
+                <div className="text-xs sm:text-sm text-coreezy-400">Commission</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-canopy-400">Zeeve</div>
-                <div className="text-sm text-coreezy-400">Infrastructure</div>
+                <div className="text-xl sm:text-3xl font-bold text-canopy-400">Zeeve</div>
+                <div className="text-xs sm:text-sm text-coreezy-400">Infrastructure</div>
               </div>
-              <div>
-                <div className="text-3xl font-bold text-canopy-400">24/7</div>
-                <div className="text-sm text-coreezy-400">Monitoring</div>
+              <div className="hidden sm:block">
+                <div className="text-xl sm:text-3xl font-bold text-canopy-400">24/7</div>
+                <div className="text-xs sm:text-sm text-coreezy-400">Monitoring</div>
               </div>
-              <div>
-                <div className="text-3xl font-bold text-canopy-400">
-                  Wyoming
-                </div>
-                <div className="text-sm text-coreezy-400">LLC</div>
+              <div className="hidden sm:block">
+                <div className="text-xl sm:text-3xl font-bold text-canopy-400">Wyoming</div>
+                <div className="text-xs sm:text-sm text-coreezy-400">LLC</div>
               </div>
             </div>
           </div>

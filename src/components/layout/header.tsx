@@ -93,13 +93,13 @@ export function Header() {
 
           {/* Mobile Navigation */}
           {isMobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-coreezy-700">
-              <div className="flex flex-col gap-2">
+            <div className="md:hidden py-4 border-t border-coreezy-700 safe-bottom">
+              <div className="flex flex-col gap-1">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="px-4 py-2 text-sm font-medium text-coreezy-300 hover:text-coreezy-100 hover:bg-coreezy-800/50 rounded-lg transition-colors"
+                    className="px-4 py-3 text-base font-medium text-coreezy-300 hover:text-coreezy-100 active:bg-coreezy-800 hover:bg-coreezy-800/50 rounded-lg transition-colors touch-target"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {item.name}

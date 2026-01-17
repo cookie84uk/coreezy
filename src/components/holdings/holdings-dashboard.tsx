@@ -302,47 +302,83 @@ export function HoldingsDashboard() {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="text-left text-xs text-coreezy-400 border-b border-coreezy-700">
-                  <th className="px-4 py-3">Date</th>
-                  <th className="px-4 py-3 text-right">Total</th>
-                  <th className="px-4 py-3 text-right">Per NFT</th>
-                  <th className="px-4 py-3 text-right">Recipients</th>
-                  <th className="px-4 py-3 text-right">TX</th>
-                </tr>
-              </thead>
-              <tbody>
-                {distributions.map((d, i) => (
-                  <tr key={i} className="border-b border-coreezy-800 hover:bg-coreezy-800/30">
-                    <td className="px-4 py-3 text-coreezy-300">
+          <>
+            {/* Mobile view - cards */}
+            <div className="sm:hidden divide-y divide-coreezy-800">
+              {distributions.map((d, i) => (
+                <div key={i} className="p-4 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-coreezy-300 font-medium">
                       {new Date(d.date).toLocaleDateString()}
-                    </td>
-                    <td className="px-4 py-3 text-right font-mono text-coreezy-200">
-                      {d.totalAmount} CORE
-                    </td>
-                    <td className="px-4 py-3 text-right font-mono text-canopy-400">
-                      {d.perNft} CORE
-                    </td>
-                    <td className="px-4 py-3 text-right text-coreezy-300">
-                      {d.recipients}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <a
-                        href={`https://explorer.coreum.com/coreum/transactions/${d.txHash}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-canopy-400 hover:text-canopy-300"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </td>
+                    </span>
+                    <a
+                      href={`https://explorer.coreum.com/coreum/transactions/${d.txHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-canopy-400 hover:text-canopy-300 p-2 -m-2"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-coreezy-500">Total</span>
+                    <span className="font-mono text-coreezy-200">{d.totalAmount} CORE</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-coreezy-500">Per NFT</span>
+                    <span className="font-mono text-canopy-400">{d.perNft} CORE</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-coreezy-500">Recipients</span>
+                    <span className="text-coreezy-300">{d.recipients}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop view - table */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="text-left text-xs text-coreezy-400 border-b border-coreezy-700">
+                    <th className="px-4 py-3">Date</th>
+                    <th className="px-4 py-3 text-right">Total</th>
+                    <th className="px-4 py-3 text-right">Per NFT</th>
+                    <th className="px-4 py-3 text-right">Recipients</th>
+                    <th className="px-4 py-3 text-right">TX</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {distributions.map((d, i) => (
+                    <tr key={i} className="border-b border-coreezy-800 hover:bg-coreezy-800/30">
+                      <td className="px-4 py-3 text-coreezy-300">
+                        {new Date(d.date).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-3 text-right font-mono text-coreezy-200">
+                        {d.totalAmount} CORE
+                      </td>
+                      <td className="px-4 py-3 text-right font-mono text-canopy-400">
+                        {d.perNft} CORE
+                      </td>
+                      <td className="px-4 py-3 text-right text-coreezy-300">
+                        {d.recipients}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <a
+                          href={`https://explorer.coreum.com/coreum/transactions/${d.txHash}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-canopy-400 hover:text-canopy-300 inline-block p-2 -m-2"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>

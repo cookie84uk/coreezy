@@ -55,7 +55,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -63,7 +63,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
       />
 
       {/* Modal */}
-      <div className="relative z-10 w-full max-w-md mx-4 card p-6">
+      <div className="relative z-10 w-full max-w-md sm:mx-4 card p-6 rounded-b-none sm:rounded-b-xl safe-bottom">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-coreezy-100">Connect Wallet</h2>
           <button

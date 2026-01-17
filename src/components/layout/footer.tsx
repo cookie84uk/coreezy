@@ -31,24 +31,24 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="border-t border-coreezy-800 bg-coreezy-950">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+    <footer className="border-t border-coreezy-800 bg-coreezy-950 safe-bottom">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 sm:gap-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2">
               <Image src="/logo.png" alt="Coreezy" width={32} height={32} className="rounded-full" />
               <span className="text-xl font-bold text-gradient">Coreezy</span>
             </Link>
-            <p className="mt-4 text-sm text-coreezy-400">
+            <p className="mt-3 sm:mt-4 text-sm text-coreezy-400">
               Stake. Vibe. Grow. Repeat.
             </p>
-            <div className="mt-4 flex gap-4">
+            <div className="mt-3 sm:mt-4 flex gap-2">
               <a
                 href="https://x.com/CoreezyVibes"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-coreezy-400 hover:text-coreezy-200 transition-colors"
+                className="p-2 -m-2 text-coreezy-400 hover:text-coreezy-200 active:text-coreezy-100 transition-colors"
                 aria-label="Twitter"
               >
                 <Twitter className="h-5 w-5" />
@@ -57,7 +57,7 @@ export function Footer() {
                 href="https://t.me/+hh333N0pTRFjNjIx"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-coreezy-400 hover:text-coreezy-200 transition-colors"
+                className="p-2 -m-2 text-coreezy-400 hover:text-coreezy-200 active:text-coreezy-100 transition-colors"
                 aria-label="Telegram"
               >
                 <Send className="h-5 w-5" />

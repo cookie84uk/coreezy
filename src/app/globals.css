@@ -159,4 +159,50 @@
   .delay-500 {
     animation-delay: 500ms;
   }
+
+  /* Mobile-friendly touch targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* Mobile table wrapper */
+  .table-mobile {
+    @apply -mx-4 sm:mx-0 overflow-x-auto;
+  }
+
+  .table-mobile > table {
+    @apply min-w-full;
+  }
+
+  /* Safe area padding for notched devices */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Mobile-specific overrides */
+@media (max-width: 640px) {
+  /* Larger touch targets on mobile */
+  .btn, button {
+    min-height: 44px;
+  }
+
+  /* Prevent text from being too small */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Better tap highlighting */
+  a, button {
+    -webkit-tap-highlight-color: rgba(74, 222, 128, 0.1);
+  }
+
+  /* Prevent horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
 }
