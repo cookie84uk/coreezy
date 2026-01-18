@@ -12,6 +12,8 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
+    "cron": "node cron-worker.js --daemon",
+    "cron:run": "node cron-worker.js --run-now",
     "test": "vitest",
     "test:ui": "vitest --ui"
   },

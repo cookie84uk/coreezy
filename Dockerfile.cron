@@ -1,0 +1,12 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy only what's needed for cron
+COPY cron-worker.js ./
+COPY package.json ./
+
+# No dependencies needed - pure Node.js
+
+# Run the cron worker
+CMD ["node", "cron-worker.js", "--daemon"]
