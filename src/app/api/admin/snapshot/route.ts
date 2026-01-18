@@ -53,10 +53,14 @@ export async function POST(request: NextRequest) {
       const isNewUser = !user;
 
       if (!user) {
+        // New delegator - set stakingSince to today
         user = await prisma.user.create({
           data: {
             walletAddress: address,
-            slothProfile: { create: { restakeStreak: 0 } },
+            slothProfile: { create: { 
+              restakeStreak: 0,
+              stakingSince: snapshotDay, // Real staking start date for new users
+            } },
           },
           include: { 
             slothProfile: { include: { activeBoosts: { where: { expiresAt: { gt: new Date() } } } } },
@@ -68,7 +72,11 @@ export async function POST(request: NextRequest) {
 
       if (!user.slothProfile) {
         await prisma.slothProfile.create({
-          data: { userId: user.id, restakeStreak: 0 },
+          data: { 
+            userId: user.id, 
+            restakeStreak: 0,
+            stakingSince: snapshotDay, // Real staking start date
+          },
         });
         user = await prisma.user.findUnique({
           where: { id: user.id },
