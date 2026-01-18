@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Baby, Leaf, TreeDeciduous, Moon, Rocket, Flame, Trophy, Check, Minus } from 'lucide-react';
+import { DistanceTrivia } from './distance-trivia';
 
 interface ProfileData {
   address: string;
@@ -233,6 +234,12 @@ export function SlothProfile({ address }: SlothProfileProps) {
         </div>
       </div>
 
+      {/* Distance Trivia */}
+      <DistanceTrivia 
+        distanceMeters={parseScoreToMeters(profile.score)}
+        daysActive={profile.daysAwake}
+      />
+
       {/* Active Boosts */}
       {profile.activeBoosts.length > 0 && (
         <div className="card p-4">
@@ -341,4 +348,10 @@ function formatCore(amount: string): string {
     return (num / 1000).toFixed(1) + 'K CORE';
   }
   return num.toFixed(0) + ' CORE';
+}
+
+// Parse score string to meters (score is stored as meters * 1000)
+function parseScoreToMeters(score: string): number {
+  const scoreBigInt = BigInt(score);
+  return Number(scoreBigInt) / 1000;
 }

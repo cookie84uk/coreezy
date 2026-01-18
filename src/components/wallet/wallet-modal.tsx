@@ -1,48 +1,71 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useWallet } from './wallet-provider';
+import { useWallet, type WalletType } from './wallet-provider';
+import { WALLET_ADAPTERS } from '@/lib/wallet-adapters';
 
 interface WalletModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const wallets = [
-  {
-    id: 'leap' as const,
+// Wallet display config (icons, descriptions)
+const WALLET_DISPLAY = {
+  leap: {
     name: 'Leap Wallet',
     icon: '🌊',
     description: 'Recommended for Coreum',
-    installUrl: 'https://www.leapwallet.io/',
+    priority: 1,
   },
-  {
-    id: 'keplr' as const,
+  keplr: {
     name: 'Keplr',
     icon: '🔮',
     description: 'Popular Cosmos wallet',
-    installUrl: 'https://www.keplr.app/',
+    priority: 2,
   },
-];
+  cosmostation: {
+    name: 'Cosmostation',
+    icon: '🌟',
+    description: 'Multi-chain wallet',
+    priority: 3,
+  },
+  xdefi: {
+    name: 'XDEFI',
+    icon: '⚡',
+    description: 'Cross-chain wallet',
+    priority: 4,
+  },
+} as const;
 
 export function WalletModal({ isOpen, onClose }: WalletModalProps) {
   const { connect, isConnecting } = useWallet();
   const [error, setError] = useState<string | null>(null);
-  const [availableWallets, setAvailableWallets] = useState<{
-    leap: boolean;
-    keplr: boolean;
-  }>({ leap: false, keplr: false });
+  const [walletStates, setWalletStates] = useState<Record<WalletType, boolean>>({
+    leap: false,
+    keplr: false,
+    cosmostation: false,
+    xdefi: false,
+  });
 
+  // Check which wallets are installed
   useEffect(() => {
     if (isOpen && typeof window !== 'undefined') {
-      setAvailableWallets({
-        leap: !!window.leap,
-        keplr: !!window.keplr,
-      });
+      const states: Record<WalletType, boolean> = {
+        leap: false,
+        keplr: false,
+        cosmostation: false,
+        xdefi: false,
+      };
+      
+      for (const [id, adapter] of Object.entries(WALLET_ADAPTERS)) {
+        states[id as WalletType] = adapter.isInstalled();
+      }
+      
+      setWalletStates(states);
     }
   }, [isOpen]);
 
-  const handleConnect = async (walletId: 'keplr' | 'leap') => {
+  const handleConnect = async (walletId: WalletType) => {
     setError(null);
     try {
       await connect(walletId);
@@ -53,6 +76,17 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
   };
 
   if (!isOpen) return null;
+
+  // Sort wallets: installed first, then by priority
+  const sortedWallets = (Object.keys(WALLET_DISPLAY) as WalletType[])
+    .filter(id => WALLET_ADAPTERS[id]) // Only show wallets we have adapters for
+    .sort((a, b) => {
+      const aInstalled = walletStates[a];
+      const bInstalled = walletStates[b];
+      if (aInstalled && !bInstalled) return -1;
+      if (!aInstalled && bInstalled) return 1;
+      return WALLET_DISPLAY[a].priority - WALLET_DISPLAY[b].priority;
+    });
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
@@ -94,31 +128,38 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         )}
 
         <div className="space-y-3">
-          {wallets.map((wallet) => {
-            const isAvailable = availableWallets[wallet.id];
+          {sortedWallets.map((walletId) => {
+            const display = WALLET_DISPLAY[walletId];
+            const adapter = WALLET_ADAPTERS[walletId];
+            const isAvailable = walletStates[walletId];
+            
             return (
               <button
-                key={wallet.id}
+                key={walletId}
                 onClick={() =>
                   isAvailable
-                    ? handleConnect(wallet.id)
-                    : window.open(wallet.installUrl, '_blank')
+                    ? handleConnect(walletId)
+                    : window.open(adapter.downloadUrl, '_blank')
                 }
                 disabled={isConnecting}
                 className="w-full flex items-center gap-4 p-4 rounded-xl bg-coreezy-800/50 border border-coreezy-700 hover:border-canopy-500 hover:bg-coreezy-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <span className="text-3xl">{wallet.icon}</span>
+                <span className="text-3xl">{display.icon}</span>
                 <div className="flex-1 text-left">
                   <div className="font-medium text-coreezy-100">
-                    {wallet.name}
+                    {display.name}
                   </div>
                   <div className="text-xs text-coreezy-400">
-                    {isAvailable ? wallet.description : 'Click to install'}
+                    {isAvailable ? display.description : 'Click to install'}
                   </div>
                 </div>
-                {!isAvailable && (
+                {isAvailable ? (
+                  <span className="text-xs text-canopy-400 px-2 py-1 rounded bg-canopy-900/30">
+                    Ready
+                  </span>
+                ) : (
                   <span className="text-xs text-coreezy-500 px-2 py-1 rounded bg-coreezy-700">
-                    Not installed
+                    Install
                   </span>
                 )}
               </button>

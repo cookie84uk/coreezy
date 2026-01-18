@@ -8,8 +8,14 @@ import {
   useEffect,
   type ReactNode,
 } from 'react';
+import { 
+  type WalletType, 
+  WALLET_ADAPTERS, 
+  getWalletAdapter,
+  COREUM_CHAIN_CONFIG 
+} from '@/lib/wallet-adapters';
 
-type WalletType = 'keplr' | 'leap';
+export type { WalletType } from '@/lib/wallet-adapters';
 
 export interface DelegationInfo {
   address: string;
@@ -42,49 +48,11 @@ interface WalletContextType {
   disconnect: () => void;
   refreshDelegation: () => Promise<void>;
   refreshRaceProfile: () => Promise<void>;
+  // New: get available wallets
+  availableWallets: Array<{ id: WalletType; name: string; installed: boolean }>;
 }
 
 const WalletContext = createContext<WalletContextType | null>(null);
-
-// Extend window for wallet types
-declare global {
-  interface Window {
-    keplr?: any;
-    leap?: any;
-  }
-}
-
-// Coreum chain config for wallets
-const COREUM_CHAIN_CONFIG = {
-  chainId: 'coreum-mainnet-1',
-  chainName: 'Coreum',
-  rpc: 'https://full-node.mainnet-1.coreum.dev:26657',
-  rest: 'https://full-node.mainnet-1.coreum.dev:1317',
-  bip44: { coinType: 990 },
-  bech32Config: {
-    bech32PrefixAccAddr: 'core',
-    bech32PrefixAccPub: 'corepub',
-    bech32PrefixValAddr: 'corevaloper',
-    bech32PrefixValPub: 'corevaloperpub',
-    bech32PrefixConsAddr: 'corevalcons',
-    bech32PrefixConsPub: 'corevalconspub',
-  },
-  currencies: [{ coinDenom: 'CORE', coinMinimalDenom: 'ucore', coinDecimals: 6 }],
-  feeCurrencies: [
-    {
-      coinDenom: 'CORE',
-      coinMinimalDenom: 'ucore',
-      coinDecimals: 6,
-      gasPriceStep: { low: 0.0625, average: 0.1, high: 0.15 },
-    },
-  ],
-  stakeCurrency: { coinDenom: 'CORE', coinMinimalDenom: 'ucore', coinDecimals: 6 },
-  features: ['cosmwasm', 'ibc-transfer', 'ibc-go'],
-};
-
-async function suggestChain(wallet: any) {
-  await wallet.experimentalSuggestChain(COREUM_CHAIN_CONFIG);
-}
 
 export function WalletProvider({ children }: { children: ReactNode }) {
   const [address, setAddress] = useState<string | null>(null);
@@ -92,9 +60,18 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [isConnecting, setIsConnecting] = useState(false);
   const [delegation, setDelegation] = useState<DelegationInfo | null>(null);
   const [raceProfile, setRaceProfile] = useState<RaceProfile | null>(null);
+  const [availableWallets, setAvailableWallets] = useState<Array<{ id: WalletType; name: string; installed: boolean }>>([]);
 
-  // Check for existing connection on mount
+  // Check for available wallets on mount
   useEffect(() => {
+    const wallets = Object.values(WALLET_ADAPTERS).map(adapter => ({
+      id: adapter.id,
+      name: adapter.name,
+      installed: adapter.isInstalled(),
+    }));
+    setAvailableWallets(wallets);
+
+    // Check for saved connection
     const savedAddress = localStorage.getItem('coreezy_wallet_address');
     const savedType = localStorage.getItem('coreezy_wallet_type') as WalletType;
 
@@ -104,23 +81,23 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const reconnect = async (type: WalletType, savedAddress: string) => {
+    const adapter = getWalletAdapter(type);
+    if (!adapter || !adapter.isInstalled()) {
+      localStorage.removeItem('coreezy_wallet_address');
+      localStorage.removeItem('coreezy_wallet_type');
+      return;
+    }
+
     try {
-      const wallet = type === 'keplr' ? window.keplr : window.leap;
-      if (!wallet) return;
+      const connectedAddress = await adapter.connect();
 
-      await suggestChain(wallet);
-      await wallet.enable(COREUM_CHAIN_CONFIG.chainId);
-
-      const offlineSigner = wallet.getOfflineSigner(COREUM_CHAIN_CONFIG.chainId);
-      const accounts = await offlineSigner.getAccounts();
-
-      if (accounts[0]?.address === savedAddress) {
+      if (connectedAddress === savedAddress) {
         setAddress(savedAddress);
         setWalletType(type);
         await fetchDelegation(savedAddress);
         await fetchRaceProfile(savedAddress);
         
-        // Record site visit on reconnect too
+        // Record site visit on reconnect
         try {
           await fetch('/api/race/site-visit', {
             method: 'POST',
@@ -131,6 +108,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
           console.error('Failed to record site visit:', error);
         }
       } else {
+        // Address changed, clear saved
         localStorage.removeItem('coreezy_wallet_address');
         localStorage.removeItem('coreezy_wallet_type');
       }
@@ -175,26 +153,20 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     setIsConnecting(true);
 
     try {
-      const wallet = type === 'keplr' ? window.keplr : window.leap;
+      const adapter = getWalletAdapter(type);
+      
+      if (!adapter) {
+        throw new Error(`Unknown wallet type: ${type}`);
+      }
 
-      if (!wallet) {
-        const walletName = type === 'keplr' ? 'Keplr' : 'Leap';
+      if (!adapter.isInstalled()) {
         throw new Error(
-          `${walletName} wallet not installed. Please install it from the browser extension store.`
+          `${adapter.name} wallet not installed. Please install it from ${adapter.downloadUrl}`
         );
       }
 
-      await suggestChain(wallet);
-      await wallet.enable(COREUM_CHAIN_CONFIG.chainId);
-
-      const offlineSigner = wallet.getOfflineSigner(COREUM_CHAIN_CONFIG.chainId);
-      const accounts = await offlineSigner.getAccounts();
-
-      if (!accounts.length) {
-        throw new Error('No accounts found in wallet');
-      }
-
-      const walletAddress = accounts[0].address;
+      const walletAddress = await adapter.connect();
+      
       setAddress(walletAddress);
       setWalletType(type);
 
@@ -257,6 +229,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         disconnect,
         refreshDelegation,
         refreshRaceProfile,
+        availableWallets,
       }}
     >
       {children}
