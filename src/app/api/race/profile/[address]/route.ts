@@ -29,6 +29,12 @@ export async function GET(
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
+    // Get the first snapshot to determine when they started staking
+    const firstSnapshot = await prisma.dailySnapshot.findFirst({
+      where: { userId: user.id },
+      orderBy: { timestamp: 'asc' },
+    });
+
     // Calculate rank
     const rank = await prisma.slothProfile.count({
       where: {
@@ -56,6 +62,8 @@ export async function GET(
         isSleeping: user.slothProfile.isSleeping,
         sleepUntil: user.slothProfile.sleepUntil,
         lastSiteVisit: user.slothProfile.lastSiteVisit,
+        // Use first snapshot date as "staking since", fallback to joinedAt
+        stakingSince: firstSnapshot?.timestamp || user.slothProfile.joinedAt,
         joinedAt: user.slothProfile.joinedAt,
         activeBoosts: user.slothProfile.activeBoosts.map((b) => ({
           platform: b.platform,

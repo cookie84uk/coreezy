@@ -7,27 +7,17 @@ export const metadata: Metadata = {
   description: 'View historical Sloth Race seasons, winners, and prize distributions.',
 };
 
-// This will eventually come from the database
-const HISTORICAL_SEASONS = [
-  // Example of what a completed season would look like
-  // {
-  //   id: 'season-1',
-  //   name: 'Season 1',
-  //   startDate: '2026-04-01',
-  //   endDate: '2026-06-30',
-  //   totalPool: 15000,
-  //   totalParticipants: 150,
-  //   distribution: { adult: 60, teen: 30, baby: 10 },
-  //   winners: {
-  //     adult: [
-  //       { rank: 1, address: 'core1abc...xyz', score: 500000, reward: 300 },
-  //       { rank: 2, address: 'core1def...uvw', score: 480000, reward: 280 },
-  //     ],
-  //     teen: [...],
-  //     baby: [...],
-  //   },
-  // },
-];
+// Historical seasons - will be populated from database after seasons complete
+interface HistoricalSeason {
+  id: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  totalPool: number;
+  totalParticipants: number;
+}
+
+const HISTORICAL_SEASONS: HistoricalSeason[] = [];
 
 export default function SeasonHistoryPage() {
   return (

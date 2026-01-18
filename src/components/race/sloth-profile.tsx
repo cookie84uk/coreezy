@@ -18,6 +18,7 @@ interface ProfileData {
   isSleeping: boolean;
   sleepUntil: string | null;
   lastSiteVisit: string | null;
+  stakingSince: string;
   joinedAt: string;
   activeBoosts: Array<{
     platform: string;
@@ -308,9 +309,9 @@ export function SlothProfile({ address }: SlothProfileProps) {
         </div>
       )}
 
-      {/* Member Since */}
+      {/* Staking Since */}
       <div className="text-center text-xs text-coreezy-500">
-        Member since {new Date(profile.joinedAt).toLocaleDateString()}
+        Staking since {new Date(profile.stakingSince || profile.joinedAt).toLocaleDateString()}
       </div>
     </div>
   );
