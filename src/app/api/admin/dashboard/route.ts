@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Get unique snapshot dates
-    const snapshotDates = [...new Set(recentSnapshots.map((s) => s.timestamp.toISOString().split('T')[0]))];
+    const snapshotDates = Array.from(new Set(recentSnapshots.map((s) => s.timestamp.toISOString().split('T')[0])));
 
     // Parse class distribution
     const classes = {
