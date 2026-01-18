@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Baby, Leaf, TreeDeciduous, Moon, Rocket, Flame } from 'lucide-react';
+import { Baby, Leaf, TreeDeciduous, Moon, Rocket, Flame, Search, X } from 'lucide-react';
+import { useDebounce } from '@/hooks/use-debounce';
 
 interface LeaderboardEntry {
   rank: number;
@@ -61,6 +62,44 @@ export function Leaderboard() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [classFilter, setClassFilter] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResult, setSearchResult] = useState<LeaderboardEntry | null>(null);
+  const [searching, setSearching] = useState(false);
+  
+  const debouncedSearch = useDebounce(searchQuery, 300);
+
+  // Search for wallet
+  const searchWallet = useCallback(async (query: string) => {
+    if (!query || query.length < 3) {
+      setSearchResult(null);
+      return;
+    }
+    
+    setSearching(true);
+    try {
+      const response = await fetch(`/api/race/leaderboard?search=${encodeURIComponent(query)}`);
+      if (response.ok) {
+        const result = await response.json();
+        if (result.leaderboard && result.leaderboard.length > 0) {
+          setSearchResult(result.leaderboard[0]);
+        } else {
+          setSearchResult(null);
+        }
+      }
+    } catch (error) {
+      console.error('Search failed:', error);
+    } finally {
+      setSearching(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      searchWallet(debouncedSearch);
+    } else {
+      setSearchResult(null);
+    }
+  }, [debouncedSearch, searchWallet]);
 
   useEffect(() => {
     async function fetchLeaderboard() {
@@ -122,19 +161,77 @@ export function Leaderboard() {
         </div>
       </div>
 
-      {/* Stats Bar */}
-      {data?.classDistribution && data.classDistribution.total > 0 && (
-        <div className="px-4 py-2 bg-coreezy-800/50 border-b border-coreezy-700 flex flex-wrap gap-4 text-xs text-coreezy-400">
-          <span>Total: {data.classDistribution.total}</span>
-          <span className="flex items-center gap-1 text-canopy-400">
-            <TreeDeciduous className="w-3 h-3" /> {data.classDistribution.adult}
-          </span>
-          <span className="flex items-center gap-1 text-emerald-400">
-            <Leaf className="w-3 h-3" /> {data.classDistribution.teen}
-          </span>
-          <span className="flex items-center gap-1 text-amber-400">
-            <Baby className="w-3 h-3" /> {data.classDistribution.baby}
-          </span>
+      {/* Stats Bar with Search */}
+      <div className="px-4 py-2 bg-coreezy-800/50 border-b border-coreezy-700 flex flex-wrap items-center justify-between gap-3">
+        {/* Stats */}
+        {data?.classDistribution && data.classDistribution.total > 0 && (
+          <div className="flex flex-wrap gap-3 text-xs text-coreezy-400">
+            <span>Total: {data.classDistribution.total}</span>
+            <span className="flex items-center gap-1 text-canopy-400">
+              <TreeDeciduous className="w-3 h-3" /> {data.classDistribution.adult}
+            </span>
+            <span className="flex items-center gap-1 text-emerald-400">
+              <Leaf className="w-3 h-3" /> {data.classDistribution.teen}
+            </span>
+            <span className="flex items-center gap-1 text-amber-400">
+              <Baby className="w-3 h-3" /> {data.classDistribution.baby}
+            </span>
+          </div>
+        )}
+        
+        {/* Search */}
+        <div className="relative flex-1 max-w-xs min-w-[200px]">
+          <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-4 h-4 text-coreezy-500" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search wallet..."
+            className="w-full bg-coreezy-900/50 border border-coreezy-700 rounded pl-8 pr-8 py-1.5 text-sm text-coreezy-200 placeholder:text-coreezy-600 focus:outline-none focus:border-canopy-600"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => {
+                setSearchQuery('');
+                setSearchResult(null);
+              }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-coreezy-500 hover:text-coreezy-300"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      </div>
+      
+      {/* Search Result */}
+      {searchQuery && (
+        <div className="px-4 py-3 bg-canopy-900/20 border-b border-canopy-700/50">
+          {searching ? (
+            <div className="text-sm text-coreezy-400">Searching...</div>
+          ) : searchResult ? (
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-coreezy-500">Found:</span>
+                <Link
+                  href={`/sloth-race/${searchResult.address}`}
+                  className="flex items-center gap-2 hover:text-canopy-400 transition-colors"
+                >
+                  <span className={`${CLASS_STYLES[searchResult.class].color}`}>
+                    {CLASS_STYLES[searchResult.class].icon}
+                  </span>
+                  <span className="font-mono text-sm text-coreezy-200">
+                    {searchResult.name || searchResult.shortAddress}
+                  </span>
+                </Link>
+              </div>
+              <div className="flex items-center gap-4 text-sm">
+                <span className="text-coreezy-400">Rank #{searchResult.rank}</span>
+                <span className="font-mono text-canopy-400">{formatScore(searchResult.score)}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="text-sm text-coreezy-500">No wallet found matching "{searchQuery}"</div>
+          )}
         </div>
       )}
 
