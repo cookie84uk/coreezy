@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { 
+  calculateDailyDistance, 
+  ucoreToCore, 
+  isRestake as checkIsRestake,
+  SCORING 
+} from '@/lib/sloth-scoring';
 
 const COREEZY_VALIDATOR = process.env.COREEZY_VALIDATOR || 'corevaloper1uxengudkvpu5feqfqs4ant2hvukvf9ahxk63gh';
 const COREUM_REST = process.env.COREUM_REST || 'https://full-node.mainnet-1.coreum.dev:1317';
 const ADMIN_SECRET = process.env.ADMIN_SECRET;
-
-// Delegation cap for scoring (50K CORE)
-const DELEGATION_CAP = BigInt(50_000_000_000); // 50K * 10^6 (ucore)
-
-// Restake detection threshold (in ucore)
-const RESTAKE_THRESHOLD = BigInt(100_000); // 0.1 CORE
 
 export async function POST(request: NextRequest) {
   // Verify admin secret
@@ -35,9 +35,11 @@ export async function POST(request: NextRequest) {
 
     let processed = 0;
     let newUsers = 0;
+    let restakeCount = 0;
 
     for (const delegation of delegations) {
       const { address, amount } = delegation;
+      const delegationCore = ucoreToCore(amount);
 
       // Find or create user
       let user = await prisma.user.findUnique({
@@ -54,7 +56,7 @@ export async function POST(request: NextRequest) {
         user = await prisma.user.create({
           data: {
             walletAddress: address,
-            slothProfile: { create: {} },
+            slothProfile: { create: { restakeStreak: 0 } },
           },
           include: { 
             slothProfile: { include: { activeBoosts: { where: { expiresAt: { gt: new Date() } } } } },
@@ -66,7 +68,7 @@ export async function POST(request: NextRequest) {
 
       if (!user.slothProfile) {
         await prisma.slothProfile.create({
-          data: { userId: user.id },
+          data: { userId: user.id, restakeStreak: 0 },
         });
         user = await prisma.user.findUnique({
           where: { id: user.id },
@@ -77,15 +79,17 @@ export async function POST(request: NextRequest) {
         });
       }
 
-      // Calculate scoring
-      const amountBigInt = BigInt(amount);
-      const cappedAmount = amountBigInt > DELEGATION_CAP ? DELEGATION_CAP : amountBigInt;
-
-      // Check for restake (delegation increase since last snapshot)
+      // Get previous delegation amount
       const lastSnapshot = user!.snapshots[0];
-      const lastAmount = lastSnapshot ? BigInt(lastSnapshot.delegationAmount) : BigInt(0);
-      const netChange = amountBigInt - lastAmount;
-      const isRestake = netChange > RESTAKE_THRESHOLD;
+      const previousDelegationCore = lastSnapshot 
+        ? ucoreToCore(lastSnapshot.delegationAmount) 
+        : 0;
+      
+      const netChangeCore = delegationCore - previousDelegationCore;
+      
+      // Check for restake (delegation increased above threshold)
+      const didRestake = checkIsRestake(delegationCore, previousDelegationCore);
+      if (didRestake) restakeCount++;
 
       // Check site visit (within last 24 hours)
       const siteVisited = user!.slothProfile?.lastSiteVisit 
@@ -94,24 +98,25 @@ export async function POST(request: NextRequest) {
 
       // Get active boosts
       const boosts = user!.slothProfile?.activeBoosts || [];
+      const boostMultipliers = boosts.map(b => b.multiplier);
 
-      // Calculate daily score
-      let dailyScore = cappedAmount;
+      // Calculate current streak
+      const currentStreak = user!.slothProfile!.restakeStreak;
+      const newStreak = didRestake ? currentStreak + 1 : 0;
 
-      // Restake bonus (+10%)
-      if (isRestake) {
-        dailyScore = dailyScore + (dailyScore * BigInt(10)) / BigInt(100);
-      }
+      // Calculate daily distance (score)
+      const dailyDistance = calculateDailyDistance(
+        delegationCore,
+        didRestake,
+        siteVisited,
+        boostMultipliers,
+        currentStreak
+      );
 
-      // Site visit bonus (+2%)
-      if (siteVisited) {
-        dailyScore = dailyScore + (dailyScore * BigInt(2)) / BigInt(100);
-      }
-
-      // Social boost multipliers
-      for (const boost of boosts) {
-        dailyScore = dailyScore + (dailyScore * BigInt(boost.multiplier)) / BigInt(100);
-      }
+      // Convert to BigInt for storage (store as meters * 1000 for precision)
+      const dailyScoreBigInt = BigInt(Math.round(dailyDistance * 1000));
+      const netChangeBigInt = BigInt(Math.round(netChangeCore * 1_000_000));
+      const delegationAmountBigInt = BigInt(amount);
 
       // Create or update snapshot for today
       await prisma.dailySnapshot.upsert({
@@ -124,34 +129,37 @@ export async function POST(request: NextRequest) {
         create: {
           userId: user!.id,
           timestamp: snapshotDay,
-          delegationAmount: amountBigInt,
-          netChange,
-          restakeActive: isRestake,
+          delegationAmount: delegationAmountBigInt,
+          netChange: netChangeBigInt,
+          restakeActive: didRestake,
           undelegated: false,
           siteVisited,
-          dailyScore,
+          dailyScore: dailyScoreBigInt,
         },
         update: {
-          delegationAmount: amountBigInt,
-          netChange,
-          restakeActive: isRestake,
+          delegationAmount: delegationAmountBigInt,
+          netChange: netChangeBigInt,
+          restakeActive: didRestake,
           undelegated: false,
           siteVisited,
-          dailyScore,
+          dailyScore: dailyScoreBigInt,
         },
       });
 
       // Update profile
-      const currentStreak = user!.slothProfile!.restakeStreak;
-      const newStreak = isRestake ? currentStreak + 1 : 0;
       const currentScore = user!.slothProfile!.totalScore;
-      const newTotalScore = currentScore + dailyScore;
+      const newTotalScore = currentScore + dailyScoreBigInt;
+
+      // Store delegation score as meters (not ucore)
+      const delegationScoreBigInt = BigInt(
+        Math.round(Math.min(delegationCore, SCORING.DELEGATION_CAP) * 1000)
+      );
 
       await prisma.slothProfile.update({
         where: { id: user!.slothProfile!.id },
         data: {
           totalScore: newTotalScore,
-          delegationScore: cappedAmount,
+          delegationScore: delegationScoreBigInt,
           restakeStreak: newStreak,
           daysAwake: { increment: 1 },
           isSleeping: false,
@@ -176,12 +184,13 @@ export async function POST(request: NextRequest) {
     // Handle sleeping sloths (undelegated)
     await handleSleepingSloths(delegations.map(d => d.address), snapshotDay);
 
-    console.log(`[Snapshot] Complete. Processed: ${processed}, New: ${newUsers}`);
+    console.log(`[Snapshot] Complete. Processed: ${processed}, New: ${newUsers}, Restakes: ${restakeCount}`);
 
     return NextResponse.json({
       success: true,
       processed,
       newUsers,
+      restakeCount,
       classesRecalculated: recalculateClasses,
       timestamp: snapshotDate.toISOString(),
     });
@@ -230,7 +239,6 @@ async function assignClassToNewUser(profileId: string, totalScore: bigint) {
   const totalCount = await prisma.slothProfile.count();
   
   if (totalCount === 0) {
-    // First user - default to BABY (they'll get Adult at season start recalc)
     return;
   }
   
@@ -296,12 +304,13 @@ async function handleSleepingSloths(activeDelegators: string[], snapshotDay: Dat
 
   for (const profile of allProfiles) {
     if (!activeDelegators.includes(profile.user.walletAddress)) {
-      // Put sloth to sleep
+      // Put sloth to sleep - reset streak
       await prisma.slothProfile.update({
         where: { id: profile.id },
         data: {
           isSleeping: true,
           sleepUntil: new Date(Date.now() + sleepDuration),
+          restakeStreak: 0, // Reset streak when going to sleep
         },
       });
 
@@ -327,6 +336,7 @@ async function handleSleepingSloths(activeDelegators: string[], snapshotDay: Dat
           delegationAmount: BigInt(0),
           undelegated: true,
           dailyScore: BigInt(0),
+          restakeActive: false,
         },
       });
     }

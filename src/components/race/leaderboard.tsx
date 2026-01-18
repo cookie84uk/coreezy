@@ -161,7 +161,7 @@ export function Leaderboard() {
                 <th className="px-4 py-3">#</th>
                 <th className="px-4 py-3">Sloth</th>
                 <th className="px-4 py-3">Class</th>
-                <th className="px-4 py-3 text-right">Score</th>
+                <th className="px-4 py-3 text-right">Distance</th>
                 <th className="px-4 py-3 text-right hidden sm:table-cell">Streak</th>
               </tr>
             </thead>
@@ -250,16 +250,20 @@ export function Leaderboard() {
   );
 }
 
-// Score is in ucore (micro units), convert to CORE and format nicely
+// Score is stored as meters * 1000 for precision
+// Format as distance traveled (sloth race metaphor)
 function formatScore(score: string): string {
-  const ucore = BigInt(score);
-  const core = Number(ucore) / 1_000_000; // Convert to CORE
+  // Score is meters * 1000
+  const scoreBigInt = BigInt(score);
+  const meters = Number(scoreBigInt) / 1000;
   
-  if (core >= 1_000_000) {
-    return (core / 1_000_000).toFixed(2) + 'M';
+  if (meters >= 1000) {
+    const km = meters / 1000;
+    if (km >= 100) {
+      return km.toFixed(0) + ' km';
+    }
+    return km.toFixed(2) + ' km';
   }
-  if (core >= 1_000) {
-    return (core / 1_000).toFixed(1) + 'K';
-  }
-  return core.toFixed(0);
+  
+  return meters.toFixed(1) + ' m';
 }

@@ -207,7 +207,7 @@ export function SlothProfile({ address }: SlothProfileProps) {
           <div className="text-2xl font-bold text-canopy-400">
             {formatScore(profile.score)}
           </div>
-          <div className="text-xs text-coreezy-400">Total Score</div>
+          <div className="text-xs text-coreezy-400">Distance Traveled</div>
         </div>
         <div className="card p-4 text-center">
           <div className="text-2xl font-bold text-canopy-400 flex items-center justify-center gap-1">
@@ -317,24 +317,28 @@ export function SlothProfile({ address }: SlothProfileProps) {
   );
 }
 
-// Score is in ucore, convert to CORE and format
+// Score is stored as meters * 1000 for precision
+// Display as distance traveled (sloth race metaphor)
 function formatScore(score: string): string {
-  const ucore = BigInt(score);
-  const core = Number(ucore) / 1_000_000;
+  const scoreBigInt = BigInt(score);
+  const meters = Number(scoreBigInt) / 1000;
   
-  if (core >= 1_000_000) {
-    return (core / 1_000_000).toFixed(2) + 'M';
+  if (meters >= 1000) {
+    const km = meters / 1000;
+    if (km >= 100) {
+      return km.toFixed(0) + ' km';
+    }
+    return km.toFixed(2) + ' km';
   }
-  if (core >= 1_000) {
-    return (core / 1_000).toFixed(1) + 'K';
-  }
-  return core.toFixed(0);
+  
+  return meters.toFixed(1) + ' m';
 }
 
+// Delegation amount is in ucore
 function formatCore(amount: string): string {
   const num = Number(amount) / 1_000_000;
   if (num >= 1000) {
-    return (num / 1000).toFixed(1) + 'K';
+    return (num / 1000).toFixed(1) + 'K CORE';
   }
-  return num.toFixed(2);
+  return num.toFixed(0) + ' CORE';
 }

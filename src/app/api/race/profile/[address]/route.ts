@@ -29,7 +29,7 @@ export async function GET(
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
-    // Get the FIRST snapshot date (when they first staked)
+    // Get the FIRST snapshot date (when they first staked with us)
     const firstSnapshot = await prisma.dailySnapshot.findFirst({
       where: { userId: user.id },
       orderBy: { timestamp: 'asc' },

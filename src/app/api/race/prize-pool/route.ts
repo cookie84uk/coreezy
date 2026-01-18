@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
     const existing = await prisma.systemConfig.findUnique({
       where: { key: 'prize_pool_accumulated' },
     });
-    let currentAccumulated = existing ? parseFloat(existing.value) : 0;
+    const currentAccumulated = existing ? parseFloat(existing.value) : 0;
 
     let newAccumulated: number;
     let contribution = 0;

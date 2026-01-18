@@ -116,12 +116,19 @@ export function PrizePool() {
           <div className="px-4 pb-4 border-b border-coreezy-800">
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs">
               <div className="text-coreezy-400">
-                <span className="text-canopy-400">{formatCore(data.pool.accumulated)}</span> from past claims
+                {data.pool.accumulated > 0 && (
+                  <>
+                    <span className="text-canopy-400">{formatCore(data.pool.accumulated)}</span> from past claims
+                  </>
+                )}
                 {data.pool.pendingContribution > 0 && (
                   <>
-                    {' + '}
+                    {data.pool.accumulated > 0 ? ' + ' : ''}
                     <span className="text-emerald-400">{formatCore(data.pool.pendingContribution)}</span> pending
                   </>
+                )}
+                {data.pool.accumulated === 0 && data.pool.pendingContribution === 0 && (
+                  <span className="text-coreezy-500">Pool will grow from validator commission</span>
                 )}
               </div>
               {data.validator && (
