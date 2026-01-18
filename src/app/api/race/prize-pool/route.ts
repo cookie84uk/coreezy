@@ -58,16 +58,22 @@ export async function GET() {
     });
     const accumulatedPool = accumulatedConfig ? parseFloat(accumulatedConfig.value) : 0;
     
+    // Get bonus contributions (sponsorships, ad-hoc incentives)
+    const bonusConfig = await prisma.systemConfig.findUnique({
+      where: { key: 'prize_pool_bonus' },
+    });
+    const bonusPool = bonusConfig ? parseFloat(bonusConfig.value) : 0;
+    
     // Fetch LIVE validator commission
     const commissionData = await fetchValidatorCommission();
     
     // Calculate prize pool:
-    // = Accumulated (from past claims) + 1% of current pending commission
+    // = Accumulated (from past claims) + 1% of current pending commission + bonus
     const pendingCommission = commissionData?.pendingCommission || 0;
     const pendingContribution = (pendingCommission * RACE_CONFIG.commissionToPool) / 100;
     
-    // Total prize pool = accumulated + pending contribution
-    const totalPool = accumulatedPool + pendingContribution;
+    // Total prize pool = accumulated + pending contribution + bonus
+    const totalPool = accumulatedPool + pendingContribution + bonusPool;
     
     // Get class distribution counts
     const [adultCount, teenCount, babyCount] = await Promise.all([
@@ -97,6 +103,7 @@ export async function GET() {
         total: parseFloat(totalPool.toFixed(2)),
         accumulated: parseFloat(accumulatedPool.toFixed(2)),
         pendingContribution: parseFloat(pendingContribution.toFixed(2)),
+        bonus: parseFloat(bonusPool.toFixed(2)),
         distribution: RACE_CONFIG.prizeDistribution,
         commissionPercent: RACE_CONFIG.commissionToPool,
       },
@@ -137,9 +144,13 @@ export async function GET() {
   }
 }
 
-// POST - Add to accumulated prize pool (admin only)
-// Call this AFTER claiming commission: pass the amount you claimed
-// It will add 1% of that to the accumulated pool
+// POST - Manage prize pool (admin only)
+// Supports:
+// - claimedAmount: Add 1% of claimed commission
+// - addBonus: Add bonus/sponsor contribution directly
+// - setBonus: Set exact bonus amount
+// - setAccumulated: Set exact accumulated amount
+// - resetPool: Reset everything to 0
 export async function POST(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
   if (!ADMIN_SECRET || authHeader !== `Bearer ${ADMIN_SECRET}`) {
@@ -148,38 +159,67 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { claimedAmount, setAccumulated, resetPool } = body;
+    const { claimedAmount, setAccumulated, resetPool, addBonus, setBonus, bonusSource } = body;
 
-    // Get current accumulated
-    const existing = await prisma.systemConfig.findUnique({
-      where: { key: 'prize_pool_accumulated' },
-    });
-    const currentAccumulated = existing ? parseFloat(existing.value) : 0;
+    // Get current values
+    const [accConfig, bonusConfig] = await Promise.all([
+      prisma.systemConfig.findUnique({ where: { key: 'prize_pool_accumulated' } }),
+      prisma.systemConfig.findUnique({ where: { key: 'prize_pool_bonus' } }),
+    ]);
+    const currentAccumulated = accConfig ? parseFloat(accConfig.value) : 0;
+    const currentBonus = bonusConfig ? parseFloat(bonusConfig.value) : 0;
 
-    let newAccumulated: number;
+    let newAccumulated = currentAccumulated;
+    let newBonus = currentBonus;
     let contribution = 0;
+    let bonusAdded = 0;
+    let action = '';
 
     if (resetPool) {
-      // Reset the pool (usually at end of season)
+      // Reset everything (usually at end of season)
       newAccumulated = 0;
+      newBonus = 0;
+      action = 'reset_all';
     } else if (setAccumulated !== undefined) {
       // Set exact accumulated amount
       newAccumulated = parseFloat(setAccumulated);
+      action = 'set_accumulated';
     } else if (claimedAmount !== undefined) {
       // Add 1% of claimed commission to accumulated
       contribution = (parseFloat(claimedAmount) * RACE_CONFIG.commissionToPool) / 100;
       newAccumulated = currentAccumulated + contribution;
-    } else {
+      action = 'add_commission';
+    }
+
+    // Handle bonus additions separately (can be combined with above)
+    if (addBonus !== undefined) {
+      bonusAdded = parseFloat(addBonus);
+      newBonus = currentBonus + bonusAdded;
+      action = action ? `${action}+add_bonus` : 'add_bonus';
+    } else if (setBonus !== undefined) {
+      newBonus = parseFloat(setBonus);
+      bonusAdded = newBonus - currentBonus;
+      action = action ? `${action}+set_bonus` : 'set_bonus';
+    }
+
+    if (!action) {
       return NextResponse.json({ 
-        error: 'Provide claimedAmount (CORE you just claimed), setAccumulated, or resetPool: true' 
+        error: 'Provide one of: claimedAmount, setAccumulated, resetPool, addBonus, setBonus' 
       }, { status: 400 });
     }
 
-    // Upsert the accumulated pool
+    // Update accumulated pool
     await prisma.systemConfig.upsert({
       where: { key: 'prize_pool_accumulated' },
       create: { key: 'prize_pool_accumulated', value: newAccumulated.toString() },
       update: { value: newAccumulated.toString() },
+    });
+
+    // Update bonus pool
+    await prisma.systemConfig.upsert({
+      where: { key: 'prize_pool_bonus' },
+      create: { key: 'prize_pool_bonus', value: newBonus.toString() },
+      update: { value: newBonus.toString() },
     });
 
     // Log the update
@@ -189,25 +229,36 @@ export async function POST(request: NextRequest) {
       update: { value: new Date().toISOString() },
     });
 
-    // Also log to JobLog for history
+    // Log to JobLog for history
     await prisma.jobLog.create({
       data: {
         jobName: 'prize_pool_update',
         status: 'success',
         completedAt: new Date(),
         metadata: {
+          action,
           previousAccumulated: currentAccumulated,
           newAccumulated,
+          previousBonus: currentBonus,
+          newBonus,
           contribution,
+          bonusAdded,
+          bonusSource: bonusSource || null,
           claimedAmount: claimedAmount || null,
-        },
+        } as Record<string, unknown>,
       },
     });
 
     return NextResponse.json({
       success: true,
+      action,
       accumulated: parseFloat(newAccumulated.toFixed(2)),
-      contribution: parseFloat(contribution.toFixed(2)),
+      bonus: parseFloat(newBonus.toFixed(2)),
+      total: parseFloat((newAccumulated + newBonus).toFixed(2)),
+      changes: {
+        commissionContribution: parseFloat(contribution.toFixed(2)),
+        bonusAdded: parseFloat(bonusAdded.toFixed(2)),
+      },
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {

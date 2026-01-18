@@ -15,6 +15,7 @@ interface PrizePoolData {
     total: number;
     accumulated: number;
     pendingContribution: number;
+    bonus: number;
     distribution: { adult: number; teen: number; baby: number };
     commissionPercent: number;
   };
@@ -115,19 +116,23 @@ export function PrizePool() {
           {/* Total Pool Info */}
           <div className="px-4 pb-4 border-b border-coreezy-800">
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs">
-              <div className="text-coreezy-400">
+              <div className="text-coreezy-400 flex flex-wrap gap-x-2">
                 {data.pool.accumulated > 0 && (
-                  <>
-                    <span className="text-canopy-400">{formatCore(data.pool.accumulated)}</span> from past claims
-                  </>
+                  <span>
+                    <span className="text-canopy-400">{formatCore(data.pool.accumulated)}</span> from claims
+                  </span>
                 )}
                 {data.pool.pendingContribution > 0 && (
-                  <>
-                    {data.pool.accumulated > 0 ? ' + ' : ''}
+                  <span>
                     <span className="text-emerald-400">{formatCore(data.pool.pendingContribution)}</span> pending
-                  </>
+                  </span>
                 )}
-                {data.pool.accumulated === 0 && data.pool.pendingContribution === 0 && (
+                {data.pool.bonus > 0 && (
+                  <span>
+                    <span className="text-amber-400">{formatCore(data.pool.bonus)}</span> bonus 🎁
+                  </span>
+                )}
+                {data.pool.accumulated === 0 && data.pool.pendingContribution === 0 && data.pool.bonus === 0 && (
                   <span className="text-coreezy-500">Pool will grow from validator commission</span>
                 )}
               </div>
