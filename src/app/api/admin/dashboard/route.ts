@@ -107,8 +107,8 @@ export async function GET(request: NextRequest) {
       })),
       
       config: {
-        seasonStartDate: RACE_CONFIG.seasonStartDate,
-        seasonEndDate: RACE_CONFIG.seasonEndDate,
+        seasonStartDate: RACE_CONFIG.season.startDate,
+        seasonEndDate: RACE_CONFIG.season.endDate,
         prizeDistribution: RACE_CONFIG.prizeDistribution,
         commissionToPool: RACE_CONFIG.commissionToPool,
       },
