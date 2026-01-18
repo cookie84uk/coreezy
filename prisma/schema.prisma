@@ -48,6 +48,7 @@ model SlothProfile {
   isSleeping      Boolean     @default(false)
   sleepUntil      DateTime?
   lastSiteVisit   DateTime?
+  stakingSince    DateTime?   // When they first delegated (from chain or manual)
   joinedAt        DateTime    @default(now())
 
   // Relations

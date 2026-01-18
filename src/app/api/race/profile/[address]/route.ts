@@ -100,8 +100,8 @@ export async function GET(
         isSleeping: user.slothProfile.isSleeping,
         sleepUntil: user.slothProfile.sleepUntil,
         lastSiteVisit: user.slothProfile.lastSiteVisit,
-        // Use on-chain date if available, fallback to first snapshot or joinedAt
-        stakingSince: firstDelegationDate || firstSnapshot?.timestamp || user.slothProfile.joinedAt,
+        // Priority: stored stakingSince > on-chain date > first snapshot > joinedAt
+        stakingSince: user.slothProfile.stakingSince || firstDelegationDate || firstSnapshot?.timestamp || user.slothProfile.joinedAt,
         joinedAt: user.slothProfile.joinedAt,
         activeBoosts: user.slothProfile.activeBoosts.map((b) => ({
           platform: b.platform,
