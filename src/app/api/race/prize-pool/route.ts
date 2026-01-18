@@ -235,7 +235,7 @@ export async function POST(request: NextRequest) {
         jobName: 'prize_pool_update',
         status: 'success',
         completedAt: new Date(),
-        metadata: {
+        metadata: JSON.parse(JSON.stringify({
           action,
           previousAccumulated: currentAccumulated,
           newAccumulated,
@@ -245,7 +245,7 @@ export async function POST(request: NextRequest) {
           bonusAdded,
           bonusSource: bonusSource || null,
           claimedAmount: claimedAmount || null,
-        } as Record<string, unknown>,
+        })),
       },
     });
 
