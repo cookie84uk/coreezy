@@ -1,6 +1,64 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+const COREEZY_VALIDATOR = process.env.COREEZY_VALIDATOR || 'corevaloper1uxengudkvpu5feqfqs4ant2hvukvf9ahxk63gh';
+const COREUM_REST = process.env.COREUM_REST || 'https://full-node.mainnet-1.coreum.dev:1317';
+
+// Fetch the first delegation date from blockchain
+async function getFirstDelegationDate(delegatorAddress: string): Promise<Date | null> {
+  try {
+    // Query for delegation transactions from this address to our validator
+    const query = encodeURIComponent(
+      `message.sender='${delegatorAddress}' AND delegate.validator='${COREEZY_VALIDATOR}'`
+    );
+    
+    const response = await fetch(
+      `${COREUM_REST}/cosmos/tx/v1beta1/txs?query=${query}&order_by=ORDER_BY_ASC&pagination.limit=1`,
+      { next: { revalidate: 3600 } } // Cache for 1 hour
+    );
+
+    if (!response.ok) {
+      // Try alternative query format
+      const altQuery = encodeURIComponent(`message.sender='${delegatorAddress}'`);
+      const altResponse = await fetch(
+        `${COREUM_REST}/cosmos/tx/v1beta1/txs?query=${altQuery}&order_by=ORDER_BY_ASC&pagination.limit=50`,
+        { next: { revalidate: 3600 } }
+      );
+      
+      if (!altResponse.ok) return null;
+      
+      const altData = await altResponse.json();
+      const txs = altData.tx_responses || [];
+      
+      // Find first delegation to our validator
+      for (const tx of txs) {
+        const messages = tx.tx?.body?.messages || [];
+        for (const msg of messages) {
+          if (
+            msg['@type'] === '/cosmos.staking.v1beta1.MsgDelegate' &&
+            msg.validator_address === COREEZY_VALIDATOR
+          ) {
+            return new Date(tx.timestamp);
+          }
+        }
+      }
+      return null;
+    }
+
+    const data = await response.json();
+    const txs = data.tx_responses || [];
+    
+    if (txs.length > 0 && txs[0].timestamp) {
+      return new Date(txs[0].timestamp);
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Failed to fetch first delegation date:', error);
+    return null;
+  }
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { address: string } }
@@ -29,11 +87,8 @@ export async function GET(
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
     }
 
-    // Get the first snapshot to determine when they started staking
-    const firstSnapshot = await prisma.dailySnapshot.findFirst({
-      where: { userId: user.id },
-      orderBy: { timestamp: 'asc' },
-    });
+    // Get the first delegation date from blockchain
+    const firstDelegationDate = await getFirstDelegationDate(address);
 
     // Calculate rank
     const rank = await prisma.slothProfile.count({
@@ -62,8 +117,8 @@ export async function GET(
         isSleeping: user.slothProfile.isSleeping,
         sleepUntil: user.slothProfile.sleepUntil,
         lastSiteVisit: user.slothProfile.lastSiteVisit,
-        // Use first snapshot date as "staking since", fallback to joinedAt
-        stakingSince: firstSnapshot?.timestamp || user.slothProfile.joinedAt,
+        // First delegation date from blockchain, fallback to joinedAt
+        stakingSince: firstDelegationDate?.toISOString() || user.slothProfile.joinedAt,
         joinedAt: user.slothProfile.joinedAt,
         activeBoosts: user.slothProfile.activeBoosts.map((b) => ({
           platform: b.platform,
