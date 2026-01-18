@@ -253,7 +253,7 @@ async function checkForBoostPosts(profileId: string, xHandle: string) {
         : 'No posts with enough engagement found. Keep posting about Coreezy!',
       requirements: {
         minEngagement: ENGAGEMENT_THRESHOLDS.twitter,
-        mustInclude: ['@CoreezyVibes', '#Coreezy', or 'Coreezy'],
+        mustInclude: ['@CoreezyVibes', '#Coreezy', 'Coreezy'],
       },
     });
   } catch (error) {
