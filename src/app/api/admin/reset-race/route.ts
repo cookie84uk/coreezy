@@ -73,13 +73,13 @@ export async function POST(request: NextRequest) {
         jobName: 'race_reset',
         status: 'success',
         completedAt: new Date(),
-        metadata: {
+        metadata: JSON.parse(JSON.stringify({
           resetStreaks,
           resetScores,
           resetPrizePool,
           resetSnapshots,
           results,
-        },
+        })),
       },
     });
 
