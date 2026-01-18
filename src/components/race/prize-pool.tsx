@@ -13,9 +13,16 @@ interface PrizePoolData {
   daysRemaining: number;
   pool: {
     total: number;
+    accumulated: number;
+    pendingContribution: number;
     distribution: { adult: number; teen: number; baby: number };
     commissionPercent: number;
   };
+  validator: {
+    pendingCommission: number;
+    commissionRate: string;
+    prizePoolContribution: string;
+  } | null;
   classes: {
     adult: { pool: number; percent: number; participants: number; perParticipant: number };
     teen: { pool: number; percent: number; participants: number; perParticipant: number };
@@ -107,8 +114,21 @@ export function PrizePool() {
         <>
           {/* Total Pool Info */}
           <div className="px-4 pb-4 border-b border-coreezy-800">
-            <div className="text-xs text-coreezy-500">
-              {data.pool.commissionPercent}% of Validator Commission • Growing throughout the quarter
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs">
+              <div className="text-coreezy-400">
+                <span className="text-canopy-400">{formatCore(data.pool.accumulated)}</span> from past claims
+                {data.pool.pendingContribution > 0 && (
+                  <>
+                    {' + '}
+                    <span className="text-emerald-400">{formatCore(data.pool.pendingContribution)}</span> pending
+                  </>
+                )}
+              </div>
+              {data.validator && (
+                <div className="text-coreezy-500 sm:ml-auto">
+                  {data.pool.commissionPercent}% of {formatCore(data.validator.pendingCommission)} CORE commission
+                </div>
+              )}
             </div>
           </div>
 

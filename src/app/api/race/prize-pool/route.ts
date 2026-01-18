@@ -8,13 +8,14 @@ const COREUM_REST = process.env.COREUM_REST || 'https://full-node.mainnet-1.core
 
 // Fetch validator commission from chain
 async function fetchValidatorCommission(): Promise<{
-  totalCommission: number;
+  pendingCommission: number;
   commissionRate: number;
 } | null> {
   try {
     // Fetch validator info to get commission rate
     const validatorResponse = await fetch(
-      `${COREUM_REST}/cosmos/staking/v1beta1/validators/${COREEZY_VALIDATOR}`
+      `${COREUM_REST}/cosmos/staking/v1beta1/validators/${COREEZY_VALIDATOR}`,
+      { next: { revalidate: 60 } } // Cache for 1 minute
     );
     
     if (!validatorResponse.ok) return null;
@@ -24,7 +25,8 @@ async function fetchValidatorCommission(): Promise<{
     
     // Fetch validator rewards/commission
     const rewardsResponse = await fetch(
-      `${COREUM_REST}/cosmos/distribution/v1beta1/validators/${COREEZY_VALIDATOR}/commission`
+      `${COREUM_REST}/cosmos/distribution/v1beta1/validators/${COREEZY_VALIDATOR}/commission`,
+      { next: { revalidate: 60 } }
     );
     
     if (!rewardsResponse.ok) return null;
@@ -34,11 +36,11 @@ async function fetchValidatorCommission(): Promise<{
     
     // Find CORE (ucore) commission
     const coreCommission = commissionCoins.find((c: { denom: string }) => c.denom === 'ucore');
-    const totalCommissionUcore = coreCommission ? parseFloat(coreCommission.amount) : 0;
-    const totalCommission = totalCommissionUcore / 1_000_000; // Convert to CORE
+    const pendingCommissionUcore = coreCommission ? parseFloat(coreCommission.amount) : 0;
+    const pendingCommission = pendingCommissionUcore / 1_000_000; // Convert to CORE
     
     return {
-      totalCommission,
+      pendingCommission,
       commissionRate,
     };
   } catch (error) {
@@ -50,23 +52,22 @@ async function fetchValidatorCommission(): Promise<{
 // GET - Fetch current prize pool data
 export async function GET() {
   try {
-    // Try to get manually set pool first
-    const poolConfig = await prisma.systemConfig.findUnique({
-      where: { key: 'prize_pool_core' },
+    // Get accumulated pool from previous commission claims
+    const accumulatedConfig = await prisma.systemConfig.findUnique({
+      where: { key: 'prize_pool_accumulated' },
     });
+    const accumulatedPool = accumulatedConfig ? parseFloat(accumulatedConfig.value) : 0;
     
-    // Fetch live validator commission
+    // Fetch LIVE validator commission
     const commissionData = await fetchValidatorCommission();
     
     // Calculate prize pool:
-    // - If manually set, use that
-    // - Otherwise, calculate as 1% of accumulated commission this quarter
-    let totalPool = poolConfig ? parseFloat(poolConfig.value) : 0;
+    // = Accumulated (from past claims) + 1% of current pending commission
+    const pendingCommission = commissionData?.pendingCommission || 0;
+    const pendingContribution = (pendingCommission * RACE_CONFIG.commissionToPool) / 100;
     
-    // Get quarter start date
-    const now = new Date();
-    const quarterStartMonth = Math.floor(now.getMonth() / 3) * 3;
-    const quarterStart = new Date(now.getFullYear(), quarterStartMonth, 1);
+    // Total prize pool = accumulated + pending contribution
+    const totalPool = accumulatedPool + pendingContribution;
     
     // Get class distribution counts
     const [adultCount, teenCount, babyCount] = await Promise.all([
@@ -93,36 +94,38 @@ export async function GET() {
       daysRemaining: getDaysRemaining(),
       
       pool: {
-        total: totalPool,
+        total: parseFloat(totalPool.toFixed(2)),
+        accumulated: parseFloat(accumulatedPool.toFixed(2)),
+        pendingContribution: parseFloat(pendingContribution.toFixed(2)),
         distribution: RACE_CONFIG.prizeDistribution,
         commissionPercent: RACE_CONFIG.commissionToPool,
       },
       
       // Include validator commission data for transparency
       validator: commissionData ? {
-        currentCommission: commissionData.totalCommission,
+        pendingCommission: parseFloat(pendingCommission.toFixed(2)),
         commissionRate: (commissionData.commissionRate * 100).toFixed(1) + '%',
-        prizePoolContribution: RACE_CONFIG.commissionToPool + '% of commission',
+        prizePoolContribution: `${RACE_CONFIG.commissionToPool}% = ${pendingContribution.toFixed(2)} CORE`,
       } : null,
 
       classes: {
         adult: {
-          pool: adultPool,
+          pool: parseFloat(adultPool.toFixed(2)),
           percent: RACE_CONFIG.prizeDistribution.adult,
           participants: adultCount,
-          perParticipant: adultPerParticipant,
+          perParticipant: parseFloat(adultPerParticipant.toFixed(2)),
         },
         teen: {
-          pool: teenPool,
+          pool: parseFloat(teenPool.toFixed(2)),
           percent: RACE_CONFIG.prizeDistribution.teen,
           participants: teenCount,
-          perParticipant: teenPerParticipant,
+          perParticipant: parseFloat(teenPerParticipant.toFixed(2)),
         },
         baby: {
-          pool: babyPool,
+          pool: parseFloat(babyPool.toFixed(2)),
           percent: RACE_CONFIG.prizeDistribution.baby,
           participants: babyCount,
-          perParticipant: babyPerParticipant,
+          perParticipant: parseFloat(babyPerParticipant.toFixed(2)),
         },
       },
 
@@ -134,8 +137,9 @@ export async function GET() {
   }
 }
 
-// POST - Update prize pool (admin only)
-// Can be called after each commission claim to add 1% to the pool
+// POST - Add to accumulated prize pool (admin only)
+// Call this AFTER claiming commission: pass the amount you claimed
+// It will add 1% of that to the accumulated pool
 export async function POST(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
   if (!ADMIN_SECRET || authHeader !== `Bearer ${ADMIN_SECRET}`) {
@@ -144,48 +148,38 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { totalPool, addAmount, addFromCommission } = body;
+    const { claimedAmount, setAccumulated, resetPool } = body;
 
-    let newTotal: number;
+    // Get current accumulated
+    const existing = await prisma.systemConfig.findUnique({
+      where: { key: 'prize_pool_accumulated' },
+    });
+    let currentAccumulated = existing ? parseFloat(existing.value) : 0;
 
-    if (addFromCommission) {
-      // Fetch current commission and add 1% of it
-      const commissionData = await fetchValidatorCommission();
-      if (!commissionData) {
-        return NextResponse.json({ error: 'Could not fetch commission data' }, { status: 500 });
-      }
-      
-      const contribution = (commissionData.totalCommission * RACE_CONFIG.commissionToPool) / 100;
-      
-      const existing = await prisma.systemConfig.findUnique({
-        where: { key: 'prize_pool_core' },
-      });
-      const currentPool = existing ? parseFloat(existing.value) : 0;
-      newTotal = currentPool + contribution;
-      
-      // Log this contribution
-      console.log(`[Prize Pool] Added ${contribution.toFixed(2)} CORE (1% of ${commissionData.totalCommission.toFixed(2)} commission)`);
-    } else if (addAmount !== undefined) {
-      // Add specific amount to existing pool
-      const existing = await prisma.systemConfig.findUnique({
-        where: { key: 'prize_pool_core' },
-      });
-      const currentPool = existing ? parseFloat(existing.value) : 0;
-      newTotal = currentPool + parseFloat(addAmount);
-    } else if (totalPool !== undefined) {
-      // Set exact total
-      newTotal = parseFloat(totalPool);
+    let newAccumulated: number;
+    let contribution = 0;
+
+    if (resetPool) {
+      // Reset the pool (usually at end of season)
+      newAccumulated = 0;
+    } else if (setAccumulated !== undefined) {
+      // Set exact accumulated amount
+      newAccumulated = parseFloat(setAccumulated);
+    } else if (claimedAmount !== undefined) {
+      // Add 1% of claimed commission to accumulated
+      contribution = (parseFloat(claimedAmount) * RACE_CONFIG.commissionToPool) / 100;
+      newAccumulated = currentAccumulated + contribution;
     } else {
       return NextResponse.json({ 
-        error: 'Provide totalPool, addAmount, or addFromCommission: true' 
+        error: 'Provide claimedAmount (CORE you just claimed), setAccumulated, or resetPool: true' 
       }, { status: 400 });
     }
 
-    // Upsert the prize pool
+    // Upsert the accumulated pool
     await prisma.systemConfig.upsert({
-      where: { key: 'prize_pool_core' },
-      create: { key: 'prize_pool_core', value: newTotal.toString() },
-      update: { value: newTotal.toString() },
+      where: { key: 'prize_pool_accumulated' },
+      create: { key: 'prize_pool_accumulated', value: newAccumulated.toString() },
+      update: { value: newAccumulated.toString() },
     });
 
     // Log the update
@@ -195,9 +189,25 @@ export async function POST(request: NextRequest) {
       update: { value: new Date().toISOString() },
     });
 
+    // Also log to JobLog for history
+    await prisma.jobLog.create({
+      data: {
+        jobName: 'prize_pool_update',
+        status: 'success',
+        completedAt: new Date(),
+        metadata: {
+          previousAccumulated: currentAccumulated,
+          newAccumulated,
+          contribution,
+          claimedAmount: claimedAmount || null,
+        },
+      },
+    });
+
     return NextResponse.json({
       success: true,
-      newTotal,
+      accumulated: parseFloat(newAccumulated.toFixed(2)),
+      contribution: parseFloat(contribution.toFixed(2)),
       updatedAt: new Date().toISOString(),
     });
   } catch (error) {
