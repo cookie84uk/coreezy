@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Baby, Leaf, TreeDeciduous, Moon, Rocket, Flame, Trophy, Check, Minus } from 'lucide-react';
+import { Baby, Leaf, TreeDeciduous, Moon, Rocket, Flame, Check, Minus } from 'lucide-react';
 import { DistanceTrivia } from './distance-trivia';
+import { SlothNameEditor } from './sloth-name-editor';
+import { useWallet } from '@/components/wallet/wallet-provider';
 
 interface ProfileData {
   address: string;
@@ -68,10 +70,14 @@ const CLASS_CONFIG = {
 };
 
 export function SlothProfile({ address }: SlothProfileProps) {
+  const { address: connectedAddress } = useWallet();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Check if viewing own profile
+  const isOwnProfile = connectedAddress?.toLowerCase() === address.toLowerCase();
 
   useEffect(() => {
     async function fetchProfile() {
@@ -158,9 +164,17 @@ export function SlothProfile({ address }: SlothProfileProps) {
 
           {/* Info */}
           <div className="flex-1 text-center sm:text-left">
-            <h1 className="text-2xl font-bold text-coreezy-100">
-              {profile.name || `Sloth #${profile.rank}`}
-            </h1>
+            {isOwnProfile ? (
+              <SlothNameEditor
+                address={address}
+                currentName={profile.name}
+                onNameChange={(name) => setProfile({ ...profile, name })}
+              />
+            ) : (
+              <h1 className="text-2xl font-bold text-coreezy-100">
+                {profile.name || `Sloth #${profile.rank}`}
+              </h1>
+            )}
             <p className="font-mono text-sm text-coreezy-400 mt-1">{address}</p>
             <div className="flex flex-wrap justify-center sm:justify-start gap-2 mt-3">
               <span className={`badge ${classConfig.bgColor} ${classConfig.color} border ${classConfig.borderColor} flex items-center gap-1`}>
